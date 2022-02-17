@@ -3,3 +3,6 @@
 
 # python compile cache
 *.pyc
+
+# database
+db.sqlite3
