@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html>
+    <head>
+        <title>
+            Salonrate - 
+            {% block title_block %}
+                Welcome!
+            {% endblock %}
+        </title>
+        <script src="../assets/jquery.min.js"></script>
+        <style>
+            .logo{
+                width: 100%;
+                height: 40%;
+                text-align: center;
+            }
+            .logo-img{
+                height: 80px;
+            }
+        </style>
+        <!-- <link href="base_lr.css" rel="stylesheet" type="text/css" /> -->
+    </head>
+    <body>
+        <div class="logo">
+            <a href="{% url 'salonrate:homepage' %}"><img class="logo-img" src="../assets/logo.png" alt="Salonrate Logo"></a>
+        </div>
+        <div class="main">
+            {% block body_block %}
+            {% endblock %}
+            
+        </div>
+        <hr />
+        <div class="about">
+            <dl>
+                <dt>About Us: IT-17</dt>
+                <dd>2589587C  ·  Cui, Chong</li>
+                <dd>2647735Y  ·  YING, Heting</li>
+                <dd>2590260Y  ·  Yang, Suiyi</li>
+                <dd>2612713X  ·  Xiong, Yipeng</li>
+                <dd>2492428V  ·  Varadhan, Reetu Thillai</li>
+            </dl>
+        </div>
+    </body>
+</html>
