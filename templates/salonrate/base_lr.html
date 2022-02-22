@@ -13,10 +13,11 @@
         <style>
             .logo{
                 width: 100%;
-                height: 40%;
+                margin-top: 20px;
                 text-align: center;
+                vertical-align: center;
             }
-            .logo-img{
+            img{
                 height: 80px;
             }
         </style>
@@ -25,7 +26,6 @@
     <body>
         <div class="logo">
             <a href="{% url 'salonrate:homepage' %}"><img src="{% static 'images/logo.jpg' %}" alt="Salonrate" /></a>
-            <a href="{% url 'salonrate:homepage' %}"><img src="../assets/logo.png" alt="Salonrate" /></a>
         </div>
         <div class="main">
             {% block body_block %}
