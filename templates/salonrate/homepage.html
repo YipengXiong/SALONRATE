@@ -1,0 +1,19 @@
+{% extends 'salonrate/base_lr.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Homepage
+{% endblock %}
+
+{% block body_block %}
+<div>
+    <ul>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'salonrate:logout' %}">Logout</a></li>
+        {% else %}
+        <li><a href="{% url 'salonrate:login' %}">Login</a></li>
+        <li><a href="{% url 'salonrate:register' %}">Register</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}

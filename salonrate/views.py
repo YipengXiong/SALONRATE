@@ -70,3 +70,15 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect(reverse('salonrate:homepage'))
+
+def homepage(request):
+    return render(request, 'salonrate/homepage.html')
+
+def salon_detail(request):
+    return render(request, 'salonrate/salon_detail.html')
+
+def service_detail(request):
+    return render(request, 'salonrate/service_detail.html')
+
+def search(request):
+    return render(request, 'salonrate/search.html')

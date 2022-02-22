@@ -1,4 +1,4 @@
-{% extends 'rango/base_lr.html' %}
+{% extends 'salonrate/base_lr.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
@@ -8,7 +8,7 @@
 {% block body_block %}
 {% if registered %}
 Thank you for registering!
-<form id="user_form" method="post" action="{% url 'rango:register' %}" enctype="multipart/form-data">
+<form id="user_form" method="post" action="{% url 'salonrate:register' %}" enctype="multipart/form-data">
     {% csrf_token %}
     {{ user_form.as_p }}
     {{ profile_form.as_p }}
