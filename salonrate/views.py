@@ -81,4 +81,4 @@ def service_detail(request):
     return render(request, 'salonrate/service_detail.html')
 
 def search(request):
-    return render(request, 'salonrate/search.html')
+    return render(request, 'salonrate/search_result.html')
