@@ -4,6 +4,36 @@
         <meta charset="UTF-8">
         <title>Search Result</title>
         <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+        <script src="jquery.min.js"></script>
+        <script>
+            $(function getSearchScope() {
+                $(".search-switch li").on("click", function () {
+                    $(this).addClass("selected").siblings().removeClass("selected").end()
+                    console.log("current search scope: " + $(this).text())
+                })
+            })
+            $(function getSortScope() {
+                $(".sort li").on("click", function () {
+                    $(this).addClass("selected").siblings().removeClass("selected").end()
+                    console.log("current sort scope: " + $(this).text())
+                })
+            })
+            $(function getFilterScope() {
+                $(".tag-filter input").change(function () {
+                    var checked_value = []
+                    $("input:checkbox:checked").each(function () {
+                        checked_value.push($(this).val())
+                    })
+                    console.log("current tag-filter scope: " + checked_value)
+                })
+            })
+            $(function getSearchKeywords() {
+                $(".search-btn").on("click", function () {
+                    var text = $(".search-txt").val()
+                    console.log("current search keywords: " + text)
+                })
+            })
+        </script>
         <style>
             .result-header {
                 display: flex;
@@ -137,8 +167,7 @@
                 border: 1px solid orange;
                 width: 70%;
                 display: flex;
-                margin-left: 10%;
-                margin-right: 10%;
+                margin: 1% 10% 1% 10%;
                 align-items: center;
                 position: relative;
             }
@@ -267,7 +296,7 @@
                     <label>
                         <input class="search-txt" type="text" placeholder="Salon">
                     </label>
-                    <a class="search-btn" href="">
+                    <a class="search-btn">
                         Q
                     </a>
                 </div>
@@ -299,37 +328,37 @@
                 <ul>
                     <li>
                         <label>
-                            <input type="checkbox" class="flagged">
+                            <input type="checkbox" class="flagged" value="Good Env">
                         </label>
                         Good Env
                     </li>
                     <li>
                         <label>
-                            <input type="checkbox" class="flagged">
+                            <input type="checkbox" class="flagged" value="Good Service">
                         </label>
                         Good Service
                     </li>
                     <li>
                         <label>
-                            <input type="checkbox" class="flagged">
+                            <input type="checkbox" class="flagged" value="Cost Effective">
                         </label>
                         Cost Effective
                     </li>
                     <li>
                         <label>
-                            <input type="checkbox" class="flagged">
+                            <input type="checkbox" class="flagged" value="Good Skill">
                         </label>
                         Good Skill
                     </li>
                     <li>
                         <label>
-                            <input type="checkbox" class="flagged">
+                            <input type="checkbox" class="flagged" value="Good Attitude">
                         </label>
                         Good Attitude
                     </li>
                     <li>
                         <label>
-                            <input type="checkbox" class="flagged">
+                            <input type="checkbox" class="flagged" value="Not Busy">
                         </label>
                         Not Busy
                     </li>
