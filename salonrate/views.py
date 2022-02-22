@@ -65,3 +65,8 @@ def user_login(request):
     else:
         # If not a POST request, go to the login page
         return render(request, 'salonrate/login.html')
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return redirect(reverse('salonrate:homepage'))
