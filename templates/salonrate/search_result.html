@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <title>Search Result</title>
         <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="{% static 'assets/js/jquery.min.js' %}"></script>
         <script>
             $(function getSearchScope() {
                 $(".search-switch li").on("click", function () {
@@ -46,6 +46,10 @@
                 margin: 0;
                 padding: 0;
                 width: auto;
+            }
+
+            .sort-filter > ul {
+                margin-left: 5%;
             }
 
             .search-switch li {
@@ -328,44 +332,44 @@
             <div class="tag-filter">
                 <ul>
                     <li>
-                        <label>
-                            <input type="checkbox" class="flagged" value="Good Env">
+                        <input type="checkbox" class="flagged" value="Good Env" id="good_env"/>
+                        <label for="good_env">
+                            Good Env
                         </label>
-                        Good Env
                     </li>
                     <li>
-                        <label>
-                            <input type="checkbox" class="flagged" value="Good Service">
+                        <input type="checkbox" class="flagged" value="Good Service" id="good_service">
+                        <label for="good_service">
+                            Good Service
                         </label>
-                        Good Service
                     </li>
                     <li>
-                        <label>
-                            <input type="checkbox" class="flagged" value="Cost Effective">
+                        <input type="checkbox" class="flagged" value="Cost Effective" id="cost_effective">
+                        <label for="cost_effective">
+                            Cost Effective
                         </label>
-                        Cost Effective
                     </li>
                     <li>
-                        <label>
-                            <input type="checkbox" class="flagged" value="Good Skill">
+                        <input type="checkbox" class="flagged" value="Good Skill" id="good_skill">
+                        <label for="good_skill">
+                            Good Skill
                         </label>
-                        Good Skill
                     </li>
                     <li>
-                        <label>
-                            <input type="checkbox" class="flagged" value="Good Attitude">
+                        <input type="checkbox" class="flagged" value="Good Attitude" id="good_attitude">
+                        <label for="good_attitude">
+                            Good Attitude
                         </label>
-                        Good Attitude
                     </li>
                     <li>
-                        <label>
-                            <input type="checkbox" class="flagged" value="Not Busy">
+                        <input type="checkbox" class="flagged" value="Not Busy" id="not_busy">
+                        <label for="not_busy">
+                            Not Busy
                         </label>
-                        Not Busy
                     </li>
                 </ul>
             </div>
-            <div style="display: flex;align-items: center;">
+            <div style="display: flex;align-items: center;margin-right: 5%">
                 <div class="page-show" style="margin-right: 15px">
                     <span id="current-page">1</span>
                     <span>/</span>
