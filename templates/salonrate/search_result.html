@@ -16,7 +16,7 @@
             $(function getSortScope() {
                 $(".sort li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
-                    console.log("current sort scope: " + $(this).text())
+                    console.log("current sort scope: " + $(this).text().trim().replace("/\s/g",""))
                 })
             })
             $(function getFilterScope() {
@@ -287,6 +287,15 @@
                 transform: rotate(45deg);
             }
 
+            li.selected > i.arrow-rotated {
+                border: solid white;
+                border-width: 0 3px 3px 0;
+                display: inline-block;
+                padding: 3px;
+                margin: 3px 0 0 2px;
+                transform: rotate(-135deg);
+            }
+
         </style>
     </head>
     <body>
@@ -316,7 +325,7 @@
         <hr>
         <div class="sort-filter">
             <ul class="sort">
-                <li class="selected">
+                <li>
                     Rate
                     <i class="arrow"></i>
                 </li>
