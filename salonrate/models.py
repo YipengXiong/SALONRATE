@@ -34,7 +34,7 @@ class Service(models.Model):
 
 class Comment(models.Model):
     comment_id = models.AutoField(primary_key=True, null=False)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    username = models.ForeignKey(User, on_delete=models.CASCADE)
     #salon_id = models.ForeignKey(Salon, on_delete=models.CASCADE)
     #service_id = models.ForeignKey(Service, on_delete=models.CASCADE)
     salon_or_service_id = models.IntegerField(default=0, null=False)
@@ -52,7 +52,7 @@ class Comment(models.Model):
 
 
 class Follows(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    username = models.ForeignKey(User, on_delete=models.CASCADE)
     salon_id = models.ForeignKey(Salon, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -62,7 +62,7 @@ class Follows(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    avatar = models.ImageField(upload_to='profile_images', blank = True)
+    avatar = models.ImageField(upload_to='avatar', blank = True)
 
     def __str__(self):
         return self.user.username
