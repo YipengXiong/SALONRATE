@@ -8,7 +8,7 @@
             Salonrate -{% block title_block %}Welcome to the Salonrate!{% endblock %}
         </title>
         <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
-        <script src="../assets/jquery.min.js"></script>
+        <script src="{% static 'js/jquery.min.js' %}"></script>
         <script>
             $(function getSearchScope() {
                 $(".search-switch li").on("click", function () {
@@ -17,6 +17,8 @@
                 })
             })
         </script>
+        {% block css_block %}
+        {% endblock %}
         <style>
             .result-header {
                 display: flex;
@@ -264,13 +266,12 @@
                 margin: 0 0 3px 2px;
                 transform: rotate(45deg);
             }
-
         </style>
     </head>
 
     <body>
         <div class="result-header">
-            <img class="logo-img" src="../assets/logo.png" alt="Salonrate Logo">
+            <img class="logo-img" src="{% static 'images/logo.png' %}" alt="Salonrate Logo">
             <div class="search-box">
                 <ul class="search-switch" id="test">
                     <li class="selected">Salon</li>
@@ -286,7 +287,7 @@
                 </div>
             </div>
             <div class="my-center">
-                <img class="me-img" src="../assets/me.png" alt="My logo">
+                <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
                 <a>
                     My Account
                 </a>

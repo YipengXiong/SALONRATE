@@ -1,0 +1,130 @@
+{% extends 'salonrate/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Service Detail
+    <!-- Can be replaced by the service name later-->
+{% endblock %}
+{% block css_block %}
+<style>
+    .main{
+        overflow:auto;
+        margin-left:5%;
+        margin-right:5%;
+        margin-top: 10px;
+        /* height: 100%; */
+        /* min-height: 600px; */
+    }
+    .detail{
+        overflow: auto;
+        /* height: 50vh; */
+        /* float:left; */
+    }
+    .left{
+        float:left;
+        width: 48%;
+        height: 30vh;
+        border-style:solid;
+        border-color: rgb(252, 200, 137);
+        border-radius: 2px;
+        border-width: 1px;
+    }
+    .right{
+        float:right;
+        width: 48%;
+    }
+    .promopic{
+        float:right;
+        height: 31vh;
+        /* width: 60%; */
+        border-style:solid;
+        border-color: rgb(252, 200, 137);
+        border-radius: 2px;
+        border-width: 1px;
+    }
+    .comment{
+        margin-top: 1px;
+        width:auto;
+        /* height:20vh; */
+        /* min-height: 200px; */
+        float:left;
+        border-style:solid;
+        border-color: rgb(252, 200, 137);
+        border-radius: 2px;
+        border-width: 1px;
+    }
+    .comment-item{
+        -webkit-line-clamp: 2;
+    }
+</style>
+{% endblock %}
+
+{% block body_block %}
+<div class="main">
+    <div class="detail">
+        <div class="left">
+            <div class="back">{{ salon_name }} Salon Name</div>
+            <div class="name"><h1>{{ service_name }} Service Name</h1></div>
+            <div class="item-rate">
+                <fieldset>
+                    <input type="radio" id="star5" name="rating" value="5"/><label for="star5" title="Outstanding">5 stars</label>
+                    <input type="radio" id="star4" name="rating" value="4"/><label for="star4" title="Very Good">4 stars</label>
+                    <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="Good">3 stars</label>
+                    <input type="radio" id="star2" name="rating" value="2"/><label for="star2" title="Poor">2 stars</label>
+                    <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="Very Poor">1 star</label>
+                </fieldset>
+            </div>
+            <div class="comcount">{{ comment_count }} Comments</div>
+            <div class="price">Price: £ {{ price }}</div>
+            {% if tags %}
+            <ul class="item-tags">
+                {% for tag in tags %}
+                <li>{{ tag }}</li>
+                {% endfor %}
+                <h5>No Tags</h5>
+            </ul>
+            {% endif %}
+        </div>
+        <div class="right">
+            <img class="promopic" src="{% static 'images/wash.png' %}" alt="wash_img" />
+            {% if service_img_rel %}
+            <img class="promopic" src={{ service_img_rel }} alt="service_img" />
+            {% elif service.type == 0 %}
+            <img class="promopic" src="{% static 'images/wash.png' %}" alt="wash_img" />
+            {% elif service.type == 1 %}
+            <img class="promopic" src="{% static 'images/cut.jpeg' %}" alt="cut_img" />
+            {% elif service.type == 2 %}
+            <img class="promopic" src="{% static 'images/dye.jpeg' %}" alt="dye_img" />
+            {% elif service.type == 3 %}
+            <img class="promopic" src="{% static 'images/perm.jpg' %}" alt="perm_img" />
+            {% elif service.type == 4 %}
+            <img class="promopic" src="{% static 'images/care.jpeg' %}" alt="care_img" />
+            {% endif %}
+        </div>
+    </div>
+    <div class="comment">
+        <div class="subtopic"><h2>Make Comments</h2></div>
+        <div class="type"></div>
+        {% if comments %}
+        {% for comment in comments %}
+        <div class="comment-item">
+            <!-- 通过外键链接到user数据库，怎么取user的数据？ -->
+            {% if comment.user.avatar %}
+            <div class="avatar"><img src={{ comment.user.avatar }} alt="Avatar" /></div>
+            {% else %}
+            <div class="avatar"><img src="{% static 'image/me.png' %}" alt="Avatar" /></div>
+            {% endif %}
+        </div>
+        <div class="user">
+            {{ comment.user.user_name }} {{ comment.comment_time }}
+        </div>
+        <div class="content">
+            {{ comment.comment }}
+        </div>
+        <!-- Reply功能要实现么？ -->
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
