@@ -14,12 +14,11 @@
                 Welcome!
             {% endblock %}
         </title>
-    <!-- Bootstrap core CSS -->
-    <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <!-- Bootstrap core CSS -->
+        <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-    <!-- Custom styles for this template -->
-    <link href="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.css" rel="stylesheet">
-        <script src="../assets/jquery.min.js"></script>
+        <!-- Custom styles for this template -->
+        <link href="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.css" rel="stylesheet">
         <style>
             .logo{
                 width: 100%;
@@ -30,19 +29,21 @@
             img{
                 height: 80px;
             }
+            .about{
+                margin-bottom: -50px;
+            }
         </style>
-        <!-- <link href="base_lr.css" rel="stylesheet" type="text/css" /> -->
     </head>
     <body>
         <div class="logo">
-            <a href="{% url 'salonrate:homepage' %}"><img src="{% static 'images/logo.jpg' %}" alt="Salonrate" /></a>
+            <a href="{% url 'salonrate:homepage' %}"><img src="{% static 'images/logo.png' %}" alt="Salonrate" /></a>
         </div>
         <div class="main">
             {% block body_block %}
             {% endblock %}
         </div>
-        <hr />
         <div class="about">
+            <hr />
             <dl>
                 <dt>About Us: IT-17</dt>
                 <dd>2589587C  ·  Cui, Chong</li>
