@@ -7,3 +7,6 @@
 # database
 db.sqlite3
 salonrate/migrations/
+
+# .DS_Store
+.DS_Store
