@@ -8,6 +8,13 @@
             Salonrate -{% block title_block %}Welcome to the Salonrate!{% endblock %}
         </title>
         <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+        <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+        <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+        <!-- Custom styles for this template -->
+        <link href="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.css" rel="stylesheet">
         <script src="{% static 'js/jquery.min.js' %}"></script>
         <script>
             $(function getSearchScope() {
@@ -266,6 +273,7 @@
                 margin: 0 0 3px 2px;
                 transform: rotate(45deg);
             }
+
         </style>
     </head>
 
@@ -293,11 +301,22 @@
                 </a>
             </div>
         </div>
-        <hr>
+        <hr />
 
-        <div>
+        <div class="main">
             {% block body_block %}
             {% endblock %}
+        </div>
+        <hr />
+        <div class="about">
+            <dl>
+                <dt>About Us: IT-17</dt>
+                <dd>2589587C  ·  Cui, Chong</li>
+                <dd>2647735Y  ·  YING, Heting</li>
+                <dd>2590260Y  ·  Yang, Suiyi</li>
+                <dd>2612713X  ·  Xiong, Yipeng</li>
+                <dd>2492428V  ·  Varadhan, Reetu Thillai</li>
+            </dl>
         </div>
     </body>
 </html>

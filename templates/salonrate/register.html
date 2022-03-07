@@ -9,6 +9,7 @@
 {% if registered %}
 Thank you for registering!
 {% else %}
+<div class="container"></div>
 <form id="user_form" method="post" action="{% url 'salonrate:register' %}" enctype="multipart/form-data">
     {% csrf_token %}
     {{ user_form.as_p }}
