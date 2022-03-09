@@ -9,10 +9,14 @@
 <style>
   .carousel-inner img {
       width: 100%;
-      height: 100%;
+  }
+
+  .test {
+      width: 70%;
   }
   </style>
-<div id="myCarousel" class="carousel slide">
+<div class="container" id="test">
+<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="2000">
     <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
         <li data-target="#myCarousel" data-slide-to="1"></li>
@@ -31,14 +35,15 @@
         </div>
     </div>
 
-    <a class="carousel-control-prev" href="#myCarousel"
-       data-slide="prev"> <span _ngcontent-c3="" aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>
+    <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
+        <span _ngcontent-c3="" aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>
     </a>
     <a class="carousel-control-next" href="#myCarousel" data-slide="next">
-        <span class="carousel-control-next-icon"></span>
+        <span class="glyphicon glyphicon-chevron-right"></span>
 
     </a>
 
+</div>
 </div>
 
 <div>
