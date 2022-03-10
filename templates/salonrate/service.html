@@ -35,8 +35,33 @@
         width:auto;
         float:left;
     }
+    .cmf{
+        /* border: 1px solid #ccc; 
+        padding: 3px 0px;
+        border-radius: 3px;
+        padding:5px; */
+        font-family: 'Courier New', Courier, monospace;
+    }
+    input{
+        border: 1px solid lavender; 
+        padding: 3px 0px;
+        border-radius: 3px;
+        padding:5px;
+        /* background-color: lavender; */
+        font-family: 'Courier New', Courier, monospace;
+    }
+    .submit{
+        border: 1px solid #ccc; 
+        padding: 3px 0px;
+        border-radius: 3px;
+        padding:5px;
+        background-color: lavender;
+        font-family: 'Courier New', Courier, monospace;
+        margin-bottom: 10px;
+    }
     .comment-item{
         -webkit-line-clamp: 2;
+        font-family: 'Courier New', Courier, monospace;
     }
     .avatar{
         height: 18px;
@@ -51,7 +76,6 @@
         float:left;
     }
     .content{
-
         font-family: 'Courier New', Courier, monospace;
     }
 </style>
@@ -101,10 +125,10 @@
     </div>
     <div class="comment">
         <div class="subtopic"><h2>Make Comments</h2></div>
-        <form method="post">
+        <form class="cmf" method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <input type="submit" value="Comment" />
+            <input class="submit" type="submit" value="Comment" />
         </form>
         {% if comments %}
         {% for comment in comments %}
