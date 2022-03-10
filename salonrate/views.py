@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from salonrate.models import UserProfile, Salon, Service, Comment, Follows
-from salonrate.forms import UserForm, UserProfileForm
+from salonrate.forms import CommentForm, UserForm, UserProfileForm
 from django.urls import reverse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -79,23 +79,35 @@ def homepage(request):
 
 
 def salon_detail(request):
-    return render(request, 'salonrate/salon_detail.html')
+    return render(request, 'salonrate/salon.html')
 
 
 def service_detail(request):
-    context_dict = {"comments":None}
-    try:
-        service = Service.objects.get(service_id=100)
-        context_dict["service"] = service
-        comments = Comment.objects.filter(salon_or_service_id=service.service_id, type=1).order_by("-comment_id")
-        if comments:
-            context_dict["comments"] = comments
-            context_dict["comment_count"] = len(comments)
+    service = get_object_or_404(Service, service_id=100)
+    context_dict = {"service":service,"comments":None}
+    comments = Comment.objects.filter(salon_or_service_id=service.service_id, type=1).order_by("-comment_id")
+    if comments:
+        context_dict["comments"] = comments
+        context_dict["comment_count"] = len(comments)
+    else:
+        print("No Comments")
+    
+    form = CommentForm()
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.username = request.user
+            comment.salon_or_service_id = service.service_id
+            comment.type = 1
+            comment.save()
+            return redirect(reverse('salonrate:service'))
+            # return redirect(reverse('salonrate:service', kwargs={'service_name_slug':service_name_slug}))
         else:
-            print("No Comments")
-    except Service.DoesNotExist:
-        context_dict["comments"]=None
-    return render(request, 'salonrate/service_detail.html', context_dict)
+            print(form.errors)
+    context_dict['form'] = form
+    return render(request, 'salonrate/service.html', context_dict)
 
 
 def search(request):
