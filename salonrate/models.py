@@ -48,7 +48,7 @@ class Comment(models.Model):
     comment_time = models.TimeField(auto_now=True)
 
     def __str__(self):
-        return self.comment_id
+        return str(self.comment_id)
 
 
 class Follows(models.Model):
@@ -56,7 +56,7 @@ class Follows(models.Model):
     salon_id = models.ForeignKey(Salon, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.user_id, self.salon_id
+        return str(self.user_id), str(self.salon_id)
 
 
 class UserProfile(models.Model):

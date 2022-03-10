@@ -56,6 +56,22 @@
     .comment-item{
         -webkit-line-clamp: 2;
     }
+    .avatar{
+        height: 18px;
+        width: 16px;
+        float: left;
+    }
+    .ava{
+        width: 100%;
+        display:block;
+    }
+    .user{
+        float:left;
+    }
+    .content{
+
+        font-family: 'Courier New', Courier, monospace;
+    }
 </style>
 {% endblock %}
 
@@ -63,8 +79,8 @@
 <div class="main">
     <div class="detail">
         <div class="left">
-            <div class="back">{{ salon_name }} Salon Name</div>
-            <div class="name"><h1>{{ service_name }} Service Name</h1></div>
+            <div class="back">{{ service.salon_id.salon_name }} </div>
+            <div class="name"><h1>{{ service.service_name }}</h1></div>
             <div class="item-rate">
                 <fieldset>
                     <input type="radio" id="star5" name="rating" value="5"/><label for="star5" title="Outstanding">5 stars</label>
@@ -75,7 +91,7 @@
                 </fieldset>
             </div>
             <div class="comcount">{{ comment_count }} Comments</div>
-            <div class="price">Price: £ {{ price }}</div>
+            <div class="price">Price: £ {{ service.service_price }}</div>
             {% if tags %}
             <ul class="item-tags">
                 {% for tag in tags %}
@@ -108,20 +124,19 @@
         {% if comments %}
         {% for comment in comments %}
         <div class="comment-item">
-            <!-- 通过外键链接到user数据库，怎么取user的数据？ -->
-            {% if comment.user.avatar %}
-            <div class="avatar"><img src={{ comment.user.avatar }} alt="Avatar" /></div>
+            {% if comment.username.avatar %}
+            <div class="avatar"><img class='ava' src={{ comment.username.avatar }} alt="Avatar" /></div>
             {% else %}
-            <div class="avatar"><img src="{% static 'image/me.png' %}" alt="Avatar" /></div>
+            <div class="avatar"><img class='ava' src="{% static 'images/me.png' %}" alt="Avatar" /></div>
             {% endif %}
+            <div class="user">
+                {{ comment.username.username }} {{ comment.comment_time }}
+            </div><br />
+            <div class="content">
+                {{ comment.comment }}
+            </div><br />
         </div>
-        <div class="user">
-            {{ comment.user.user_name }} {{ comment.comment_time }}
-        </div>
-        <div class="content">
-            {{ comment.comment }}
-        </div>
-        <!-- Reply功能要实现么？ -->
+        
         {% endfor %}
         {% endif %}
     </div>

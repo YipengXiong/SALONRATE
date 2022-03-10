@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from salonrate.models import UserProfile
+from salonrate.models import UserProfile, Salon, Service, Comment, Follows
 from salonrate.forms import UserForm, UserProfileForm
 from django.urls import reverse
 from django.http import HttpResponse
@@ -7,7 +7,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
-
 
 # Create your views here.
 def register(request):
@@ -84,8 +83,28 @@ def salon_detail(request):
 
 
 def service_detail(request):
-    return render(request, 'salonrate/service_detail.html')
+    context_dict = {"comments":None}
+    try:
+        service = Service.objects.get(service_id=100)
+        context_dict["service"] = service
+        comments = Comment.objects.filter(salon_or_service_id=service.service_id, type=1).order_by("-comment_id")
+        if comments:
+            context_dict["comments"] = comments
+            context_dict["comment_count"] = len(comments)
+        else:
+            print("No Comments")
+    except Service.DoesNotExist:
+        context_dict["comments"]=None
+    return render(request, 'salonrate/service_detail.html', context_dict)
 
 
 def search(request):
     return render(request, 'salonrate/search_result.html')
+
+# def jsonEncoder(data):
+#     json_data = []
+#     for p in data:
+#         print(p.__dict__)
+#         p.__dict__.pop("_state") # Remove '_state'
+#         json_data.append(p.__dict__) 
+#     return json_data
