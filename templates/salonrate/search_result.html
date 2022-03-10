@@ -1,424 +1,443 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Search Result</title>
-        <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
-        <script src="{% static 'js/jquery.min.js' %}"></script>
-        <script>
-            $(function getSearchScope() {
-                $(".search-switch li").on("click", function () {
-                    $(this).addClass("selected").siblings().removeClass("selected").end()
-                    console.log("current search scope: " + $(this).text())
+<head>
+    <meta charset="UTF-8">
+    <title>Search Result</title>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script>
+        $(function getSearchScope() {
+            $(".search-switch li").on("click", function () {
+                $(this).addClass("selected").siblings().removeClass("selected").end()
+                console.log("current search scope: " + $(this).text())
+            })
+        })
+
+        $(function getSortScope() {
+            $(".sort li").on("click", function () {
+                $(this).addClass("selected").siblings().removeClass("selected").end()
+                console.log("current sort scope: " + $(this).text().trim().replace("/\s/g", ""))
+            })
+        })
+        $(function getFilterScope() {
+            $(".tag-filter input").change(function () {
+                var checked_value = []
+                $("input:checkbox:checked").each(function () {
+                    checked_value.push($(this).val())
+                })
+                console.log("current tag-filter scope: " + checked_value)
+            })
+        })
+        // $(function getSearchKeywords() {
+        //     $(".search-btn").on("click", function () {
+        //         var text = $(".search-txt").val()
+        //         console.log("current search keywords: " + text)
+        //     })
+        // })
+        $(function search() {
+            // $('#key').bind('keypress', function (event) {
+            //     if (event.keyCode === "13") {
+            //         event.preventDefault();
+            //         $(".search-btn").click();
+            //     }
+            // });
+            var csrf_token = $('[name="csrfmiddlewaretoken"]').val();
+            // console.log(csrf_token)
+
+            $(".search-btn").on("click", function () {
+                $.ajax({
+                    type: 'post',
+                    url: '/salonrate/search/',
                 })
             })
-            $(function getSortScope() {
-                $(".sort li").on("click", function () {
-                    $(this).addClass("selected").siblings().removeClass("selected").end()
-                    console.log("current sort scope: " + $(this).text().trim().replace("/\s/g",""))
-                })
-            })
-            $(function getFilterScope() {
-                $(".tag-filter input").change(function () {
-                    var checked_value = []
-                    $("input:checkbox:checked").each(function () {
-                        checked_value.push($(this).val())
-                    })
-                    console.log("current tag-filter scope: " + checked_value)
-                })
-            })
-            $(function getSearchKeywords() {
-                $(".search-btn").on("click", function () {
-                    var text = $(".search-txt").val()
-                    console.log("current search keywords: " + text)
-                })
-            })
-        </script>
-        <style>
-            .result-header {
-                display: flex;
-                align-items: center;
-            }
+        })
+    </script>
+    <style>
+        .result-header {
+            display: flex;
+            align-items: center;
+        }
 
-            ul {
-                list-style: none;
-                margin: 0;
-                padding: 0;
-                width: auto;
-            }
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            width: auto;
+        }
 
-            .sort-filter > ul {
-                margin-left: 5%;
-            }
+        .sort-filter > ul {
+            margin-left: 5%;
+        }
 
-            .search-switch li {
-                float: left;
-                border: 2px solid #E1D5E7;
-                margin: 0 -1px 0 -1px;
-                padding: 2px 10px 2px 10px;
-            }
+        .search-switch li {
+            float: left;
+            border: 2px solid #E1D5E7;
+            margin: 0 -1px 0 -1px;
+            padding: 2px 10px 2px 10px;
+        }
 
-            .search-switch li:first-child {
-                border-radius: 8px 0 0 8px;
-            }
+        .search-switch li:first-child {
+            border-radius: 8px 0 0 8px;
+        }
 
-            .search-switch li:last-child {
-                border-radius: 0 8px 8px 0;
-            }
+        .search-switch li:last-child {
+            border-radius: 0 8px 8px 0;
+        }
 
-            .logo-img {
-                display: block;
-                height: 50px;
-                margin: 0 0 0 5%;
-            }
+        .logo-img {
+            display: block;
+            height: 50px;
+            margin: 0 0 0 5%;
+        }
 
-            .my-center {
-                margin: 0 5% 0 0;
-            }
+        .my-center {
+            margin: 0 5% 0 0;
+        }
 
-            .me-img {
-                height: 20px;
-            }
+        .me-img {
+            height: 20px;
+        }
 
 
-            .search-switch {
-                color: #A680B8;
-                background-color: #FFFFFF;
-                float: left;
-                margin: 0 20px 0 0;
-            }
+        .search-switch {
+            color: #A680B8;
+            background-color: #FFFFFF;
+            float: left;
+            margin: 0 20px 0 0;
+        }
 
 
-            .selected {
-                color: #FFFFFF;
-                background-color: #C3ABD0;
-            }
+        .selected {
+            color: #FFFFFF;
+            background-color: #C3ABD0;
+        }
 
-            .search-box {
-                flex: 1;
-                display: flex;
-                justify-content: center;
-            }
+        .search-box {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
 
-            .search-area {
-                float: left;
-                border: 1px solid #C3ABD0;
-            }
+        .search-area {
+            float: left;
+            border: 1px solid #C3ABD0;
+        }
 
-            .search-txt {
-                height: 20px;
-                line-height: 20px;
-                border: none;
-                background: transparent;
-                text-overflow: ellipsis;
-                overflow: hidden;
-                border-radius: 0;
-                font-style: italic;
-                color: #C3ABD0;
-                outline: none;
-            }
+        .search-txt {
+            height: 20px;
+            line-height: 20px;
+            border: none;
+            background: transparent;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            border-radius: 0;
+            font-style: italic;
+            color: #C3ABD0;
+            outline: none;
+        }
 
-            .search-btn {
-                color: #808080;
-                display: inline-block;
-            }
+        .search-btn {
+            color: #808080;
+            display: inline-block;
+        }
 
-            .sort-filter {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
+        .sort-filter {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-            .sort li {
-                float: left;
-                border: 2px solid #E1D5E7;
-                margin: 0 -1px 0 -1px;
-                padding: 2px 10px 2px 10px;
-                color: #A680B8;
-            }
+        .sort li {
+            float: left;
+            border: 2px solid #E1D5E7;
+            margin: 0 -1px 0 -1px;
+            padding: 2px 10px 2px 10px;
+            color: #A680B8;
+        }
 
-            .sort li.selected {
-                color: #FFFFFF;
-            }
+        .sort li.selected {
+            color: #FFFFFF;
+        }
 
-            .tag-filter li {
-                float: left;
-                font-weight: bold;
+        .tag-filter li {
+            float: left;
+            font-weight: bold;
 
-            }
+        }
 
-            .tag-filter input {
-                height: 14px;
-                width: 14px;
-                display: inline-block;
-                float: left;
-                border: 1px solid #E1D5E7;
-            }
+        .tag-filter input {
+            height: 14px;
+            width: 14px;
+            display: inline-block;
+            float: left;
+            border: 1px solid #E1D5E7;
+        }
 
-            #prev-page, #next-page {
-                float: left;
-                border: 2px solid #E1D5E7;
-                margin: 0 -1px 0 -1px;
-                padding: 0 15px 0 15px;
-                color: #A680B8;
-            }
+        #prev-page, #next-page {
+            float: left;
+            border: 2px solid #E1D5E7;
+            margin: 0 -1px 0 -1px;
+            padding: 0 15px 0 15px;
+            color: #A680B8;
+        }
 
-            .page-control, .page-show {
-                float: left;
-            }
+        .page-control, .page-show {
+            float: left;
+        }
 
-            .item-content {
-                border: 1px solid orange;
-                width: 70%;
-                display: flex;
-                margin: 1% 10% 1% 10%;
-                align-items: center;
-                position: relative;
-            }
+        .item-content {
+            border: 1px solid orange;
+            width: 70%;
+            display: flex;
+            margin: 1% 10% 1% 10%;
+            align-items: center;
+            position: relative;
+        }
 
-            .item-img {
-                margin: 2% 1% 2% 1%;
-            }
+        .item-img {
+            margin: 2% 1% 2% 1%;
+        }
 
-            .item-name {
-                font-weight: bolder;
+        .item-name {
+            font-weight: bolder;
 
-            }
+        }
 
-            .item-rate {
-                font-family: 'FontAwesome';
-                margin: 1% 0 3% 0;
-            }
+        .item-rate {
+            font-family: 'FontAwesome';
+            margin: 1% 0 3% 0;
+        }
 
-            .item-rate > fieldset {
-                padding: 0;
-                margin: 0;
-                border: none;
-                display: inline-block;
-            }
+        .item-rate > fieldset {
+            padding: 0;
+            margin: 0;
+            border: none;
+            display: inline-block;
+        }
 
-            .item-rate > fieldset:not(:checked) > input {
-                position: absolute;
-                top: -9999px;
-                clip: rect(0, 0, 0, 0);
-            }
+        .item-rate > fieldset:not(:checked) > input {
+            position: absolute;
+            top: -9999px;
+            clip: rect(0, 0, 0, 0);
+        }
 
-            .item-rate > fieldset:not(:checked) > label {
-                float: right;
-                width: 1em;
-                padding: 0 .05em;
-                overflow: hidden;
-                white-space: nowrap;
-                cursor: pointer;
-                font-size: 150%;
-                color: #F0A30A;
-            }
+        .item-rate > fieldset:not(:checked) > label {
+            float: right;
+            width: 1em;
+            padding: 0 .05em;
+            overflow: hidden;
+            white-space: nowrap;
+            cursor: pointer;
+            font-size: 150%;
+            color: #F0A30A;
+        }
 
-            .item-rate > fieldset:not(:checked) > label:before {
-                content: '\f006  ';
-            }
+        .item-rate > fieldset:not(:checked) > label:before {
+            content: '\f006  ';
+        }
 
-            .item-rate > fieldset:not(:checked) > label:hover,
-            .item-rate > fieldset:not(:checked) > label:hover ~ label {
-                color: #F0A30A;
-                text-shadow: 0 0 3px #F0A30A;
-            }
+        .item-rate > fieldset:not(:checked) > label:hover,
+        .item-rate > fieldset:not(:checked) > label:hover ~ label {
+            color: #F0A30A;
+            text-shadow: 0 0 3px #F0A30A;
+        }
 
-            .item-rate > fieldset:not(:checked) > label:hover:before,
-            .item-rate > fieldset:not(:checked) > label:hover ~ label:before {
-                content: '\f005  ';
-            }
+        .item-rate > fieldset:not(:checked) > label:hover:before,
+        .item-rate > fieldset:not(:checked) > label:hover ~ label:before {
+            content: '\f005  ';
+        }
 
-            .item-rate > fieldset > input:checked ~ label:before {
-                content: '\f005  ';
-            }
+        .item-rate > fieldset > input:checked ~ label:before {
+            content: '\f005  ';
+        }
 
-            .item-rate > fieldset > label:active {
-                position: relative;
-                top: 2px;
-            }
+        .item-rate > fieldset > label:active {
+            position: relative;
+            top: 2px;
+        }
 
-            .item-address {
-                color: #A680B8;
-            }
+        .item-address {
+            color: #A680B8;
+        }
 
-            .item-tags {
-                margin-top: 2%;
-            }
+        .item-tags {
+            margin-top: 2%;
+        }
 
-            .item-tags > li {
-                float: left;
-                background-color: #FFF2CC;
-                color: #FFB570;
-                width: 23%;
-                margin: 0 2% 0 2%;
-                padding: 1% 0 1% 0;
-                text-align: center;
-            }
+        .item-tags > li {
+            float: left;
+            background-color: #FFF2CC;
+            color: #FFB570;
+            width: 23%;
+            margin: 0 2% 0 2%;
+            padding: 1% 0 1% 0;
+            text-align: center;
+        }
 
-            .busy {
-                border: 1px solid #B85450;
-                background-image: linear-gradient(#F8CECC, #EA6B66);
-                color: black;
-                font-weight: bolder;
-                font-style: italic;
-                padding: 4px 10px 4px 10px;
-                position: absolute;
-                right: 0;
-                top: 0;
-            }
+        .busy {
+            border: 1px solid #B85450;
+            background-image: linear-gradient(#F8CECC, #EA6B66);
+            color: black;
+            font-weight: bolder;
+            font-style: italic;
+            padding: 4px 10px 4px 10px;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
 
-            .arrow {
-                border: solid black;
-                border-width: 0 3px 3px 0;
-                display: inline-block;
-                padding: 3px;
-                margin: 0 0 3px 2px;
-                transform: rotate(45deg);
-            }
+        .arrow {
+            border: solid black;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            margin: 0 0 3px 2px;
+            transform: rotate(45deg);
+        }
 
-            li.selected > i.arrow {
-                border: solid white;
-                border-width: 0 3px 3px 0;
-                display: inline-block;
-                padding: 3px;
-                margin: 0 0 3px 2px;
-                transform: rotate(45deg);
-            }
+        li.selected > i.arrow {
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            margin: 0 0 3px 2px;
+            transform: rotate(45deg);
+        }
 
-            li.selected > i.arrow-rotated {
-                border: solid white;
-                border-width: 0 3px 3px 0;
-                display: inline-block;
-                padding: 3px;
-                margin: 3px 0 0 2px;
-                transform: rotate(-135deg);
-            }
+        li.selected > i.arrow-rotated {
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            margin: 3px 0 0 2px;
+            transform: rotate(-135deg);
+        }
 
-        </style>
-    </head>
-    <body>
-        <div class="result-header">
-            <img class="logo-img" src="{% static 'images/logo.png' %}" alt="Salonrate Logo">
-            <div class="search-box">
-                <ul class="search-switch" id="test">
-                    <li class="selected">Salon</li>
-                    <li>Service</li>
-                </ul>
-                <div class="search-area">
-                    <label>
-                        <input class="search-txt" type="text" placeholder="Salon">
-                    </label>
-                    <a class="search-btn">
-                        Q
-                    </a>
-                </div>
-            </div>
-            <div class="my-center">
-                <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
-                <a>
-                    My Account
-                </a>
-            </div>
+    </style>
+</head>
+<body>
+{% csrf_token %}
+<div class="result-header">
+    <img class="logo-img" src="{% static 'images/logo.png' %}" alt="Salonrate Logo">
+    <div class="search-box">
+        <ul class="search-switch">
+            <li class="selected">Salon</li>
+            <li>Service</li>
+        </ul>
+        <div class="search-area">
+            <label>
+                <input class="search-txt" type="text" placeholder="Salon" name="keywords">
+            </label>
+            <a class="search-btn">
+                Q
+            </a>
         </div>
-        <hr>
-        <div class="sort-filter">
-            <ul class="sort">
-                <li>
-                    Rate
-                    <i class="arrow"></i>
-                </li>
-                <li>
-                    Distance
-                    <i class="arrow"></i>
-                </li>
-                <li>
-                    Price
-                    <i class="arrow"></i>
-                </li>
-            </ul>
-            <div class="tag-filter">
-                <ul>
-                    <li>
-                        <input type="checkbox" class="flagged" value="Good Env" id="good_env"/>
-                        <label for="good_env">
-                            Good Env
-                        </label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="flagged" value="Good Service" id="good_service">
-                        <label for="good_service">
-                            Good Service
-                        </label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="flagged" value="Cost Effective" id="cost_effective">
-                        <label for="cost_effective">
-                            Cost Effective
-                        </label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="flagged" value="Good Skill" id="good_skill">
-                        <label for="good_skill">
-                            Good Skill
-                        </label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="flagged" value="Good Attitude" id="good_attitude">
-                        <label for="good_attitude">
-                            Good Attitude
-                        </label>
-                    </li>
-                    <li>
-                        <input type="checkbox" class="flagged" value="Not Busy" id="not_busy">
-                        <label for="not_busy">
-                            Not Busy
-                        </label>
-                    </li>
-                </ul>
-            </div>
-            <div style="display: flex;align-items: center;margin-right: 5%">
-                <div class="page-show" style="margin-right: 15px">
-                    <span id="current-page">1</span>
-                    <span>/</span>
-                    <span id="all-page">3</span>
-                </div>
-                <div class="page-control">
-                    <a id="prev-page"><</a>
-                    <a id="next-page">></a>
-                </div>
-            </div>
+    </div>
+    <div class="my-center">
+        <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
+        <a>
+            My Account
+        </a>
+    </div>
+</div>
+<hr>
+<div class="sort-filter">
+    <ul class="sort">
+        <li>
+            Rate
+            <i class="arrow"></i>
+        </li>
+        <li>
+            Distance
+            <i class="arrow"></i>
+        </li>
+        <li>
+            Price
+            <i class="arrow"></i>
+        </li>
+    </ul>
+    <div class="tag-filter">
+        <ul>
+            <li>
+                <input type="checkbox" class="flagged" value="Good Env" id="good_env"/>
+                <label for="good_env">
+                    Good Env
+                </label>
+            </li>
+            <li>
+                <input type="checkbox" class="flagged" value="Good Service" id="good_service">
+                <label for="good_service">
+                    Good Service
+                </label>
+            </li>
+            <li>
+                <input type="checkbox" class="flagged" value="Cost Effective" id="cost_effective">
+                <label for="cost_effective">
+                    Cost Effective
+                </label>
+            </li>
+            <li>
+                <input type="checkbox" class="flagged" value="Good Skill" id="good_skill">
+                <label for="good_skill">
+                    Good Skill
+                </label>
+            </li>
+            <li>
+                <input type="checkbox" class="flagged" value="Good Attitude" id="good_attitude">
+                <label for="good_attitude">
+                    Good Attitude
+                </label>
+            </li>
+            <li>
+                <input type="checkbox" class="flagged" value="Not Busy" id="not_busy">
+                <label for="not_busy">
+                    Not Busy
+                </label>
+            </li>
+        </ul>
+    </div>
+    <div style="display: flex;align-items: center;margin-right: 5%">
+        <div class="page-show" style="margin-right: 15px">
+            <span id="current-page">1</span>
+            <span>/</span>
+            <span id="all-page">3</span>
         </div>
-        <hr>
-        <div class="item-content">
-            <img class="item-img" src="{% static 'images/item.png' %}" alt="item image">
-            <div class="item-detail">
-                <span class="item-name">WESTEND HAIR SALON</span>
-                <div class="item-rate">
-                    <fieldset>
-                        <input type="radio" id="star5" name="rating" value="5"/><label for="star5" title="Outstanding">5
-                        stars</label>
-                        <input type="radio" id="star4" name="rating" value="4"/><label for="star4" title="Very Good">4
-                        stars</label>
-                        <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="Good">3
-                        stars</label>
-                        <input type="radio" id="star2" name="rating" value="2"/><label for="star2" title="Poor">2
-                        stars</label>
-                        <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="Very Poor">1
-                        star</label>
-                    </fieldset>
-                </div>
-                <span class="item-address">487 Great Western Road, Glasgow, G12 8HL</span>
-                <ul class="item-tags">
-                    <li>Tag 1</li>
-                    <li>Tag 1</li>
-                    <li>Tag 1</li>
-                </ul>
-            </div>
-            <div class="busy">
-                BUSY
-            </div>
+        <div class="page-control">
+            <a id="prev-page"><</a>
+            <a id="next-page">></a>
         </div>
-    </body>
+    </div>
+</div>
+<hr>
+<div class="item-content">
+    <img class="item-img" src="{% static 'images/item.png' %}" alt="item image">
+    <div class="item-detail">
+        <span class="item-name">WESTEND HAIR SALON</span>
+        <div class="item-rate">
+            <fieldset>
+                <input type="radio" id="star5" name="rating" value="5"/><label for="star5" title="Outstanding">5
+                stars</label>
+                <input type="radio" id="star4" name="rating" value="4"/><label for="star4" title="Very Good">4
+                stars</label>
+                <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="Good">3
+                stars</label>
+                <input type="radio" id="star2" name="rating" value="2"/><label for="star2" title="Poor">2
+                stars</label>
+                <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="Very Poor">1
+                star</label>
+            </fieldset>
+        </div>
+        <span class="item-address">487 Great Western Road, Glasgow, G12 8HL</span>
+        <ul class="item-tags">
+            <li>Tag 1</li>
+            <li>Tag 1</li>
+            <li>Tag 1</li>
+        </ul>
+    </div>
+    <div class="busy">
+        BUSY
+    </div>
+</div>
+</body>
 </html>

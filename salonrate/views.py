@@ -87,5 +87,11 @@ def service_detail(request):
     return render(request, 'salonrate/service_detail.html')
 
 
-def search(request):
+def search_result(request):
     return render(request, 'salonrate/search_result.html')
+
+
+def search(request):
+    keywords = request.POST.get('keywords', '')
+    print(keywords)
+    return HttpResponse("<p>Test</p>")
