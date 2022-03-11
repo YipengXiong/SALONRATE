@@ -7,32 +7,150 @@
         <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
         <script src="{% static 'js/jquery.min.js' %}"></script>
         <script>
-            $(function getSearchScope() {
+            const one_page_count = 6
+            let current_page = 0
+            let all_page_count = 0
+
+            function setAllPages(resLength) {
+                all_page_count = Math.ceil(resLength / one_page_count)
+                $("span#all-page").text(all_page_count)
+            }
+
+            function dividePages() {
+                let item_count = $("div.item-content").size();
+                if (item_count > 6) {
+                    for (let i = 0; i < one_page_count; i++) {
+                        $("div#" + i).show()
+                    }
+                    current_page++
+                } else {
+                    for (let i = 0; i < item_count; i++) {
+                        $("div#" + i).show()
+                    }
+                    current_page++
+                }
+                $("span#current-page").text(current_page)
+                $("span#all-page").text(all_page_count)
+            }
+
+            function getPrevPage() {
+                if (current_page > 1) {
+                    $("div.item-content").hide()
+                    current_page--
+                    for (let i = (current_page - 1) * one_page_count; i < current_page * one_page_count; i++) {
+                        $("div#" + i).show()
+                    }
+                    $("span#current-page").text(current_page)
+                }
+            }
+
+            function getNextPage() {
+                if (all_page_count > 1) {
+                    if (current_page < all_page_count) {
+                        $("div.item-content").hide()
+                        for (let i = current_page * one_page_count; i < (current_page + 1) * one_page_count; i++) {
+                            $("div#" + i).show()
+                        }
+                        current_page++
+                        $("span#current-page").text(current_page)
+                    }
+                }
+            }
+
+
+            $(function () {
+                $("a#next-page").on("click", getNextPage)
+                $("a#prev-page").on("click", getPrevPage)
+                $("span#current-page").text(current_page)
+                $("span#all-page").text(all_page_count)
                 $(".search-switch li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
-                    console.log("current search scope: " + $(this).text())
+                    // console.log("current search scope: " + $(this).text())
                 })
-            })
-            $(function getSortScope() {
                 $(".sort li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
-                    console.log("current sort scope: " + $(this).text().trim().replace("/\s/g",""))
+                    // console.log("current sort scope: " + $(this).text().trim().replace("/\s/g", ""))
                 })
-            })
-            $(function getFilterScope() {
                 $(".tag-filter input").change(function () {
-                    var checked_value = []
+                    let checked_value = []
                     $("input:checkbox:checked").each(function () {
                         checked_value.push($(this).val())
                     })
-                    console.log("current tag-filter scope: " + checked_value)
+                    // console.log("current tag-filter scope: " + checked_value)
                 })
             })
-            $(function getSearchKeywords() {
-                $(".search-btn").on("click", function () {
-                    var text = $(".search-txt").val()
-                    console.log("current search keywords: " + text)
+
+            function getSearchData() {
+                let scope = $('ul.search-switch li.selected').text().toLowerCase()
+                // console.log("scope is " + scope)
+                let keyword = $('input.search-txt').val()
+                // console.log("keyword is " + keywords)
+                $.ajax({
+                    type: 'post',
+                    url: '{% url "salonrate:search" %}',
+                    data: {
+                        'scope': scope,
+                        'keyword': keyword,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        // console.log(res)
+                        current_page = 0
+                        all_page_count = 0
+                        setAllPages(res.length)
+
+                        $("div.item-content").not(":first").remove()
+                        $("div.item-content:last").clone().attr("id", 1).appendTo($("div.item-container"))
+                        for (let i = 0; i < res.length - 1; i++) {
+                            $("div.item-content:last").clone().appendTo($("div.item-container"))
+                        }
+                        if (res[0].model === "salonrate.salon") {
+                            for (let j = 0; j < res.length; j++) {
+                                $("div.item-content").eq(j).attr("id", j)
+                                $("div#" + j + " div.item-detail span.item-name").text(res[j].fields.salon_name)
+                                $("div#" + j + " span.item-address").text(res[j].fields.salon_address)
+                                let rate = Math.floor(res[j].fields.salon_rate)
+                                $("div#" + j + " label").removeClass("rated")
+                                for (let i = 0; i < rate; i++) {
+                                    $("div#" + j + " label.star" + i).addClass("rated")
+                                }
+                                $("div#" + j + " ul.item-tags").hide()
+                                if (res[j].fields.salon_busy === false) {
+                                    $("div#" + j + " div.busy").hide()
+                                } else {
+                                    $("div#" + j + " div.busy").show()
+                                }
+                            }
+                        } else if (res[0].model === "salonrate.service") {
+                            for (let j = 0; j < res.length; j++) {
+                                $("div.item-content").eq(j).attr("id", j)
+                                $("div#" + j + " div.item-detail span.item-name").text(res[j].fields.service_name)
+                                let rate = Math.floor(res[j].fields.service_rate)
+                                $("div#" + j + " label").removeClass("rated")
+                                for (let i = 0; i < rate; i++) {
+                                    $("div#" + j + " label.star" + i).addClass("rated")
+                                }
+                                $("div#" + j + " span.item-address").hide()
+                                $("div#" + j + " ul.item-tags").hide()
+                                $("div#" + j + " div.busy").hide()
+                            }
+                        }
+                        $("div.item-content").hide()
+                        dividePages()
+
+                    }
                 })
+            }
+
+            $(function search() {
+                $('input.search-txt').keydown(function (e) {
+                    if (e.keyCode === 13) {
+                        getSearchData()
+                    }
+                })
+
+                $(".search-btn").on("click", getSearchData)
             })
         </script>
         <style>
@@ -198,13 +316,7 @@
                 display: inline-block;
             }
 
-            .item-rate > fieldset:not(:checked) > input {
-                position: absolute;
-                top: -9999px;
-                clip: rect(0, 0, 0, 0);
-            }
-
-            .item-rate > fieldset:not(:checked) > label {
+            .item-rate > fieldset > label {
                 float: right;
                 width: 1em;
                 padding: 0 .05em;
@@ -215,29 +327,37 @@
                 color: #F0A30A;
             }
 
-            .item-rate > fieldset:not(:checked) > label:before {
+            /*.item-rate > fieldset > label:before {*/
+            /*    content: '\f006  ';*/
+            /*}*/
+
+            .item-rate > fieldset > label:before {
                 content: '\f006  ';
             }
 
-            .item-rate > fieldset:not(:checked) > label:hover,
-            .item-rate > fieldset:not(:checked) > label:hover ~ label {
-                color: #F0A30A;
-                text-shadow: 0 0 3px #F0A30A;
-            }
-
-            .item-rate > fieldset:not(:checked) > label:hover:before,
-            .item-rate > fieldset:not(:checked) > label:hover ~ label:before {
+            .item-rate > fieldset > label.rated:before {
                 content: '\f005  ';
             }
 
-            .item-rate > fieldset > input:checked ~ label:before {
-                content: '\f005  ';
-            }
+            /*.item-rate > fieldset:not(:checked) > label:hover,*/
+            /*.item-rate > fieldset:not(:checked) > label:hover ~ label {*/
+            /*    color: #F0A30A;*/
+            /*    text-shadow: 0 0 3px #F0A30A;*/
+            /*}*/
 
-            .item-rate > fieldset > label:active {
-                position: relative;
-                top: 2px;
-            }
+            /*.item-rate > fieldset:not(:checked) > label:hover:before,*/
+            /*.item-rate > fieldset:not(:checked) > label:hover ~ label:before {*/
+            /*    content: '\f005  ';*/
+            /*}*/
+
+            /*.item-rate > fieldset > input:checked ~ label:before {*/
+            /*    content: '\f005  ';*/
+            /*}*/
+
+            /*.item-rate > fieldset > label:active {*/
+            /*    position: relative;*/
+            /*    top: 2px;*/
+            /*}*/
 
             .item-address {
                 color: #A680B8;
@@ -299,16 +419,17 @@
         </style>
     </head>
     <body>
+        {% csrf_token %}
         <div class="result-header">
             <img class="logo-img" src="{% static 'images/logo.png' %}" alt="Salonrate Logo">
             <div class="search-box">
-                <ul class="search-switch" id="test">
+                <ul class="search-switch">
                     <li class="selected">Salon</li>
                     <li>Service</li>
                 </ul>
                 <div class="search-area">
                     <label>
-                        <input class="search-txt" type="text" placeholder="Salon">
+                        <input class="search-txt" type="text" placeholder="Salon" name="keywords">
                     </label>
                     <a class="search-btn">
                         Q
@@ -382,7 +503,7 @@
                 <div class="page-show" style="margin-right: 15px">
                     <span id="current-page">1</span>
                     <span>/</span>
-                    <span id="all-page">3</span>
+                    <span id="all-page">1</span>
                 </div>
                 <div class="page-control">
                     <a id="prev-page"><</a>
@@ -391,33 +512,30 @@
             </div>
         </div>
         <hr>
-        <div class="item-content">
-            <img class="item-img" src="{% static 'images/item.png' %}" alt="item image">
-            <div class="item-detail">
-                <span class="item-name">WESTEND HAIR SALON</span>
-                <div class="item-rate">
-                    <fieldset>
-                        <input type="radio" id="star5" name="rating" value="5"/><label for="star5" title="Outstanding">5
-                        stars</label>
-                        <input type="radio" id="star4" name="rating" value="4"/><label for="star4" title="Very Good">4
-                        stars</label>
-                        <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="Good">3
-                        stars</label>
-                        <input type="radio" id="star2" name="rating" value="2"/><label for="star2" title="Poor">2
-                        stars</label>
-                        <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="Very Poor">1
-                        star</label>
-                    </fieldset>
+        <div class="item-container">
+            <div class="item-content">
+                <img class="item-img" src="{% static 'images/item.png' %}" alt="item image">
+                <div class="item-detail">
+                    <span class="item-name">WESTEND HAIR SALON</span>
+                    <div class="item-rate">
+                        <fieldset>
+                            <label class="star4" title="Outstanding">5 stars</label>
+                            <label class="star3" title="Very Good">4 stars</label>
+                            <label class="star2" title="Good">3 stars</label>
+                            <label class="star1" title="Poor">2 stars</label>
+                            <label class="star0" title="Very Poor">1 star</label>
+                        </fieldset>
+                    </div>
+                    <span class="item-address">487 Great Western Road, Glasgow, G12 8HL</span>
+                    <ul class="item-tags">
+                        <li>Tag 1</li>
+                        <li>Tag 1</li>
+                        <li>Tag 1</li>
+                    </ul>
                 </div>
-                <span class="item-address">487 Great Western Road, Glasgow, G12 8HL</span>
-                <ul class="item-tags">
-                    <li>Tag 1</li>
-                    <li>Tag 1</li>
-                    <li>Tag 1</li>
-                </ul>
-            </div>
-            <div class="busy">
-                BUSY
+                <div class="busy">
+                    BUSY
+                </div>
             </div>
         </div>
     </body>

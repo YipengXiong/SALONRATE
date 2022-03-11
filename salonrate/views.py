@@ -1,5 +1,7 @@
+import json
 from django.shortcuts import get_object_or_404, render
 from salonrate.models import UserProfile, Salon, Service, Comment, Follows
+from django.core import serializers
 from salonrate.forms import CommentForm, UserForm, UserProfileForm
 from django.urls import reverse
 from django.http import HttpResponse
@@ -109,9 +111,23 @@ def service_detail(request):
     context_dict['form'] = form
     return render(request, 'salonrate/service.html', context_dict)
 
+def search_result(request):
+    return render(request, 'salonrate/search_result.html')
+
 
 def search(request):
-    return render(request, 'salonrate/search_result.html')
+    scope = request.POST.get("scope")
+    keyword = request.POST.get('keyword')
+    # search_deatil = None
+    # context_dict = {}
+    if scope == "salon":
+        search_deatil = Salon.objects.filter(salon_name__contains=keyword)
+        context_dict = {'detail': search_deatil, 'flag': "True"}
+    else:
+        search_deatil = Service.objects.filter(service_name__contains=keyword)
+        context_dict = {'detail': search_deatil, 'flag': "False"}
+    res = serializers.serialize('json', search_deatil)
+    return HttpResponse(res)
 
 # def jsonEncoder(data):
 #     json_data = []
