@@ -35,33 +35,47 @@
             //         console.log("current search keywords: " + text)
             //     })
             // })
-            $(function search() {
-                // $('#key').bind('keypress', function (event) {
-                //     if (event.keyCode === "13") {
-                //         event.preventDefault();
-                //         $(".search-btn").click();
-                //     }
-                // });
-
-                $(".search-btn").on("click", function () {
-                    var scope = $('ul.search-switch li.selected').text().toLowerCase()
-                    // console.log("scope is " + scope)
-                    var keyword = $('input.search-txt').val()
-                    // console.log("keyword is " + keywords)
-                    $.ajax({
-                        type: 'post',
-                        url: '{% url "salonrate:search" %}',
-                        data: {
-                            'scope': scope,
-                            'keyword': keyword,
-                            'csrfmiddlewaretoken': '{{ csrf_token }}'
-                        },
-                        dataType : 'json',
-                        success: function (res) {
-                            console.log(res)
+            function getSearchData() {
+                var scope = $('ul.search-switch li.selected').text().toLowerCase()
+                // console.log("scope is " + scope)
+                var keyword = $('input.search-txt').val()
+                // console.log("keyword is " + keywords)
+                $.ajax({
+                    type: 'post',
+                    url: '{% url "salonrate:search" %}',
+                    data: {
+                        'scope': scope,
+                        'keyword': keyword,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        console.log(res)
+                        resLength = res.length
+                        console.log(resLength)
+                        for (var i = 0; i < res.length; i++) {
+                            $("div.item-content:first").clone().appendTo("body")
+                            $("div.item-content").attr("id", i)
+                            $("div.item-content div.item-detail span.item-name").text(res[i].fields.salon_name)
+                            $("div.item-content span.item-address").text(res[i].fields.salon_address)
+                            if (res[i].fields.salon_busy === false) {
+                                $("div.item-content div.busy").hide()
+                            } else {
+                                $("div.item-content div.busy").show()
+                            }
                         }
-                    })
+                    }
                 })
+            }
+
+            $(function search() {
+                $('input.search-txt').keydown(function (e) {
+                    if (e.keyCode === 13) {
+                        getSearchData()
+                    }
+                })
+
+                $(".search-btn").on("click", getSearchData)
             })
         </script>
         <style>
