@@ -1,7 +1,7 @@
 import json
 from django.shortcuts import render
 from django.core import serializers
-from salonrate.models import UserProfile, Salon
+from salonrate.models import UserProfile, Salon, Service
 from salonrate.forms import UserForm, UserProfileForm
 from django.urls import reverse
 from django.http import HttpResponse
@@ -96,11 +96,13 @@ def search_result(request):
 def search(request):
     scope = request.POST.get("scope")
     keyword = request.POST.get('keyword')
-    salon_detail = Salon.objects.filter(salon_name__contains=keyword)
-    context_dict = {'detail': salon_detail}
+    # search_deatil = None
+    # context_dict = {}
     if scope == "salon":
-        context_dict['flag'] = True
+        search_deatil = Salon.objects.filter(salon_name__contains=keyword)
+        context_dict = {'detail': search_deatil, 'flag': "True"}
     else:
-        context_dict['flag'] = False
-    res = serializers.serialize('json', salon_detail)
+        search_deatil = Service.objects.filter(service_name__contains=keyword)
+        context_dict = {'detail': search_deatil, 'flag': "False"}
+    res = serializers.serialize('json', search_deatil)
     return HttpResponse(res)
