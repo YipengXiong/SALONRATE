@@ -25,7 +25,7 @@
         font-weight: 500;   
     }
     input{
-        width: 300px;
+        width: 250px;
         margin: 8px;
         border: 1px solid #ccc; 
         padding: 3px 0px;
@@ -33,7 +33,6 @@
         padding:5px;
         background-color: lavender;
         font-family: 'Courier New', Courier, monospace;
-
     }
     .btn{
         font-family: 'Courier New', Courier, monospace;
@@ -45,17 +44,16 @@
         border-radius: 3px;
         padding-left:5px; 
         width: 405px;
-        height: 30px;
+        height: 40px;
         background-color: white;
         color:rgb(191, 137, 242);
-
     }
 </style>
 {% endblock %}
 
 {% block body_block %}
 <div class="container">
-    <h1>Login to Salonrate</h1>
+    <h1>Welcome to Salonrate!</h1>
     <form id="login_form" method="post" action="{% url 'salonrate:login' %}">
         {% csrf_token %}
         <label for="inputUsername" class="sr-only">Username</label>
@@ -65,7 +63,8 @@
         <input type="password" name="password" id="id_password" class="form-control"
             placeholder="Enter password" required><br />
         <button class="btn" type="submit"
-                value="Submit">Sign in</button>
+                value="Submit">Sign in</button><br />
+        <a href="{% url 'salonrate:register' %}"><button class="btn" type="button">Don't have an account? Register first!</button></a>
     </form>
 </div>
 {% endblock %}
