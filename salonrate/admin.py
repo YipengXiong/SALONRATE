@@ -7,9 +7,11 @@ from salonrate.models import Salon, Service, Comment, Follows
 # Register your models here.
 class SalonAdmin(admin.ModelAdmin):
     list_display = ('salon_id', 'salon_name', 'salon_address', 'salon_rate', 'salon_busy')
+    prepopulated_fields = {'slug':('salon_name',)}
 
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ('service_id', 'salon_id', 'service_name', 'service_type', 'service_price', 'service_rate')
+    prepopulated_fields = {'slug':('service_name',)}
 
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('comment_id', 'username', 'salon_or_service_id', 'comment')

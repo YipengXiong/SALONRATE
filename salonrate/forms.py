@@ -17,4 +17,4 @@ class UserProfileForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ('comment', 'tag_environ', 'tag_service', 'tag_cost', 'tag_skill', 'tag_attitude', )
+        fields = ('comment', 'star', 'tag_environ', 'tag_service', 'tag_cost', 'tag_skill', 'tag_attitude', )

@@ -1,7 +1,8 @@
+from email.policy import default
 from django.db import models
 from django.forms import CharField, FloatField, IntegerField
 from django.contrib.auth.models import User
-
+from django.template.defaultfilters import slugify
 # Create your models here.
 
 
@@ -12,9 +13,15 @@ class Salon(models.Model):
     salon_rate = models.FloatField(null=False)
     salon_avg_price = models.FloatField(default=0.0)
     salon_busy = models.BooleanField(default=False)
+    image = models.ImageField(upload_to="salon_img", blank=True)
     tag = models.CharField(max_length=16, default='0')
     phone = models.CharField(max_length=16)
     open_time = models.CharField(max_length=32, default='10:00am-5:00pm')
+    slug = models.SlugField(blank=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.salon_name)
+        super(Salon, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.salon_name
@@ -27,6 +34,11 @@ class Service(models.Model):
     service_type = models.IntegerField(default=0)
     service_price = models.FloatField(default=0.0)
     service_rate = models.FloatField(default=0.0)
+    slug = models.SlugField(blank=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.service_name)
+        super(Service, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.service_name
@@ -40,6 +52,7 @@ class Comment(models.Model):
     salon_or_service_id = models.IntegerField(default=0, null=False)
     type = models.IntegerField(default=0)
     comment = models.CharField(max_length=500)
+    star = models.IntegerField(default=0)
     tag_environ = models.BooleanField(default=False)
     tag_service = models.BooleanField(default=False)
     tag_cost = models.BooleanField(default=False)
