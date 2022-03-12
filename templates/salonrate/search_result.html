@@ -10,6 +10,7 @@
             const one_page_count = 6
             let current_page = 0
             let all_page_count = 0
+            let checked_value = {}
 
             function setAllPages(resLength) {
                 all_page_count = Math.ceil(resLength / one_page_count)
@@ -72,11 +73,20 @@
                     // console.log("current sort scope: " + $(this).text().trim().replace("/\s/g", ""))
                 })
                 $(".tag-filter input").change(function () {
-                    let checked_value = []
+                    // checked_value = {
+                    //     'good_env': 0,
+                    //     'good_service': 0,
+                    //     'cost_effective': 0,
+                    //     'good_skill': 0,
+                    //     'good_attitude': 0,
+                    //     'not_busy': 0
+                    // }
+                    checked_value = {}
                     $("input:checkbox:checked").each(function () {
-                        checked_value.push($(this).val())
+                        checked_value[$(this).val().toLowerCase().replace(" ", "_")] = 1
                     })
                     // console.log("current tag-filter scope: " + checked_value)
+                    // console.log(checked_value)
                 })
             })
 
@@ -91,6 +101,7 @@
                     data: {
                         'scope': scope,
                         'keyword': keyword,
+                        'sort_tag':checked_value,
                         'csrfmiddlewaretoken': '{{ csrf_token }}'
                     },
                     dataType: 'json',
@@ -98,48 +109,59 @@
                         // console.log(res)
                         current_page = 0
                         all_page_count = 0
+                        // console.log(res.length)
                         setAllPages(res.length)
 
-                        $("div.item-content").not(":first").remove()
-                        if (res.length > 1) {
-                            $("div.item-content:last").clone().attr("id", 1).appendTo($("div.item-container"))
-                        }
-                        for (let i = 0; i < res.length - 1; i++) {
-                            $("div.item-content:last").clone().appendTo($("div.item-container"))
-                        }
-                        if (res[0].model === "salonrate.salon") {
-                            for (let j = 0; j < res.length; j++) {
-                                $("div.item-content").eq(j).attr("id", j)
-                                $("div#" + j + " div.item-detail span.item-name").text(res[j].fields.salon_name)
-                                $("div#" + j + " span.item-address").text(res[j].fields.salon_address)
-                                let rate = Math.floor(res[j].fields.salon_rate)
-                                $("div#" + j + " label").removeClass("rated")
-                                for (let i = 0; i < rate; i++) {
-                                    $("div#" + j + " label.star" + i).addClass("rated")
+                        if (res.length) {
+                            $("div.item-content").not(":first").remove()
+                            if (res.length > 1) {
+                                $("div.item-content:last").clone().attr("id", 1).appendTo($("div.item-container"))
+                            }
+                            for (let i = 0; i < res.length - 1; i++) {
+                                $("div.item-content:last").clone().appendTo($("div.item-container"))
+                            }
+                            if (res[0].model === "salonrate.salon") {
+                                for (let j = 0; j < res.length; j++) {
+                                    $("div.item-content").eq(j).attr("id", j)
+                                    $("div#" + j + " div.item-detail span.item-name").text(res[j].fields.salon_name)
+                                    $("div#" + j + " span.item-address").text(res[j].fields.salon_address)
+                                    let rate = Math.floor(res[j].fields.salon_rate)
+                                    $("div#" + j + " label").removeClass("rated")
+                                    for (let i = 0; i < rate; i++) {
+                                        $("div#" + j + " label.star" + i).addClass("rated")
+                                    }
+                                    // todo: 前端tag显示
+                                    let tag_count = 0
+                                    for (let i = 0; i < 5; i++) {
+
+                                    }
+                                    $("div#" + j + " ul.item-tags").hide()
+                                    if (res[j].fields.salon_busy === false) {
+                                        $("div#" + j + " div.busy").hide()
+                                    } else {
+                                        $("div#" + j + " div.busy").show()
+                                    }
                                 }
-                                $("div#" + j + " ul.item-tags").hide()
-                                if (res[j].fields.salon_busy === false) {
+                            } else if (res[0].model === "salonrate.service") {
+                                for (let j = 0; j < res.length; j++) {
+                                    $("div.item-content").eq(j).attr("id", j)
+                                    $("div#" + j + " div.item-detail span.item-name").text(res[j].fields.service_name)
+                                    let rate = Math.floor(res[j].fields.service_rate)
+                                    $("div#" + j + " label").removeClass("rated")
+                                    for (let i = 0; i < rate; i++) {
+                                        $("div#" + j + " label.star" + i).addClass("rated")
+                                    }
+                                    $("div#" + j + " span.item-address").hide()
+                                    $("div#" + j + " ul.item-tags").hide()
                                     $("div#" + j + " div.busy").hide()
-                                } else {
-                                    $("div#" + j + " div.busy").show()
                                 }
                             }
-                        } else if (res[0].model === "salonrate.service") {
-                            for (let j = 0; j < res.length; j++) {
-                                $("div.item-content").eq(j).attr("id", j)
-                                $("div#" + j + " div.item-detail span.item-name").text(res[j].fields.service_name)
-                                let rate = Math.floor(res[j].fields.service_rate)
-                                $("div#" + j + " label").removeClass("rated")
-                                for (let i = 0; i < rate; i++) {
-                                    $("div#" + j + " label.star" + i).addClass("rated")
-                                }
-                                $("div#" + j + " span.item-address").hide()
-                                $("div#" + j + " ul.item-tags").hide()
-                                $("div#" + j + " div.busy").hide()
-                            }
+                            $("div.item-content").hide()
+                            dividePages()
+                        } else {
+                            $("div.item-content").hide()
+                            $("span#current-page").text(0)
                         }
-                        $("div.item-content").hide()
-                        dividePages()
 
                     }
                 })

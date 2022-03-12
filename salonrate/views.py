@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
+
 # Create your views here.
 def register(request):
     # Set a boolean value to indicate the registration state.
@@ -86,14 +87,14 @@ def salon_detail(request):
 
 def service_detail(request):
     service = get_object_or_404(Service, service_id=100)
-    context_dict = {"service":service,"comments":None}
+    context_dict = {"service": service, "comments": None}
     comments = Comment.objects.filter(salon_or_service_id=service.service_id, type=1).order_by("-comment_id")
     if comments:
         context_dict["comments"] = comments
         context_dict["comment_count"] = len(comments)
     else:
         print("No Comments")
-    
+
     form = CommentForm()
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -111,6 +112,7 @@ def service_detail(request):
     context_dict['form'] = form
     return render(request, 'salonrate/service.html', context_dict)
 
+
 def search_result(request):
     return render(request, 'salonrate/search_result.html')
 
@@ -118,15 +120,42 @@ def search_result(request):
 def search(request):
     scope = request.POST.get("scope")
     keyword = request.POST.get('keyword')
-    # search_deatil = None
-    # context_dict = {}
+    # sort_value = request.POST.get('sort_value')
+    # print(sort_value)
+    pre_filters = {
+        'good_env': request.POST.get('sort_tag[good_env]'),
+        'good_service': request.POST.get('sort_tag[good_service]'),
+        'cost_effective': request.POST.get('sort_tag[cost_effective]'),
+        'good_skill': request.POST.get('sort_tag[good_skill]'),
+        'good_attitude': request.POST.get('sort_tag[good_attitude]'),
+        'not_busy': request.POST.get('sort_tag[not_busy]')
+    }
+    # pre_filters["good_env"] = request.POST.get('sort_tag[good_env]')
+    # pre_filters["good_service"] = request.POST.get('sort_tag[good_service]')
+    # pre_filters["cost_effective"] = request.POST.get('sort_tag[cost_effective]')
+    # pre_filters["good_skill"] = request.POST.get('sort_tag[good_skill]')
+    # pre_filters["good_attitude"] = request.POST.get('sort_tag[good_attitude]')
+    # pre_filters["not_busy"] = request.POST.get('sort_tag[not_busy]')
+    # flag = good_env | good_service | cost_effective | good_skill | good_attitude | not_busy
+    # print(f"{good_env}:{good_service}:{cost_effective}:{good_skill}:{good_attitude}:{not_busy}")
+    # print(pre_filters)
+    filters = {}
+    for k, v in pre_filters.items():
+        if v is not None:
+            if k is "not_busy":
+                filters["salon_busy"] = 1 if v == 1 else 0
+            else:
+                filters[k] = v
+
+    search_detail = None
     if scope == "salon":
-        search_deatil = Salon.objects.filter(salon_name__contains=keyword)
-        context_dict = {'detail': search_deatil, 'flag': "True"}
+        # filters = {"good_env": 1,"good_attitude":1}
+        search_detail = Salon.objects.filter(salon_name__contains=keyword)
+        search_detail = search_detail.filter(**filters)
+
     else:
-        search_deatil = Service.objects.filter(service_name__contains=keyword)
-        context_dict = {'detail': search_deatil, 'flag': "False"}
-    res = serializers.serialize('json', search_deatil)
+        search_detail = Service.objects.filter(service_name__contains=keyword)
+    res = serializers.serialize('json', search_detail)
     return HttpResponse(res)
 
 # def jsonEncoder(data):
