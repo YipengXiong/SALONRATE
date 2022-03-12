@@ -69,8 +69,9 @@ class Follows(models.Model):
     salon_id = models.ForeignKey(Salon, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.user_id), str(self.salon_id)
-
+        return str(self.username), str(self.salon_id)
+    class Meta:
+        verbose_name_plural = 'Follows'
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
