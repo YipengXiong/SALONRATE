@@ -101,7 +101,9 @@
                         setAllPages(res.length)
 
                         $("div.item-content").not(":first").remove()
-                        $("div.item-content:last").clone().attr("id", 1).appendTo($("div.item-container"))
+                        if (res.length > 1) {
+                            $("div.item-content:last").clone().attr("id", 1).appendTo($("div.item-container"))
+                        }
                         for (let i = 0; i < res.length - 1; i++) {
                             $("div.item-content:last").clone().appendTo($("div.item-container"))
                         }
