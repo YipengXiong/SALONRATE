@@ -14,10 +14,16 @@ class Salon(models.Model):
     salon_avg_price = models.FloatField(default=0.0)
     salon_busy = models.BooleanField(default=False)
     image = models.ImageField(upload_to="salon_img", blank=True)
-    tag = models.CharField(max_length=16, default='0')
+    # tag = models.CharField(max_length=16, default='0')
     phone = models.CharField(max_length=16)
     open_time = models.CharField(max_length=32, default='10:00am-5:00pm')
     slug = models.SlugField(blank=True)
+    good_env = models.BooleanField(default=False)
+    good_service = models.BooleanField(default=False)
+    cost_effective = models.BooleanField(default=False)
+    good_skill = models.BooleanField(default=False)
+    good_attitude = models.BooleanField(default=False)
+
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.salon_name)
