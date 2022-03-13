@@ -101,12 +101,12 @@
                     data: {
                         'scope': scope,
                         'keyword': keyword,
-                        'sort_tag':checked_value,
+                        'sort_tag': checked_value,
                         'csrfmiddlewaretoken': '{{ csrf_token }}'
                     },
                     dataType: 'json',
                     success: function (res) {
-                        // console.log(res)
+                        console.log(res)
                         current_page = 0
                         all_page_count = 0
                         // console.log(res.length)
@@ -130,12 +130,28 @@
                                     for (let i = 0; i < rate; i++) {
                                         $("div#" + j + " label.star" + i).addClass("rated")
                                     }
-                                    // todo: 前端tag显示
-                                    let tag_count = 0
-                                    for (let i = 0; i < 5; i++) {
 
+                                    let tags = {
+                                        'Good Env': res[j].fields.good_env,
+                                        'Good Service': res[j].fields.good_service,
+                                        'Cost Effective': res[j].fields.cost_effective,
+                                        'Good Skill': res[j].fields.good_skill,
+                                        'Good Attitude': res[j].fields.good_attitude
                                     }
-                                    $("div#" + j + " ul.item-tags").hide()
+                                    // console.log(tags)
+                                    
+// todo: css background color of tags
+                                    $("div#" + j + " ul.item-tags li").hide()
+                                    let tag_index = 0
+                                    if (tag_index < 3) {
+                                        $.each(tags, function (k, v) {
+                                            if (v) {
+                                                $("div#" + j + " ul.item-tags li").eq(tag_index).text(k).show()
+                                                tag_index++
+                                            }
+                                        })
+                                    }
+
                                     if (res[j].fields.salon_busy === false) {
                                         $("div#" + j + " div.busy").hide()
                                     } else {
