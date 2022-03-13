@@ -127,8 +127,12 @@ def search(request):
     scope = request.POST.get("scope")
     keyword = request.POST.get('keyword')
 
+    # init search detail object
     search_detail = None
+
+    # search in salon scope
     if scope == "salon":
+        # prefilter to get which tag filters selected
         pre_filters = {
             'good_env': request.POST.get('sort_tag[good_env]'),
             'good_service': request.POST.get('sort_tag[good_service]'),
@@ -137,18 +141,21 @@ def search(request):
             'good_attitude': request.POST.get('sort_tag[good_attitude]'),
             'not_busy': request.POST.get('sort_tag[not_busy]')
         }
+        # create customized where limit conditions(where xxx=xxx)
         filters = {}
         for k, v in pre_filters.items():
+            # if tag is selected, add to where limit conditions
             if v is not None:
                 if k is "not_busy":
                     filters["salon_busy"] = 1 if v == 1 else 0
                 else:
                     filters[k] = v
-        # filters = {"good_env": 1,"good_attitude":1}
         search_detail = Salon.objects.filter(salon_name__contains=keyword)
+        # query with dynamic where limit conditions
         search_detail = search_detail.filter(**filters)
 
     else:
+        # prefilter to get which tag filters selected
         pre_filters = {
             'wash': request.POST.get('sort_tag[wash]'),
             'cut': request.POST.get('sort_tag[cut]'),
@@ -156,17 +163,27 @@ def search(request):
             'perm': request.POST.get('sort_tag[perm]'),
             'care': request.POST.get('sort_tag[care]'),
         }
+        # map type name to integer used in database
         service_tag_map = {'wash': 0, 'cut': 1, 'dye': 2, 'perm': 3, 'care': 4}
         sort_type = []
         for k, v in pre_filters.items():
             if v is not None:
                 sort_type.append(service_tag_map.get(k))
-        print(sort_type)
+
+        # create default query with name conditions
         search_detail = Service.objects.filter(service_name__contains=keyword)
+        # use Q query to create dynamic where limit conditions
         q_query = Q()
         for i in range(len(sort_type)):
+            # if tag is selected, add it into where limit conditions by *OR*
+            # i.e. tag_condition1 OR tag_condition2 OR ...
             q_query |= Q(service_type=sort_type[i])
+
+        # update default querySet with dynamic Q where limit conditions
+        # i.e. select * from service where service_name like "%xxx%" AND (tag1 OR tag2 OR tag3 ...)
         search_detail = search_detail.filter(q_query)
+
+    # map object to json format
     res = serializers.serialize('json', search_detail)
     return HttpResponse(res)
 
