@@ -140,7 +140,7 @@
                                     }
                                     // console.log(tags)
 
-// todo: css background color of tags
+                                    // todo: 4. css background color of tags
                                     $("div#" + j + " ul.item-tags li").hide()
                                     let tag_index = 0
                                     if (tag_index < 3) {
@@ -159,6 +159,7 @@
                                     }
                                 }
                             } else if (res[0].model === "salonrate.service") {
+                                //todo: 2. service type show
                                 for (let j = 0; j < res.length; j++) {
                                     $("div.item-content").eq(j).attr("id", j)
                                     $("div#" + j + " div.item-detail span.item-name").text(res[j].fields.service_name)
@@ -182,6 +183,8 @@
                     }
                 })
             }
+
+            //todo: 1. service tag dynamic change when change to service scope
 
             $(function search() {
                 $('input.search-txt').keydown(function (e) {

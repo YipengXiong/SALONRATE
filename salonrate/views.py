@@ -120,8 +120,6 @@ def search_result(request):
 def search(request):
     scope = request.POST.get("scope")
     keyword = request.POST.get('keyword')
-    # sort_value = request.POST.get('sort_value')
-    # print(sort_value)
     pre_filters = {
         'good_env': request.POST.get('sort_tag[good_env]'),
         'good_service': request.POST.get('sort_tag[good_service]'),
@@ -130,15 +128,6 @@ def search(request):
         'good_attitude': request.POST.get('sort_tag[good_attitude]'),
         'not_busy': request.POST.get('sort_tag[not_busy]')
     }
-    # pre_filters["good_env"] = request.POST.get('sort_tag[good_env]')
-    # pre_filters["good_service"] = request.POST.get('sort_tag[good_service]')
-    # pre_filters["cost_effective"] = request.POST.get('sort_tag[cost_effective]')
-    # pre_filters["good_skill"] = request.POST.get('sort_tag[good_skill]')
-    # pre_filters["good_attitude"] = request.POST.get('sort_tag[good_attitude]')
-    # pre_filters["not_busy"] = request.POST.get('sort_tag[not_busy]')
-    # flag = good_env | good_service | cost_effective | good_skill | good_attitude | not_busy
-    # print(f"{good_env}:{good_service}:{cost_effective}:{good_skill}:{good_attitude}:{not_busy}")
-    # print(pre_filters)
     filters = {}
     for k, v in pre_filters.items():
         if v is not None:
@@ -154,6 +143,7 @@ def search(request):
         search_detail = search_detail.filter(**filters)
 
     else:
+        # todo: 3. service tag filter operation with database
         search_detail = Service.objects.filter(service_name__contains=keyword)
     res = serializers.serialize('json', search_detail)
     return HttpResponse(res)
