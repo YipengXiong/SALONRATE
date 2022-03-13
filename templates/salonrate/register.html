@@ -73,7 +73,7 @@
 {% else %}
 <div class="container">
     <h1>Register</h1>
-    <form id="user_form" method="post" action="{% url 'salonrate:register' %}">
+    <form id="user_form" method="post" action="{% url 'salonrate:register' %}" enctype="multipart/form-data">
         {% csrf_token %}
         {% for field in user_form %}
             {{ field.errors }}
