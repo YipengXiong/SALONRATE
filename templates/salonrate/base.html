@@ -29,10 +29,11 @@
         <style>
             .result-header {
                 margin-top:15px;
-                margin-left:5%;
-                margin-right:5%;
+                margin-left:10%;
+                margin-right:10%;
                 display: flex;
                 align-items: center;
+                font-family: 'Courier New', Courier, monospace;
             }
 
             ul {
@@ -44,36 +45,45 @@
 
             .search-switch li {
                 float: left;
-                border: 2px solid #E1D5E7;
+                border: 1px solid rgb(208, 167, 245);
+                width: 80px;
+                height: 30px;
+                text-align: center;
                 margin: 0 -1px 0 -1px;
                 padding: 2px 10px 2px 10px;
+                font-weight: 500;
+                font-size: 15px;
             }
 
             .search-switch li:first-child {
-                border-radius: 8px 0 0 8px;
+                border-radius: 2px 0 0 2px;
             }
 
             .search-switch li:last-child {
-                border-radius: 0 8px 8px 0;
+                border-radius: 0 2px 2px 0;
             }
 
             .logo-img {
                 display: block;
                 height: 50px;
-                margin: 0 0 0 5%;
+                /* margin: 0 0 0 10%; */
             }
 
-            .my-center {
+            /* .my-center {
                 margin: 0 5% 0 0;
-            }
+            } */
 
             .me-img {
-                height: 20px;
+                border-radius: 50%;
+                width: 4vmin;
+                height:4vmin;
+                object-fit: cover;
+                object-position: center;
             }
 
 
             .search-switch {
-                color: #A680B8;
+                color: rgb(191, 137, 242);
                 background-color: #FFFFFF;
                 float: left;
                 margin: 0 20px 0 0;
@@ -82,7 +92,7 @@
 
             .selected {
                 color: #FFFFFF;
-                background-color: #C3ABD0;
+                background-color: rgb(208, 167, 245);
             }
 
             .search-box {
@@ -93,25 +103,37 @@
 
             .search-area {
                 float: left;
-                border: 1px solid #C3ABD0;
+                border: 1px solid rgb(208, 167, 245);
+                border-radius: 2px;
+                height: 30px;
+                width: 300px;
             }
 
             .search-txt {
-                height: 20px;
-                line-height: 20px;
+                height: 28px;
+                width: 248px;
                 border: none;
                 background: transparent;
                 text-overflow: ellipsis;
                 overflow: hidden;
-                border-radius: 0;
                 font-style: italic;
-                color: #C3ABD0;
+                color: rgb(191, 137, 242);
                 outline: none;
             }
 
+            .search-txt::placeholder{
+                color: rgb(191, 137, 242);
+            }
+
             .search-btn {
-                color: #808080;
+                color: rgb(191, 137, 242);
                 display: inline-block;
+                width: 10%;
+            }
+
+            .search-img{
+                width: 25px;
+                margin-top: -5px;
             }
 
             .sort-filter {
@@ -187,7 +209,18 @@
                 display: inline-block;
             }
 
-            .item-rate > fieldset:not(:checked) > input {
+            .item-rate > fieldset > label {
+                float: right;
+                width: 1em;
+                padding: 0 .05em;
+                overflow: hidden;
+                white-space: nowrap;
+                cursor: pointer;
+                font-size: 150%;
+                color: #F0A30A;
+            }
+
+            /* .item-rate > fieldset:not(:checked) > input {
                 position: absolute;
                 top: -9999px;
                 clip: rect(0, 0, 0, 0);
@@ -226,6 +259,12 @@
             .item-rate > fieldset > label:active {
                 position: relative;
                 top: 2px;
+            } */
+            .item-rate > fieldset > label:before {
+                content: '\f006  ';
+            }
+            .item-rate > fieldset > label.rated:before {
+                content: '\f005  ';
             }
 
             .item-address {
@@ -238,11 +277,11 @@
 
             .item-tags > li {
                 float: left;
-                background-color: #FFF2CC;
-                color: #FFB570;
-                width: 23%;
-                margin: 0 2% 0 2%;
-                padding: 1% 0 1% 0;
+                background-color: #fff9e8;
+                color: #fe9b3e;
+                width: 140px;
+                margin: 0 6px 0 0;
+                padding: 6px 0 6px 0;
                 text-align: center;
             }
 
@@ -288,7 +327,7 @@
 
     <body>
         <div class="result-header">
-            <img class="logo-img" src="{% static 'images/logo.png' %}" alt="Salonrate Logo">
+            <a href="{% url 'salonrate:homepage' %}"><img class="logo-img" src="{% static 'images/logo.png' %}" alt="Salonrate Logo"></a>
             <div class="search-box">
                 <ul class="search-switch" id="test">
                     <li class="selected">Salon</li>
@@ -296,18 +335,26 @@
                 </ul>
                 <div class="search-area">
                     <label>
-                        <input class="search-txt" type="text" placeholder="Salon">
+                        <input class="search-txt" type="text" placeholder="Search for salon or service">
                     </label>
                     <a class="search-btn">
-                        Q
+                        <img class="search-img" src="{% static 'images/search.png' %}" alt="Q">
                     </a>
                 </div>
             </div>
             <div class="my-center">
+                {% if user.is_authenticated %}
+                {% if user.userprofile.avatar.url %}
+                <img class='me-img' src="{{ user.userprofile.avatar.url }}" alt="Avatar" />
+                {% else %}
                 <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
-                <a>
-                    My Account
-                </a>
+                {% endif %}
+                <a>{{ user.username }}</a>
+                {% else %}
+                <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
+                <a>My Account</a>
+                {% endif %}
+                
             </div>
         </div>
         <hr />

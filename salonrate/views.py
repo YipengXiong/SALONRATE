@@ -81,17 +81,22 @@ def homepage(request):
     return render(request, 'salonrate/homepage.html')
 
 
-def salon_detail(request):
+def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
     return render(request, 'salonrate/salon.html')
 
 
-def service_detail(request):
-    service = get_object_or_404(Service, service_id=100)
+def service_detail(request, service_name_slug="eyebrows-eyelashes-191"):
+    service = get_object_or_404(Service, slug=service_name_slug)
     context_dict = {"service": service, "comments": None}
     comments = Comment.objects.filter(salon_or_service_id=service.service_id, type=1).order_by("-comment_id")
     if comments:
         context_dict["comments"] = comments
         context_dict["comment_count"] = len(comments)
+        # Calculate the average rate of the current service
+        service.service_rate = round(sum([c.star for c in comments])/len(comments))
+        service.save()
+        context_dict["service"] = service
+        # context_dict["service_rate"] = service.service_rate
     else:
         print("No Comments")
 
@@ -105,8 +110,8 @@ def service_detail(request):
             comment.salon_or_service_id = service.service_id
             comment.type = 1
             comment.save()
-            return redirect(reverse('salonrate:service'))
-            # return redirect(reverse('salonrate:service', kwargs={'service_name_slug':service_name_slug}))
+            # return redirect(reverse('salonrate:service'))
+            return redirect(reverse('salonrate:service', kwargs={'service_name_slug':service_name_slug}))
         else:
             print(form.errors)
     context_dict['form'] = form
