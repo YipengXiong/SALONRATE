@@ -90,6 +90,19 @@
                 })
             })
 
+            function text_remap(original_name) {
+                switch (original_name) {
+                    case ("Good Env"):
+                        return "Nice Environment"
+                    case("Good Service"):
+                        return "Attentive Service"
+                    case("Good Skill"):
+                        return "Excellent Skill"
+                    case("Good Attitude"):
+                        return "Warm Attitude"
+                }
+            }
+
             function getSearchData() {
                 let scope = $('ul.search-switch li.selected').text().toLowerCase()
                 // console.log("scope is " + scope)
@@ -146,7 +159,7 @@
                                     if (tag_index < 3) {
                                         $.each(tags, function (k, v) {
                                             if (v) {
-                                                $("div#" + j + " ul.item-tags li").eq(tag_index).text(k).show()
+                                                $("div#" + j + " ul.item-tags li").eq(tag_index).text(text_remap(k)).show()
                                                 tag_index++
                                             }
                                         })
@@ -184,7 +197,31 @@
                 })
             }
 
-            //todo: 1. service tag dynamic change when change to service scope
+            $(function () {
+                $(".search-switch li").on("click", function () {
+                    $(this).addClass("selected").siblings().removeClass("selected").end()
+                    // console.log($(this).text())
+                    let scope = $(this).text().toLowerCase()
+                    if (scope === "service") {
+                        let service_tag = ["Wash", "Cut", "Dye", "Perm", "Care"]
+                        for (let i = 0; i < 5; i++) {
+                            $("div.tag-filter li input").eq(i).attr("value", service_tag[i]).attr("id", service_tag[i].toLowerCase())
+                            $("div.tag-filter li label").eq(i).attr("for", service_tag[i].toLowerCase())
+                            $("div.tag-filter li label").eq(i).text(service_tag[i])
+                        }
+                        $("div.tag-filter li").eq(-1).hide()
+                    }
+                    if (scope === "salon") {
+                        let salon_tag = ["Good Env", "Good Service", "Cost Effective", "Good Skill", "Good Attitude", "Not Busy"]
+                        for (let i = 0; i < 6; i++) {
+                            $("div.tag-filter li input").eq(i).attr("value", salon_tag[i]).attr("id", salon_tag[i].toLowerCase().replace(" ", "_"))
+                            $("div.tag-filter li label").eq(i).attr("for", salon_tag[i].toLowerCase().replace(" ", "_"))
+                            $("div.tag-filter li label").eq(i).text(text_remap(salon_tag[i]))
+                        }
+                        $("div.tag-filter li").eq(-1).show()
+                    }
+                })
+            })
 
             $(function search() {
                 $('input.search-txt').keydown(function (e) {
