@@ -64,7 +64,7 @@ class Comment(models.Model):
     tag_cost = models.BooleanField(default=False)
     tag_skill = models.BooleanField(default=False)
     tag_attitude = models.BooleanField(default=False)
-    comment_time = models.TimeField(auto_now=True)
+    comment_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.comment_id)
