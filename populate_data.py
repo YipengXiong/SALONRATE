@@ -76,7 +76,7 @@ def populate_comment():
                     id = random.randint(1, 193)
                 users = User.objects.all()
                 user = users[random.randint(0,1)]
-                c = Comment(user_id=user, salon_or_service_id=id, type=comment_type, comment=comment_content,
+                c = Comment(username=user, salon_or_service_id=id, type=comment_type, comment=comment_content,
                             tag_environ=randomBool(), tag_service=randomBool(), tag_cost=randomBool(), tag_skill=randomBool(), tag_attitude=randomBool(),)
                 c.save()
         f.close()
@@ -86,9 +86,17 @@ def populate_follows():
     salons = Salon.objects.all()
     for salon in salons:
         user = users[random.randint(0,1)]
-        f = Follows(salon_id=salon, user_id=user)
+        f = Follows(salon_id=salon, username=user)
         f.save()
 
+def populate_save():
+    salons = Salon.objects.all()
+    services = Service.objects.all()
+    for s in salons:
+        s.save()
+    for serv in services:
+        serv.save()
+    print("Finished")
 
 if __name__ == '__main__':
     print('Starting population script...')

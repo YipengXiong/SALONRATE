@@ -1,4 +1,5 @@
 from email.policy import default
+import uuid
 from django.db import models
 from django.forms import CharField, FloatField, IntegerField
 from django.contrib.auth.models import User
@@ -43,7 +44,7 @@ class Service(models.Model):
     slug = models.SlugField(blank=True)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.service_name)
+        self.slug = slugify(self.service_name) + "-" + str(self.service_id)
         super(Service, self).save(*args, **kwargs)
 
     def __str__(self):
