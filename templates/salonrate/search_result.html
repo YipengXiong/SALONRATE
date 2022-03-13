@@ -172,7 +172,6 @@
                                     }
                                 }
                             } else if (res[0].model === "salonrate.service") {
-                                //todo: 2. service type show
                                 for (let j = 0; j < res.length; j++) {
                                     $("div.item-content").eq(j).attr("id", j)
                                     $("div#" + j + " div.item-detail span.item-name").text(res[j].fields.service_name)
