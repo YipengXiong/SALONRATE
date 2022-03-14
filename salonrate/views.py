@@ -123,7 +123,7 @@ def search_result(request):
     return render(request, 'salonrate/search_result.html')
 
 
-def search(request):
+def ajax_search(request):
     scope = request.POST.get("scope")
     keyword = request.POST.get('keyword')
 

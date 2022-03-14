@@ -119,7 +119,7 @@
                 // console.log("keyword is " + keywords)
                 $.ajax({
                     type: 'post',
-                    url: '{% url "salonrate:search" %}',
+                    url: '{% url "salonrate:ajax_search" %}',
                     data: {
                         'scope': scope,
                         'keyword': keyword,
@@ -128,7 +128,7 @@
                     },
                     dataType: 'json',
                     success: function (res) {
-                        console.log(res)
+                        // console.log(res)
                         current_page = 0
                         all_page_count = 0
                         // console.log(res.length)
