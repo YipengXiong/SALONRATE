@@ -67,11 +67,10 @@
                 $(".search-switch li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
                     // console.log("current search scope: " + $(this).text())
-                    if($(this).text()==="Salon"){
-                        $("div.search-box div.search-area input").attr("placeholder","Salon Name")
-                    }
-                    else {
-                        $("div.search-box div.search-area input").attr("placeholder","Service Name")
+                    if ($(this).text() === "Salon") {
+                        $("div.search-box div.search-area input").attr("placeholder", "Salon Name")
+                    } else {
+                        $("div.search-box div.search-area input").attr("placeholder", "Service Name")
                     }
                 })
                 $(".sort li").on("click", function () {
@@ -600,11 +599,13 @@
             </div>
         </div>
         <hr>
+        {% if res %}
+        {% for item in res %}
         <div class="item-container">
             <div class="item-content">
                 <img class="item-img" src="{% static 'images/item.png' %}" alt="item image">
                 <div class="item-detail">
-                    <span class="item-name">WESTEND HAIR SALON</span>
+                    <span class="item-name">{{item.salon_name}}</span>
                     <div class="item-rate">
                         <fieldset>
                             <label class="star4" title="Outstanding">5 stars</label>
@@ -614,7 +615,7 @@
                             <label class="star0" title="Very Poor">1 star</label>
                         </fieldset>
                     </div>
-                    <span class="item-address">487 Great Western Road, Glasgow, G12 8HL</span>
+                    <span class="item-address">{{item.salon_address}}</span>
                     <ul class="item-tags">
                         <li>Tag 1</li>
                         <li>Tag 1</li>
@@ -626,5 +627,7 @@
                 </div>
             </div>
         </div>
+        {% endfor %}
+        {% endif %}
     </body>
 </html>
