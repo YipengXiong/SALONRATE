@@ -2,409 +2,422 @@
 {% load staticfiles %}
 
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>
-            Salonrate -{% block title_block %}Welcome to the Salonrate!{% endblock %}
-        </title>
-        <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
-        <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
-        <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-        <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        Salonrate -{% block title_block %}Welcome to the Salonrate!{% endblock %}
+    </title>
+    <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-        <!-- Custom styles for this template -->
-        <link href="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.css" rel="stylesheet">
-        <script src="{% static 'js/jquery.min.js' %}"></script>
-        <script>
-            $(function getSearchScope() {
-                $(".search-switch li").on("click", function () {
-                    $(this).addClass("selected").siblings().removeClass("selected").end()
-                    console.log("current search scope: " + $(this).text())
-                })
+    <!-- Custom styles for this template -->
+    <link href="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.css" rel="stylesheet">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script>
+        $(function getSearchScope() {
+            $(".search-switch li").on("click", function () {
+                $(this).addClass("selected").siblings().removeClass("selected").end()
+                $("input.dynamic-scope").val($(this).text().toLowerCase())
+                console.log("current search scope: " + $(this).text())
+            })
+        })
+
+        // todo: 2. search function in homepage.html
+        function getSearchData() {
+            let scope = $('ul.search-switch li.selected').text().toLowerCase()
+            // console.log("scope is " + scope)
+            let keyword = $('input.search-txt').val()
+            // console.log("keyword is " + keywords)
+
+            $("form#search-form").submit()
+
+            // $.ajax({
+            //     type: 'post',
+            //     url: '{% url "salonrate:search_result" %}',
+            //     data: {
+            //         'scope': scope,
+            //         'keyword': keyword,
+            //         'csrfmiddlewaretoken': '{{ csrf_token }}'
+            //     },
+            //     dataType: 'json',
+            //     success: function (res) {
+            //         $.write(res)
+            //
+            //     }
+            // })
+        }
+
+        $(function search() {
+            $('input.search-txt').keydown(function (e) {
+                if (e.keyCode === 13) {
+                    getSearchData()
+                }
             })
 
-            // todo: 2. search function in homepage.html
-            // function getSearchData() {
-            //     let scope = $('ul.search-switch li.selected').text().toLowerCase()
-            //     // console.log("scope is " + scope)
-            //     let keyword = $('input.search-txt').val()
-            //     // console.log("keyword is " + keywords)
-            //     $.ajax({
-            //         type: 'post',
-            //         url: '{% url "salonrate:search_result" %}',
-            //         data: {
-            //             'scope': scope,
-            //             'keyword': keyword,
-            //             'csrfmiddlewaretoken': '{{ csrf_token }}'
-            //         },
-            //         dataType: 'json',
-            //         success: function () {
-            //             window.location.href = '{% url "salonrate:search_result" %}'
-            //
-            //         }
-            //     })
-            // }
-            //
-            // $(function search() {
-            //     $('input.search-txt').keydown(function (e) {
-            //         if (e.keyCode === 13) {
-            //             getSearchData()
-            //         }
-            //     })
-            //
-            //     $(".search-btn").on("click", getSearchData)
-            // })
-        </script>
-        {% block css_block %}
-        {% endblock %}
-        <style>
-            .result-header {
-                margin-top:15px;
-                margin-left:10%;
-                margin-right:10%;
-                display: flex;
-                align-items: center;
-                font-family: 'Courier New', Courier, monospace;
-            }
+            $(".search-btn").on("click", getSearchData)
+        })
+    </script>
+    {% block css_block %}
+    {% endblock %}
+    <style>
+        .result-header {
+            margin-top: 15px;
+            margin-left: 10%;
+            margin-right: 10%;
+            display: flex;
+            align-items: center;
+            font-family: 'Courier New', Courier, monospace;
+        }
 
-            ul {
-                list-style: none;
-                margin: 0;
-                padding: 0;
-                width: auto;
-            }
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            width: auto;
+        }
 
-            .search-switch li {
-                float: left;
-                border: 1px solid rgb(208, 167, 245);
-                width: 80px;
-                height: 30px;
-                text-align: center;
-                margin: 0 -1px 0 -1px;
-                padding: 2px 10px 2px 10px;
-                font-weight: 500;
-                font-size: 15px;
-            }
+        .search-switch li {
+            float: left;
+            border: 1px solid rgb(208, 167, 245);
+            width: 80px;
+            height: 30px;
+            text-align: center;
+            margin: 0 -1px 0 -1px;
+            padding: 2px 10px 2px 10px;
+            font-weight: 500;
+            font-size: 15px;
+        }
 
-            .search-switch li:first-child {
-                border-radius: 2px 0 0 2px;
-            }
+        .search-switch li:first-child {
+            border-radius: 2px 0 0 2px;
+        }
 
-            .search-switch li:last-child {
-                border-radius: 0 2px 2px 0;
-            }
+        .search-switch li:last-child {
+            border-radius: 0 2px 2px 0;
+        }
 
-            .logo-img {
-                display: block;
-                height: 50px;
-                /* margin: 0 0 0 10%; */
-            }
+        .logo-img {
+            display: block;
+            height: 50px;
+            /* margin: 0 0 0 10%; */
+        }
 
-            /* .my-center {
-                margin: 0 5% 0 0;
-            } */
+        /* .my-center {
+            margin: 0 5% 0 0;
+        } */
 
-            .me-img {
-                border-radius: 50%;
-                width: 4vmin;
-                height:4vmin;
-                object-fit: cover;
-                object-position: center;
-            }
+        .me-img {
+            border-radius: 50%;
+            width: 4vmin;
+            height: 4vmin;
+            object-fit: cover;
+            object-position: center;
+        }
 
 
-            .search-switch {
-                color: rgb(191, 137, 242);
-                background-color: #FFFFFF;
-                float: left;
-                margin: 0 20px 0 0;
-            }
+        .search-switch {
+            color: rgb(191, 137, 242);
+            background-color: #FFFFFF;
+            float: left;
+            margin: 0 20px 0 0;
+        }
 
 
-            .selected {
-                color: #FFFFFF;
-                background-color: rgb(208, 167, 245);
-            }
+        .selected {
+            color: #FFFFFF;
+            background-color: rgb(208, 167, 245);
+        }
 
-            .search-box {
-                flex: 1;
-                display: flex;
-                justify-content: center;
-            }
+        .search-box {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
 
-            .search-area {
-                float: left;
-                border: 1px solid rgb(208, 167, 245);
-                border-radius: 2px;
-                height: 30px;
-                width: 300px;
-            }
+        .search-area {
+            float: left;
+            border: 1px solid rgb(208, 167, 245);
+            border-radius: 2px;
+            height: 30px;
+            width: 300px;
+        }
 
-            .search-txt {
-                height: 28px;
-                width: 248px;
-                border: none;
-                background: transparent;
-                text-overflow: ellipsis;
-                overflow: hidden;
-                font-style: italic;
-                color: rgb(191, 137, 242);
-                outline: none;
-            }
+        .search-txt {
+            height: 28px;
+            width: 248px;
+            border: none;
+            background: transparent;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            font-style: italic;
+            color: rgb(191, 137, 242);
+            outline: none;
+        }
 
-            .search-txt::placeholder{
-                color: rgb(191, 137, 242);
-            }
+        .search-txt::placeholder {
+            color: rgb(191, 137, 242);
+        }
 
-            .search-btn {
-                color: rgb(191, 137, 242);
-                display: inline-block;
-                width: 10%;
-            }
+        .search-btn {
+            color: rgb(191, 137, 242);
+            display: inline-block;
+            width: 10%;
+        }
 
-            .search-img{
-                width: 25px;
-                margin-top: -5px;
-            }
+        .search-img {
+            width: 25px;
+            margin-top: -5px;
+        }
 
-            .sort-filter {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
+        .sort-filter {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-            .sort li {
-                float: left;
-                border: 2px solid #E1D5E7;
-                margin: 0 -1px 0 -1px;
-                padding: 2px 10px 2px 10px;
-                color: #A680B8;
-            }
+        .sort li {
+            float: left;
+            border: 2px solid #E1D5E7;
+            margin: 0 -1px 0 -1px;
+            padding: 2px 10px 2px 10px;
+            color: #A680B8;
+        }
 
-            .sort li.selected {
-                color: #FFFFFF;
-            }
+        .sort li.selected {
+            color: #FFFFFF;
+        }
 
-            .tag-filter li {
-                float: left;
-                font-weight: bold;
+        .tag-filter li {
+            float: left;
+            font-weight: bold;
 
-            }
+        }
 
-            .tag-filter input {
-                height: 14px;
-                width: 14px;
-                display: inline-block;
-                float: left;
-                border: 1px solid #E1D5E7;
-            }
+        .tag-filter input {
+            height: 14px;
+            width: 14px;
+            display: inline-block;
+            float: left;
+            border: 1px solid #E1D5E7;
+        }
 
-            #prev-page, #next-page {
-                float: left;
-                border: 2px solid #E1D5E7;
-                margin: 0 -1px 0 -1px;
-                padding: 0 15px 0 15px;
-                color: #A680B8;
-            }
+        #prev-page, #next-page {
+            float: left;
+            border: 2px solid #E1D5E7;
+            margin: 0 -1px 0 -1px;
+            padding: 0 15px 0 15px;
+            color: #A680B8;
+        }
 
-            .page-control, .page-show {
-                float: left;
-            }
+        .page-control, .page-show {
+            float: left;
+        }
 
-            .item-content {
-                border: 1px solid orange;
-                width: 70%;
-                display: flex;
-                margin: 1% 10% 1% 10%;
-                align-items: center;
-                position: relative;
-            }
+        .item-content {
+            border: 1px solid orange;
+            width: 70%;
+            display: flex;
+            margin: 1% 10% 1% 10%;
+            align-items: center;
+            position: relative;
+        }
 
-            .item-img {
-                margin: 2% 1% 2% 1%;
-            }
+        .item-img {
+            margin: 2% 1% 2% 1%;
+        }
 
-            .item-name {
-                font-weight: bolder;
-            }
+        .item-name {
+            font-weight: bolder;
+        }
 
-            .item-rate {
-                font-family: 'FontAwesome';
-                margin: 1% 0 3% 0;
-            }
+        .item-rate {
+            font-family: 'FontAwesome';
+            margin: 1% 0 3% 0;
+        }
 
-            .item-rate > fieldset {
-                padding: 0;
-                margin: 0;
-                border: none;
-                display: inline-block;
-            }
+        .item-rate > fieldset {
+            padding: 0;
+            margin: 0;
+            border: none;
+            display: inline-block;
+        }
 
-            .item-rate > fieldset > label {
-                float: right;
-                width: 1em;
-                padding: 0 .05em;
-                overflow: hidden;
-                white-space: nowrap;
-                cursor: pointer;
-                font-size: 150%;
-                color: #F0A30A;
-            }
+        .item-rate > fieldset > label {
+            float: right;
+            width: 1em;
+            padding: 0 .05em;
+            overflow: hidden;
+            white-space: nowrap;
+            cursor: pointer;
+            font-size: 150%;
+            color: #F0A30A;
+        }
 
-            /* .item-rate > fieldset:not(:checked) > input {
-                position: absolute;
-                top: -9999px;
-                clip: rect(0, 0, 0, 0);
-            }
+        /* .item-rate > fieldset:not(:checked) > input {
+            position: absolute;
+            top: -9999px;
+            clip: rect(0, 0, 0, 0);
+        }
 
-            .item-rate > fieldset:not(:checked) > label {
-                float: right;
-                width: 1em;
-                padding: 0 .05em;
-                overflow: hidden;
-                white-space: nowrap;
-                cursor: pointer;
-                font-size: 150%;
-                color: #F0A30A;
-            }
+        .item-rate > fieldset:not(:checked) > label {
+            float: right;
+            width: 1em;
+            padding: 0 .05em;
+            overflow: hidden;
+            white-space: nowrap;
+            cursor: pointer;
+            font-size: 150%;
+            color: #F0A30A;
+        }
 
-            .item-rate > fieldset:not(:checked) > label:before {
-                content: '\f006  ';
-            }
+        .item-rate > fieldset:not(:checked) > label:before {
+            content: '\f006  ';
+        }
 
-            .item-rate > fieldset:not(:checked) > label:hover,
-            .item-rate > fieldset:not(:checked) > label:hover ~ label {
-                color: #F0A30A;
-                text-shadow: 0 0 3px #F0A30A;
-            }
+        .item-rate > fieldset:not(:checked) > label:hover,
+        .item-rate > fieldset:not(:checked) > label:hover ~ label {
+            color: #F0A30A;
+            text-shadow: 0 0 3px #F0A30A;
+        }
 
-            .item-rate > fieldset:not(:checked) > label:hover:before,
-            .item-rate > fieldset:not(:checked) > label:hover ~ label:before {
-                content: '\f005  ';
-            }
+        .item-rate > fieldset:not(:checked) > label:hover:before,
+        .item-rate > fieldset:not(:checked) > label:hover ~ label:before {
+            content: '\f005  ';
+        }
 
-            .item-rate > fieldset > input:checked ~ label:before {
-                content: '\f005  ';
-            }
+        .item-rate > fieldset > input:checked ~ label:before {
+            content: '\f005  ';
+        }
 
-            .item-rate > fieldset > label:active {
-                position: relative;
-                top: 2px;
-            } */
-            .item-rate > fieldset > label:before {
-                content: '\f006  ';
-            }
-            .item-rate > fieldset > label.rated:before {
-                content: '\f005  ';
-            }
+        .item-rate > fieldset > label:active {
+            position: relative;
+            top: 2px;
+        } */
+        .item-rate > fieldset > label:before {
+            content: '\f006  ';
+        }
 
-            .item-address {
-                color: #A680B8;
-            }
+        .item-rate > fieldset > label.rated:before {
+            content: '\f005  ';
+        }
 
-            .item-tags {
-                margin-top: 2%;
-            }
+        .item-address {
+            color: #A680B8;
+        }
 
-            .item-tags > li {
-                float: left;
-                background-color: #fff9e8;
-                color: #fe9b3e;
-                width: 140px;
-                margin: 0 6px 0 0;
-                padding: 6px 0 6px 0;
-                text-align: center;
-            }
+        .item-tags {
+            margin-top: 2%;
+        }
 
-            .busy {
-                border: 1px solid #B85450;
-                background-image: linear-gradient(#F8CECC, #EA6B66);
-                color: black;
-                font-weight: bolder;
-                font-style: italic;
-                padding: 4px 10px 4px 10px;
-                position: absolute;
-                right: 0;
-                top: 0;
-            }
+        .item-tags > li {
+            float: left;
+            background-color: #fff9e8;
+            color: #fe9b3e;
+            width: 140px;
+            margin: 0 6px 0 0;
+            padding: 6px 0 6px 0;
+            text-align: center;
+        }
 
-            .arrow {
-                border: solid black;
-                border-width: 0 3px 3px 0;
-                display: inline-block;
-                padding: 3px;
-                margin: 0 0 3px 2px;
-                transform: rotate(45deg);
-            }
+        .busy {
+            border: 1px solid #B85450;
+            background-image: linear-gradient(#F8CECC, #EA6B66);
+            color: black;
+            font-weight: bolder;
+            font-style: italic;
+            padding: 4px 10px 4px 10px;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
 
-            li.selected > i.arrow {
-                border: solid white;
-                border-width: 0 3px 3px 0;
-                display: inline-block;
-                padding: 3px;
-                margin: 0 0 3px 2px;
-                transform: rotate(45deg);
-            }
-            .about{
-                margin-left:10%;
-                align-items:center;
-                float:left;
-                text-align: center;
-                margin-left: 40%;
-                font-family: 'Courier New', Courier, monospace;
-            }
-        </style>
-    </head>
+        .arrow {
+            border: solid black;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            margin: 0 0 3px 2px;
+            transform: rotate(45deg);
+        }
 
-    <body>
-        <div class="result-header">
-            <a href="{% url 'salonrate:homepage' %}"><img class="logo-img" src="{% static 'images/logo.png' %}" alt="Salonrate Logo"></a>
-            <div class="search-box">
-                <ul class="search-switch" id="test">
-                    <li class="selected">Salon</li>
-                    <li>Service</li>
-                </ul>
-                <div class="search-area">
-                    <label>
-                        <input class="search-txt" type="text" placeholder="Search for salon or service">
-                    </label>
-                    <a class="search-btn">
-                        <img class="search-img" src="{% static 'images/search.png' %}" alt="Q">
-                    </a>
-                </div>
+        li.selected > i.arrow {
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            margin: 0 0 3px 2px;
+            transform: rotate(45deg);
+        }
+
+        .about {
+            margin-left: 10%;
+            align-items: center;
+            float: left;
+            text-align: center;
+            margin-left: 40%;
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+
+<body>
+<div class="result-header">
+    <a href="{% url 'salonrate:homepage' %}"><img class="logo-img" src="{% static 'images/logo.png' %}"
+                                                  alt="Salonrate Logo"></a>
+    <div class="search-box">
+        <ul class="search-switch" id="test">
+            <li class="selected">Salon</li>
+            <li>Service</li>
+        </ul>
+        <form id="search-form" action='{% url "salonrate:search_result" %}' method="post">
+            {% csrf_token %}
+            <div class="search-area">
+                <label>
+                    <input class="dynamic-scope" name="scope" style="display: none" value="salon">
+                    <input class="search-txt" type="text" placeholder="Search for salon or service" name="keyword">
+                </label>
+                <a class="search-btn" type="submit">
+                    <img class="search-img" src="{% static 'images/search.png' %}" alt="Q">
+                </a>
             </div>
-            <div class="my-center">
-                {% if user.is_authenticated %}
-                {% if user.userprofile.avatar.url %}
-                <img class='me-img' src="{{ user.userprofile.avatar.url }}" alt="Avatar" />
-                {% else %}
-                <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
-                {% endif %}
-                <a>{{ user.username }}</a>
-                {% else %}
-                <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
-                <a>My Account</a>
-                {% endif %}
-                
-            </div>
-        </div>
-        <hr />
+        </form>
+    </div>
+    <div class="my-center">
+        {% if user.is_authenticated %}
+        {% if user.userprofile.avatar.url %}
+        <img class='me-img' src="{{ user.userprofile.avatar.url }}" alt="Avatar"/>
+        {% else %}
+        <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
+        {% endif %}
+        <a>{{ user.username }}</a>
+        {% else %}
+        <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
+        <a>My Account</a>
+        {% endif %}
 
-        <div class="main">
-            {% block body_block %}
-            {% endblock %}
-        </div>
-        <hr />
-        <div class="about">
-            <dl>
-                <dt>· About Us: IT-17 ·</dt><br />
-                <dd>2589587C  ·  Cui, Chong</li>
-                <dd>2647735Y  ·  YING, Heting</li>
-                <dd>2590260Y  ·  Yang, Suiyi</li>
-                <dd>2612713X  ·  Xiong, Yipeng</li>
-                <dd>2492428V  ·  Varadhan, Reetu Thillai</li>
-            </dl>
-        </div>
-    </body>
+    </div>
+</div>
+<hr/>
+
+<div class="main">
+    {% block body_block %}
+    {% endblock %}
+</div>
+<hr/>
+<div class="about">
+    <dl>
+        <dt>· About Us: IT-17 ·</dt>
+        <br/>
+        <dd>2589587C · Cui, Chong</li>
+        <dd>2647735Y · YING, Heting</li>
+        <dd>2590260Y · Yang, Suiyi</li>
+        <dd>2612713X · Xiong, Yipeng</li>
+        <dd>2492428V · Varadhan, Reetu Thillai</li>
+    </dl>
+</div>
+</body>
 </html>

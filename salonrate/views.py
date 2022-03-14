@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from django.db.models import Q
+from django.template.loader import render_to_string
 
 
 # Create your views here.
@@ -122,8 +123,15 @@ def service_detail(request, service_name_slug="eyebrows-eyelashes-191"):
 def search_result(request):
     scope = request.POST.get("scope")
     keyword = request.POST.get('keyword')
+    print(f"{scope}::{keyword}")
     # init search detail object
     search_detail = None
+    if scope is None:
+        scope = ""
+    if keyword is None:
+        keyword = ""
+
+    # keyword = "hair"
 
     # search in salon scope
     if scope == "salon":
@@ -134,7 +142,8 @@ def search_result(request):
         search_detail = Service.objects.filter(service_name__contains=keyword)
 
     context_dict = {'scope': scope, 'res': search_detail}
-    print(context_dict)
+    # print(context_dict)
+    # return HttpResponse(render_to_string('salonrate/search_result.html',context_dict))
     return render(request, 'salonrate/search_result.html', context_dict)
 
 
