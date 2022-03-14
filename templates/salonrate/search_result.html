@@ -605,7 +605,13 @@
             <div class="item-content">
                 <img class="item-img" src="{% static 'images/item.png' %}" alt="item image">
                 <div class="item-detail">
-                    <span class="item-name">{{item.salon_name}}</span>
+                    <span class="item-name">
+                        {% if scope == 'salon' %}
+                        {{item.salon_name}}
+                        {% else %}
+                        {{item.service_name}}
+                        {% endif %}
+                    </span>
                     <div class="item-rate">
                         <fieldset>
                             <label class="star4" title="Outstanding">5 stars</label>
@@ -615,7 +621,11 @@
                             <label class="star0" title="Very Poor">1 star</label>
                         </fieldset>
                     </div>
-                    <span class="item-address">{{item.salon_address}}</span>
+                    <span class="item-address">
+                        {% if scope == 'salon' %}
+                        {{item.salon_address}}
+                        {% endif %}
+                    </span>
                     <ul class="item-tags">
                         <li>Tag 1</li>
                         <li>Tag 1</li>
