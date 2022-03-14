@@ -67,6 +67,12 @@
                 $(".search-switch li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
                     // console.log("current search scope: " + $(this).text())
+                    if($(this).text()==="Salon"){
+                        $("div.search-box div.search-area input").attr("placeholder","Salon Name")
+                    }
+                    else {
+                        $("div.search-box div.search-area input").attr("placeholder","Service Name")
+                    }
                 })
                 $(".sort li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
@@ -88,7 +94,6 @@
                     // console.log("current tag-filter scope: " + checked_value)
                     // console.log(checked_value)
                 })
-                // todo: 1. scope change with placeholder value change
 
 
                 // todo: 3. sort by rate, distance, price. Discuss how to show in item list
