@@ -25,6 +25,36 @@
             })
 
             // todo: 2. search function in homepage.html
+            // function getSearchData() {
+            //     let scope = $('ul.search-switch li.selected').text().toLowerCase()
+            //     // console.log("scope is " + scope)
+            //     let keyword = $('input.search-txt').val()
+            //     // console.log("keyword is " + keywords)
+            //     $.ajax({
+            //         type: 'post',
+            //         url: '{% url "salonrate:search_result" %}',
+            //         data: {
+            //             'scope': scope,
+            //             'keyword': keyword,
+            //             'csrfmiddlewaretoken': '{{ csrf_token }}'
+            //         },
+            //         dataType: 'json',
+            //         success: function () {
+            //             window.location.href = '{% url "salonrate:search_result" %}'
+            //
+            //         }
+            //     })
+            // }
+            //
+            // $(function search() {
+            //     $('input.search-txt').keydown(function (e) {
+            //         if (e.keyCode === 13) {
+            //             getSearchData()
+            //         }
+            //     })
+            //
+            //     $(".search-btn").on("click", getSearchData)
+            // })
         </script>
         {% block css_block %}
         {% endblock %}

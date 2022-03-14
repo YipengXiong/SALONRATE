@@ -120,7 +120,22 @@ def service_detail(request, service_name_slug="eyebrows-eyelashes-191"):
 
 
 def search_result(request):
-    return render(request, 'salonrate/search_result.html')
+    scope = request.POST.get("scope")
+    keyword = request.POST.get('keyword')
+    # init search detail object
+    search_detail = None
+
+    # search in salon scope
+    if scope == "salon":
+        search_detail = Salon.objects.filter(salon_name__contains=keyword)
+
+    else:
+        # create default query with name conditions
+        search_detail = Service.objects.filter(service_name__contains=keyword)
+
+    context_dict = {'scope': scope, 'res': search_detail}
+    print(context_dict)
+    return render(request, 'salonrate/search_result.html', context_dict)
 
 
 def ajax_search(request):
