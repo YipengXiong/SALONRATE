@@ -48,16 +48,9 @@
 
 <div>
     <ul>
-        {% if user.is_authenticated %}
-        <li><a href="{% url 'salonrate:logout' %}">Logout</a></li>
-        {% else %}
-        <li><a href="{% url 'salonrate:login' %}">Login</a></li>
-        <li><a href="{% url 'salonrate:register' %}">Register</a></li>
-        {% endif %}
         <li><a href="{% url 'salonrate:search_result' %}">Search</a></li>
         <li><a href="{% url 'salonrate:salon' 'rich-hair-beauty-salon' %}">Salon Detail</a></li>
         <li><a href="{% url 'salonrate:service' 'eyebrows-eyelashes-191' %}">Service Detail</a></li>
-        
     </ul>
 </div>
 {% endblock %}

@@ -384,21 +384,51 @@
             </div>
         </form>
     </div>
+{#    <div class="my-center">#}
+{#    {% if user.is_authenticated %}#}
+{#        {% if user.userprofile.avatar %}#}
+{#            {% if user.userprofile.avatar.url %}#}
+{#            <img class='me-img' src="{{ user.userprofile.avatar.url }}" alt="Avatar" />#}
+{#            {% endif %}#}
+{#        {% else %}#}
+{#        <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">#}
+{#        {% endif %}#}
+{#        <a>{{ user.username }}</a>#}
+{#    {% else %}#}
+{#        <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">#}
+{#        <a>My Account</a>#}
+{#    {% endif %}#}
+{##}
+{#    </div>#}
     <div class="my-center">
-    {% if user.is_authenticated %}
-        {% if user.userprofile.avatar %}
-            {% if user.userprofile.avatar.url %}
-            <img class='me-img' src="{{ user.userprofile.avatar.url }}" alt="Avatar" />
-            {% endif %}
-        {% else %}
-        <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
-        {% endif %}
-        <a>{{ user.username }}</a>
-    {% else %}
-        <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
-        <a>My Account</a>
-    {% endif %}
-
+                <li class="dropdown" style="list-style-type: none">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: #FFFFFF">
+                        {% if user.is_authenticated %}
+                            {% if user.userprofile.avatar %}
+                                {% if user.userprofile.avatar.url %}
+                                <img class='me-img' src="{{ user.userprofile.avatar.url }}" alt="Avatar" />
+                                <span class="caret"></span>
+                                {% endif %}
+                            {% else %}
+                            <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
+                            <span class="caret"></span>
+                            {% endif %}
+                            <a>{{ user.username }}</a>
+                        {% else %}
+                            <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
+                            <a>My Account</a>
+                            <span class="caret"></span>
+                        {% endif %}
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url 'salonrate:logout' %}">Logout</a></li>
+                        {% else %}
+                        <li><a href="{% url 'salonrate:login' %}">Login</a></li>
+                        <li><a href="{% url 'salonrate:register' %}">Register</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
     </div>
 </div>
 <hr/>
