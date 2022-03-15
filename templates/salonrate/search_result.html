@@ -637,9 +637,11 @@
                     {% endif %}
                 </div>
                 {% if scope == 'salon' %}
+                {% if item.salon_busy %}
                 <div class="busy">
                     BUSY
                 </div>
+                {% endif %}
                 {% endif %}
             </div>
         </div>
