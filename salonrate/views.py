@@ -123,7 +123,7 @@ def service_detail(request, service_name_slug="eyebrows-eyelashes-191"):
 def search_result(request):
     scope = request.POST.get("scope")
     keyword = request.POST.get('keyword')
-    print(f"{scope}::{keyword}")
+    # print(f"{scope}::{keyword}")
     # init search detail object
     search_detail = None
     if scope is None:
@@ -141,8 +141,8 @@ def search_result(request):
         # create default query with name conditions
         search_detail = Service.objects.filter(service_name__contains=keyword)
 
-    context_dict = {'scope': scope, 'res': search_detail}
-    # print(context_dict)
+    context_dict = {'scope': scope, 'detail': search_detail}
+    print(context_dict)
     # return HttpResponse(render_to_string('salonrate/search_result.html',context_dict))
     return render(request, 'salonrate/search_result.html', context_dict)
 
