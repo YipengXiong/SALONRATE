@@ -95,7 +95,6 @@
                 })
 
 
-
                 // todo: 3. sort by rate, distance, price. Discuss how to show in item list
             })
 
@@ -149,7 +148,7 @@
                                     $("div.item-content").eq(j).attr("id", j)
                                     $("div#" + j + " div.item-detail span.item-name").text(res[j].fields.salon_name)
                                     $("div#" + j + " span.item-address").text(res[j].fields.salon_address)
-                                    let rate = Math.floor(res[j].fields.salon_rate)
+                                    let rate = Math.floor(res[j].fields._rate)
                                     $("div#" + j + " label").removeClass("rated")
                                     for (let i = 0; i < rate; i++) {
                                         $("div#" + j + " label.star" + i).addClass("rated")
@@ -615,14 +614,38 @@
                         {{item.service_name}}
                         {% endif %}
                     </span>
-<!--                    todo: 2. rate star dynamic show by django code-->
                     <div class="item-rate">
                         <fieldset>
+                            {% if item.rate > 4 %}
+                            <label class="star4 rated" title="Outstanding">5 stars</label>
+                            {% else %}
                             <label class="star4" title="Outstanding">5 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 3 %}
+                            <label class="star3 rated" title="Very Good">4 stars</label>
+                            {% else %}
                             <label class="star3" title="Very Good">4 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 2 %}
+                            <label class="star2 rated" title="Good">3 stars</label>
+                            {% else %}
                             <label class="star2" title="Good">3 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 1 %}
+                            <label class="star1 rated" title="Poor">2 stars</label>
+                            {% else %}
                             <label class="star1" title="Poor">2 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 0 %}
+                            <label class="star0 rated" title="Very Poor">1 star</label>
+                            {% else %}
                             <label class="star0" title="Very Poor">1 star</label>
+                            {% endif %}
+
                         </fieldset>
                     </div>
                     <span class="item-address">
