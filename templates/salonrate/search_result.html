@@ -314,9 +314,13 @@
         </script>
         <style>
             .result-header {
-                display: flex;
-                align-items: center;
-            }
+            margin-top: 15px;
+            margin-left: 10%;
+            margin-right: 10%;
+            display: flex;
+            align-items: center;
+            font-family: 'Courier New', Courier, monospace;
+        }
 
             ul {
                 list-style: none;
@@ -330,47 +334,53 @@
             }
 
             .search-switch li {
-                float: left;
-                border: 2px solid #E1D5E7;
-                margin: 0 -1px 0 -1px;
-                padding: 2px 10px 2px 10px;
-            }
+            float: left;
+            border: 1px solid rgb(208, 167, 245);
+            width: 80px;
+            height: 30px;
+            text-align: center;
+            margin: 0 -1px 0 -1px;
+            padding: 2px 10px 2px 10px;
+            font-weight: 500;
+            font-size: 15px;
+        }
 
             .search-switch li:first-child {
-                border-radius: 8px 0 0 8px;
-            }
+            border-radius: 2px 0 0 2px;
+        }
 
             .search-switch li:last-child {
-                border-radius: 0 8px 8px 0;
-            }
+            border-radius: 0 2px 2px 0;
+        }
 
             .logo-img {
-                display: block;
-                height: 50px;
-                margin: 0 0 0 5%;
-            }
+            display: block;
+            height: 50px;
+            /* margin: 0 0 0 10%; */
+        }
 
-            .my-center {
-                margin: 0 5% 0 0;
-            }
 
             .me-img {
-                height: 20px;
-            }
+            border-radius: 50%;
+            width: 4vmin;
+            height: 4vmin;
+            object-fit: cover;
+            object-position: center;
+        }
 
 
             .search-switch {
-                color: #A680B8;
-                background-color: #FFFFFF;
-                float: left;
-                margin: 0 20px 0 0;
-            }
+            color: rgb(191, 137, 242);
+            background-color: #FFFFFF;
+            float: left;
+            margin: 0 20px 0 0;
+        }
 
 
             .selected {
-                color: #FFFFFF;
-                background-color: #C3ABD0;
-            }
+            color: #FFFFFF;
+            background-color: rgb(208, 167, 245);
+        }
 
             .search-box {
                 flex: 1;
@@ -379,27 +389,39 @@
             }
 
             .search-area {
-                float: left;
-                border: 1px solid #C3ABD0;
-            }
+            float: left;
+            border: 1px solid rgb(208, 167, 245);
+            border-radius: 2px;
+            height: 30px;
+            width: 300px;
+        }
 
             .search-txt {
-                height: 20px;
-                line-height: 20px;
-                border: none;
-                background: transparent;
-                text-overflow: ellipsis;
-                overflow: hidden;
-                border-radius: 0;
-                font-style: italic;
-                color: #C3ABD0;
-                outline: none;
-            }
+            height: 28px;
+            width: 248px;
+            border: none;
+            background: transparent;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            font-style: italic;
+            color: rgb(191, 137, 242);
+            outline: none;
+        }
+
+            .search-txt::placeholder {
+            color: rgb(191, 137, 242);
+        }
 
             .search-btn {
-                color: #808080;
-                display: inline-block;
-            }
+            color: rgb(191, 137, 242);
+            display: inline-block;
+            width: 10%;
+        }
+
+            .search-img {
+            width: 25px;
+            margin-top: -5px;
+        }
 
             .sort-filter {
                 display: flex;
@@ -408,16 +430,16 @@
             }
 
             .sort li {
-                float: left;
-                border: 2px solid #E1D5E7;
-                margin: 0 -1px 0 -1px;
-                padding: 2px 10px 2px 10px;
-                color: #A680B8;
-            }
+            float: left;
+            border: 2px solid #E1D5E7;
+            margin: 0 -1px 0 -1px;
+            padding: 2px 10px 2px 10px;
+            color: #A680B8;
+        }
 
             .sort li.selected {
-                color: #FFFFFF;
-            }
+            color: #FFFFFF;
+        }
 
             .tag-filter li {
                 float: left;
@@ -575,13 +597,22 @@
                 transform: rotate(-135deg);
             }
 
+            .about {
+            margin-left: 10%;
+            align-items: center;
+            float: left;
+            text-align: center;
+            margin-left: 40%;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
         </style>
     </head>
     <body>
-        <!--        <a>{{ detail.number }}</a>-->
         {% csrf_token %}
         <div class="result-header">
-            <img class="logo-img" src="{% static 'images/logo.png' %}" alt="Salonrate Logo">
+            <a href="{% url 'salonrate:homepage' %}"><img class="logo-img" src="{% static 'images/logo.png' %}"
+                                                  alt="Salonrate Logo"></a>
             <div class="search-box">
                 <ul class="search-switch">
                     <li class="selected">Salon</li>
@@ -592,16 +623,26 @@
                         <input class="search-txt" type="text" placeholder="Salon" name="keywords">
                     </label>
                     <a class="search-btn">
-                        Q
+                        <img class="search-img" src="{% static 'images/search.png' %}" alt="Q">
                     </a>
                 </div>
             </div>
             <div class="my-center">
-                <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
-                <a>
-                    My Account
-                </a>
-            </div>
+    {% if user.is_authenticated %}
+        {% if user.userprofile.avatar %}
+            {% if user.userprofile.avatar.url %}
+            <img class='me-img' src="{{ user.userprofile.avatar.url }}" alt="Avatar" />
+            {% endif %}
+        {% else %}
+        <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
+        {% endif %}
+        <a>{{ user.username }}</a>
+    {% else %}
+        <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
+        <a>My Account</a>
+    {% endif %}
+
+    </div>
         </div>
         <hr>
         <div class="sort-filter">
@@ -681,9 +722,9 @@
                 <div class="item-detail">
                     <span class="item-name">
                         {% if scope == 'salon' %}
-                        {{item.salon_name}}
+                        <a href="{% url 'salonrate:salon' item.slug %}">{{item.salon_name}}</a>
                         {% else %}
-                        {{item.service_name}}
+                        <a href="{% url 'salonrate:service' item.slug %}">{{item.service_name}}</a>
                         {% endif %}
                     </span>
                     <div class="item-rate">
@@ -756,6 +797,17 @@
             {% endfor %}
             {% endif %}
         </div>
-
+<hr/>
+<div class="about">
+    <dl>
+        <dt>· About Us: IT-17 ·</dt>
+        <br/>
+        <dd>2589587C · Cui, Chong</li>
+        <dd>2647735Y · YING, Heting</li>
+        <dd>2590260Y · Yang, Suiyi</li>
+        <dd>2612713X · Xiong, Yipeng</li>
+        <dd>2492428V · Varadhan, Reetu Thillai</li>
+    </dl>
+</div>
     </body>
 </html>
