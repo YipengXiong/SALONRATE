@@ -4,6 +4,7 @@ from django.db import models
 from django.forms import CharField, FloatField, IntegerField
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
+from django.core.validators import MaxValueValidator, MinValueValidator
 # Create your models here.
 
 
@@ -59,7 +60,7 @@ class Comment(models.Model):
     salon_or_service_id = models.IntegerField(default=0, null=False)
     type = models.IntegerField(default=0)
     comment = models.CharField(max_length=500)
-    star = models.IntegerField(default=0)
+    star = models.IntegerField(default=0, validators=[MaxValueValidator(5), MinValueValidator(0)])
     tag_environ = models.BooleanField(default=False)
     tag_service = models.BooleanField(default=False)
     tag_cost = models.BooleanField(default=False)
