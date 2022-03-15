@@ -11,7 +11,7 @@
             let current_page = 0
             let all_page_count = 0
             let checked_value = {}
-
+// todo: divide page
             function setAllPages(resLength) {
                 all_page_count = Math.ceil(resLength / one_page_count)
                 $("span#all-page").text(all_page_count)
@@ -67,11 +67,10 @@
                 $(".search-switch li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
                     // console.log("current search scope: " + $(this).text())
-                    if($(this).text()==="Salon"){
-                        $("div.search-box div.search-area input").attr("placeholder","Salon Name")
-                    }
-                    else {
-                        $("div.search-box div.search-area input").attr("placeholder","Service Name")
+                    if ($(this).text() === "Salon") {
+                        $("div.search-box div.search-area input").attr("placeholder", "Salon Name")
+                    } else {
+                        $("div.search-box div.search-area input").attr("placeholder", "Service Name")
                     }
                 })
                 $(".sort li").on("click", function () {
@@ -109,6 +108,8 @@
                         return "Excellent Skill"
                     case("Good Attitude"):
                         return "Warm Attitude"
+                    case("Cost Effective"):
+                        return "Cost Effective"
                 }
             }
 
@@ -119,7 +120,7 @@
                 // console.log("keyword is " + keywords)
                 $.ajax({
                     type: 'post',
-                    url: '{% url "salonrate:search" %}',
+                    url: '{% url "salonrate:ajax_search" %}',
                     data: {
                         'scope': scope,
                         'keyword': keyword,
@@ -128,7 +129,7 @@
                     },
                     dataType: 'json',
                     success: function (res) {
-                        console.log(res)
+                        // console.log(res)
                         current_page = 0
                         all_page_count = 0
                         // console.log(res.length)
@@ -147,7 +148,7 @@
                                     $("div.item-content").eq(j).attr("id", j)
                                     $("div#" + j + " div.item-detail span.item-name").text(res[j].fields.salon_name)
                                     $("div#" + j + " span.item-address").text(res[j].fields.salon_address)
-                                    let rate = Math.floor(res[j].fields.salon_rate)
+                                    let rate = Math.floor(res[j].fields._rate)
                                     $("div#" + j + " label").removeClass("rated")
                                     for (let i = 0; i < rate; i++) {
                                         $("div#" + j + " label.star" + i).addClass("rated")
@@ -165,7 +166,7 @@
                                     // todo: 4. css background color of tags
                                     $("div#" + j + " ul.item-tags li").hide()
                                     let tag_index = 0
-                                    if (tag_index < 3) {
+                                    if (tag_index < 5) {
                                         $.each(tags, function (k, v) {
                                             if (v) {
                                                 $("div#" + j + " ul.item-tags li").eq(tag_index).text(text_remap(k)).show()
@@ -600,31 +601,88 @@
             </div>
         </div>
         <hr>
+        {% if detail %}
+        {% for item in detail %}
         <div class="item-container">
             <div class="item-content">
                 <img class="item-img" src="{% static 'images/item.png' %}" alt="item image">
                 <div class="item-detail">
-                    <span class="item-name">WESTEND HAIR SALON</span>
+                    <span class="item-name">
+                        {% if scope == 'salon' %}
+                        {{item.salon_name}}
+                        {% else %}
+                        {{item.service_name}}
+                        {% endif %}
+                    </span>
                     <div class="item-rate">
                         <fieldset>
+                            {% if item.rate > 4 %}
+                            <label class="star4 rated" title="Outstanding">5 stars</label>
+                            {% else %}
                             <label class="star4" title="Outstanding">5 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 3 %}
+                            <label class="star3 rated" title="Very Good">4 stars</label>
+                            {% else %}
                             <label class="star3" title="Very Good">4 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 2 %}
+                            <label class="star2 rated" title="Good">3 stars</label>
+                            {% else %}
                             <label class="star2" title="Good">3 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 1 %}
+                            <label class="star1 rated" title="Poor">2 stars</label>
+                            {% else %}
                             <label class="star1" title="Poor">2 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 0 %}
+                            <label class="star0 rated" title="Very Poor">1 star</label>
+                            {% else %}
                             <label class="star0" title="Very Poor">1 star</label>
+                            {% endif %}
+
                         </fieldset>
                     </div>
-                    <span class="item-address">487 Great Western Road, Glasgow, G12 8HL</span>
+                    <span class="item-address">
+                        {% if scope == 'salon' %}
+                        {{item.salon_address}}
+                        {% endif %}
+                    </span>
+                    {% if scope == 'salon' %}
                     <ul class="item-tags">
-                        <li>Tag 1</li>
-                        <li>Tag 1</li>
-                        <li>Tag 1</li>
+                        {% if item.good_env %}
+                        <li>Nice Environment</li>
+                        {% endif %}
+                        {% if item.good_service %}
+                        <li>Attentive Service</li>
+                        {% endif %}
+                        {% if item.cost_effective %}
+                        <li>Cost Effective</li>
+                        {% endif %}
+                        {% if item.good_skill %}
+                        <li>Excellent Skill</li>
+                        {% endif %}
+                        {% if item.good_attitude %}
+                        <li>Warm Attidute</li>
+                        {% endif %}
                     </ul>
+                    {% endif %}
                 </div>
+                {% if scope == 'salon' %}
+                {% if item.salon_busy %}
                 <div class="busy">
                     BUSY
                 </div>
+                {% endif %}
+                {% endif %}
             </div>
         </div>
+        {% endfor %}
+        {% endif %}
     </body>
 </html>

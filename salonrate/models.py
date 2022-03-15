@@ -11,7 +11,7 @@ class Salon(models.Model):
     salon_id = models.AutoField(primary_key=True, null=False)
     salon_name = models.CharField(max_length=50, null=False)
     salon_address = models.CharField(max_length=100, null=False)
-    salon_rate = models.FloatField(null=False)
+    rate = models.FloatField(null=False)
     salon_avg_price = models.FloatField(default=0.0)
     salon_busy = models.BooleanField(default=False)
     image = models.ImageField(upload_to="salon_img", blank=True)
@@ -40,7 +40,7 @@ class Service(models.Model):
     service_name = models.CharField(max_length=50, null=False)
     service_type = models.IntegerField(default=0)
     service_price = models.FloatField(default=0.0)
-    service_rate = models.FloatField(default=0.0)
+    rate = models.FloatField(default=0.0)
     slug = models.SlugField(blank=True)
 
     def save(self, *args, **kwargs):
