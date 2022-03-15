@@ -1,0 +1,88 @@
+{% load staticfiles %}
+{% if detail %}
+<script>
+    all_page_count = {{detail.paginator.num_pages}}
+    scope = '{{scope}}'
+    keyword = '{{keyword}}'
+    $("span#all-page").text(all_page_count)
+</script>
+{% for item in detail %}
+<div class="item-content">
+    <img class="item-img" src="{% static 'images/item.png' %}" alt="item image">
+    <div class="item-detail">
+                    <span class="item-name">
+                        {% if scope == 'salon' %}
+                        {{item.salon_name}}
+                        {% else %}
+                        {{item.service_name}}
+                        {% endif %}
+                    </span>
+        <div class="item-rate">
+            <fieldset>
+                {% if item.rate > 4 %}
+                <label class="star4 rated" title="Outstanding">5 stars</label>
+                {% else %}
+                <label class="star4" title="Outstanding">5 stars</label>
+                {% endif %}
+
+                {% if item.rate > 3 %}
+                <label class="star3 rated" title="Very Good">4 stars</label>
+                {% else %}
+                <label class="star3" title="Very Good">4 stars</label>
+                {% endif %}
+
+                {% if item.rate > 2 %}
+                <label class="star2 rated" title="Good">3 stars</label>
+                {% else %}
+                <label class="star2" title="Good">3 stars</label>
+                {% endif %}
+
+                {% if item.rate > 1 %}
+                <label class="star1 rated" title="Poor">2 stars</label>
+                {% else %}
+                <label class="star1" title="Poor">2 stars</label>
+                {% endif %}
+
+                {% if item.rate > 0 %}
+                <label class="star0 rated" title="Very Poor">1 star</label>
+                {% else %}
+                <label class="star0" title="Very Poor">1 star</label>
+                {% endif %}
+
+            </fieldset>
+        </div>
+        <span class="item-address">
+                        {% if scope == 'salon' %}
+                        {{item.salon_address}}
+                        {% endif %}
+                    </span>
+        {% if scope == 'salon' %}
+        <ul class="item-tags">
+            {% if item.good_env %}
+            <li>Nice Environment</li>
+            {% endif %}
+            {% if item.good_service %}
+            <li>Attentive Service</li>
+            {% endif %}
+            {% if item.cost_effective %}
+            <li>Cost Effective</li>
+            {% endif %}
+            {% if item.good_skill %}
+            <li>Excellent Skill</li>
+            {% endif %}
+            {% if item.good_attitude %}
+            <li>Warm Attidute</li>
+            {% endif %}
+        </ul>
+        {% endif %}
+    </div>
+    {% if scope == 'salon' %}
+    {% if item.salon_busy %}
+    <div class="busy">
+        BUSY
+    </div>
+    {% endif %}
+    {% endif %}
+</div>
+{% endfor %}
+{% endif %}

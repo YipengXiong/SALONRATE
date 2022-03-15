@@ -141,7 +141,7 @@
 <div class="main">
     <div class="detail">
         <div class="left">
-            <div class="back"><a href="{% url 'salonrate:salon' %}">{{ service.salon_id.salon_name }}</a></div>
+            <div class="back"><a href="{% url 'salonrate:salon' service.salon_id.slug %}">{{ service.salon_id.salon_name }}</a></div>
             <div class="name"><h2>{{ service.service_name }}</h2></div>
             <div class="item-rate">
                 <fieldset>

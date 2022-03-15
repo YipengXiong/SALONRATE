@@ -8,10 +8,18 @@
         <script src="{% static 'js/jquery.min.js' %}"></script>
         <script>
             const one_page_count = 6
-            let current_page = 0
+            let current_page = 1
             let all_page_count = 0
             let checked_value = {}
-// todo: divide page
+            let scope
+            let keyword
+
+            scope = '{{scope}}'
+            keyword = '{{keyword}}'
+            all_page_count = {{detail.paginator.num_pages}}
+
+
+
             function setAllPages(resLength) {
                 all_page_count = Math.ceil(resLength / one_page_count)
                 $("span#all-page").text(all_page_count)
@@ -34,36 +42,89 @@
                 $("span#all-page").text(all_page_count)
             }
 
+
             function getPrevPage() {
-                if (current_page > 1) {
-                    $("div.item-content").hide()
-                    current_page--
-                    for (let i = (current_page - 1) * one_page_count; i < current_page * one_page_count; i++) {
-                        $("div#" + i).show()
-                    }
-                    $("span#current-page").text(current_page)
+                // if (current_page > 1) {
+                //     $("div.item-content").hide()
+                //     current_page--
+                //     for (let i = (current_page - 1) * one_page_count; i < current_page * one_page_count; i++) {
+                //         $("div#" + i).show()
+                //     }
+                //     $("span#current-page").text(current_page)
+                // }
+
+
+                current_page--
+                $("span#current-page").text(current_page)
+
+                if (current_page >= 1) {
+                    $("a#next-page").show()
+                    $.ajax({
+                        type: 'post',
+                        url: '{% url "salonrate:search_result" %}',
+                        data: {
+                            'scope': scope,
+                            'keyword': keyword,
+                            'current_page': current_page,
+                            'sort_tag':checked_value,
+                            'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        },
+                        success: function (res) {
+                            // console.log(res)
+                            $("div.item-container").html(res)
+                            if (current_page===1){
+                                $("a#prev-page").hide()
+                            }
+                        }
+                    })
                 }
             }
 
             function getNextPage() {
-                if (all_page_count > 1) {
-                    if (current_page < all_page_count) {
-                        $("div.item-content").hide()
-                        for (let i = current_page * one_page_count; i < (current_page + 1) * one_page_count; i++) {
-                            $("div#" + i).show()
+                // if (all_page_count > 1) {
+                //     if (current_page < all_page_count) {
+                //         $("div.item-content").hide()
+                //         for (let i = current_page * one_page_count; i < (current_page + 1) * one_page_count; i++) {
+                //             $("div#" + i).show()
+                //         }
+                //         current_page++
+                //         $("span#current-page").text(current_page)
+                //     }
+                // }
+
+                current_page++
+                $("span#current-page").text(current_page)
+
+                if (current_page <= all_page_count) {
+                    $("a#prev-page").show()
+                    $.ajax({
+                        type: 'post',
+                        url: '{% url "salonrate:search_result" %}',
+                        data: {
+                            'scope': scope,
+                            'keyword': keyword,
+                            'current_page': current_page,
+                            'sort_tag':checked_value,
+                            'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        },
+                        success: function (res) {
+                            // console.log(res)
+                            $("div.item-container").html(res)
+                            if (current_page===all_page_count){
+                                $("a#next-page").hide()
+                            }
                         }
-                        current_page++
-                        $("span#current-page").text(current_page)
-                    }
+                    })
                 }
+
             }
 
 
             $(function () {
-                $("a#next-page").on("click", getNextPage)
-                $("a#prev-page").on("click", getPrevPage)
-                $("span#current-page").text(current_page)
-                $("span#all-page").text(all_page_count)
+                $("a#next-page").on('click', getNextPage)
+                $("a#prev-page").on('click', getPrevPage)
+                // $("span#current-page").text(current_page)
+                // $("span#all-page").text(all_page_count)
                 $(".search-switch li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
                     // console.log("current search scope: " + $(this).text())
@@ -125,82 +186,91 @@
                         'scope': scope,
                         'keyword': keyword,
                         'sort_tag': checked_value,
+                        'current_page': current_page,
                         'csrfmiddlewaretoken': '{{ csrf_token }}'
                     },
-                    dataType: 'json',
+                    // dataType: 'json',
                     success: function (res) {
                         // console.log(res)
-                        current_page = 0
-                        all_page_count = 0
-                        // console.log(res.length)
-                        setAllPages(res.length)
-
-                        if (res.length) {
-                            $("div.item-content").not(":first").remove()
-                            if (res.length > 1) {
-                                $("div.item-content:last").clone().attr("id", 1).appendTo($("div.item-container"))
-                            }
-                            for (let i = 0; i < res.length - 1; i++) {
-                                $("div.item-content:last").clone().appendTo($("div.item-container"))
-                            }
-                            if (res[0].model === "salonrate.salon") {
-                                for (let j = 0; j < res.length; j++) {
-                                    $("div.item-content").eq(j).attr("id", j)
-                                    $("div#" + j + " div.item-detail span.item-name").text(res[j].fields.salon_name)
-                                    $("div#" + j + " span.item-address").text(res[j].fields.salon_address)
-                                    let rate = Math.floor(res[j].fields._rate)
-                                    $("div#" + j + " label").removeClass("rated")
-                                    for (let i = 0; i < rate; i++) {
-                                        $("div#" + j + " label.star" + i).addClass("rated")
-                                    }
-
-                                    let tags = {
-                                        'Good Env': res[j].fields.good_env,
-                                        'Good Service': res[j].fields.good_service,
-                                        'Cost Effective': res[j].fields.cost_effective,
-                                        'Good Skill': res[j].fields.good_skill,
-                                        'Good Attitude': res[j].fields.good_attitude
-                                    }
-                                    // console.log(tags)
-
-                                    // todo: 4. css background color of tags
-                                    $("div#" + j + " ul.item-tags li").hide()
-                                    let tag_index = 0
-                                    if (tag_index < 5) {
-                                        $.each(tags, function (k, v) {
-                                            if (v) {
-                                                $("div#" + j + " ul.item-tags li").eq(tag_index).text(text_remap(k)).show()
-                                                tag_index++
-                                            }
-                                        })
-                                    }
-
-                                    if (res[j].fields.salon_busy === false) {
-                                        $("div#" + j + " div.busy").hide()
-                                    } else {
-                                        $("div#" + j + " div.busy").show()
-                                    }
-                                }
-                            } else if (res[0].model === "salonrate.service") {
-                                for (let j = 0; j < res.length; j++) {
-                                    $("div.item-content").eq(j).attr("id", j)
-                                    $("div#" + j + " div.item-detail span.item-name").text(res[j].fields.service_name)
-                                    let rate = Math.floor(res[j].fields.service_rate)
-                                    $("div#" + j + " label").removeClass("rated")
-                                    for (let i = 0; i < rate; i++) {
-                                        $("div#" + j + " label.star" + i).addClass("rated")
-                                    }
-                                    $("div#" + j + " span.item-address").hide()
-                                    $("div#" + j + " ul.item-tags").hide()
-                                    $("div#" + j + " div.busy").hide()
-                                }
-                            }
-                            $("div.item-content").hide()
-                            dividePages()
-                        } else {
-                            $("div.item-content").hide()
-                            $("span#current-page").text(0)
+                        current_page=1
+                        $("span#current-page").text(current_page)
+                        $("div.item-container").html(res)
+                        $("a#next-page").show()
+                        if (current_page>=all_page_count){
+                            $("a#next-page").hide()
                         }
+                        // console.log(res)
+                        // current_page = 0
+                        // all_page_count = 0
+                        // console.log(res.length)
+                        // setAllPages(res.length)
+
+                        // if (res.length) {
+                        //     $("div.item-content").not(":first").remove()
+                        //     if (res.length > 1) {
+                        //         $("div.item-content:last").clone().attr("id", 1).appendTo($("div.item-container"))
+                        //     }
+                        //     for (let i = 0; i < res.length - 1; i++) {
+                        //         $("div.item-content:last").clone().appendTo($("div.item-container"))
+                        //     }
+                        //     if (res[0].model === "salonrate.salon") {
+                        //         for (let j = 0; j < res.length; j++) {
+                        //             $("div.item-content").eq(j).attr("id", j)
+                        //             $("div#" + j + " div.item-detail span.item-name").text(res[j].fields.salon_name)
+                        //             $("div#" + j + " span.item-address").text(res[j].fields.salon_address)
+                        //             let rate = Math.floor(res[j].fields._rate)
+                        //             $("div#" + j + " label").removeClass("rated")
+                        //             for (let i = 0; i < rate; i++) {
+                        //                 $("div#" + j + " label.star" + i).addClass("rated")
+                        //             }
+                        //
+                        //             let tags = {
+                        //                 'Good Env': res[j].fields.good_env,
+                        //                 'Good Service': res[j].fields.good_service,
+                        //                 'Cost Effective': res[j].fields.cost_effective,
+                        //                 'Good Skill': res[j].fields.good_skill,
+                        //                 'Good Attitude': res[j].fields.good_attitude
+                        //             }
+                        //             // console.log(tags)
+                        //
+                        //             // todo: 4. css background color of tags
+                        //             $("div#" + j + " ul.item-tags li").hide()
+                        //             let tag_index = 0
+                        //             if (tag_index < 5) {
+                        //                 $.each(tags, function (k, v) {
+                        //                     if (v) {
+                        //                         $("div#" + j + " ul.item-tags li").eq(tag_index).text(text_remap(k)).show()
+                        //                         tag_index++
+                        //                     }
+                        //                 })
+                        //             }
+                        //
+                        //             if (res[j].fields.salon_busy === false) {
+                        //                 $("div#" + j + " div.busy").hide()
+                        //             } else {
+                        //                 $("div#" + j + " div.busy").show()
+                        //             }
+                        //         }
+                        //     } else if (res[0].model === "salonrate.service") {
+                        //         for (let j = 0; j < res.length; j++) {
+                        //             $("div.item-content").eq(j).attr("id", j)
+                        //             $("div#" + j + " div.item-detail span.item-name").text(res[j].fields.service_name)
+                        //             let rate = Math.floor(res[j].fields.service_rate)
+                        //             $("div#" + j + " label").removeClass("rated")
+                        //             for (let i = 0; i < rate; i++) {
+                        //                 $("div#" + j + " label.star" + i).addClass("rated")
+                        //             }
+                        //             $("div#" + j + " span.item-address").hide()
+                        //             $("div#" + j + " ul.item-tags").hide()
+                        //             $("div#" + j + " div.busy").hide()
+                        //         }
+                        //     }
+                        //     $("div.item-content").hide()
+                        //     dividePages()
+                        // } else {
+                        //     $("div.item-content").hide()
+                        //     $("span#current-page").text(0)
+                        // }
 
                     }
                 })
@@ -508,6 +578,7 @@
         </style>
     </head>
     <body>
+        <!--        <a>{{ detail.number }}</a>-->
         {% csrf_token %}
         <div class="result-header">
             <img class="logo-img" src="{% static 'images/logo.png' %}" alt="Salonrate Logo">
@@ -590,20 +661,21 @@
             </div>
             <div style="display: flex;align-items: center;margin-right: 5%">
                 <div class="page-show" style="margin-right: 15px">
-                    <span id="current-page">1</span>
+                    <span id="current-page">{{ detail.number }}</span>
                     <span>/</span>
-                    <span id="all-page">1</span>
+                    <span id="all-page">{{ detail.paginator.num_pages }}</span>
                 </div>
                 <div class="page-control">
-                    <a id="prev-page"><</a>
+                    <a id="prev-page" style="display: none"><</a>
                     <a id="next-page">></a>
                 </div>
             </div>
         </div>
         <hr>
-        {% if detail %}
-        {% for item in detail %}
         <div class="item-container">
+            {% if detail %}
+            {% for item in detail %}
+
             <div class="item-content">
                 <img class="item-img" src="{% static 'images/item.png' %}" alt="item image">
                 <div class="item-detail">
@@ -681,8 +753,9 @@
                 {% endif %}
                 {% endif %}
             </div>
+            {% endfor %}
+            {% endif %}
         </div>
-        {% endfor %}
-        {% endif %}
+
     </body>
 </html>
