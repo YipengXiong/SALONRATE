@@ -95,6 +95,8 @@
                 })
 
 
+                // $()
+
                 // todo: 3. sort by rate, distance, price. Discuss how to show in item list
             })
 
@@ -626,15 +628,19 @@
                         {{item.salon_address}}
                         {% endif %}
                     </span>
+                    {% if scope == 'salon' %}
                     <ul class="item-tags">
                         <li>Tag 1</li>
                         <li>Tag 1</li>
                         <li>Tag 1</li>
                     </ul>
+                    {% endif %}
                 </div>
+                {% if scope == 'salon' %}
                 <div class="busy">
                     BUSY
                 </div>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
