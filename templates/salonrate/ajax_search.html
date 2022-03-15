@@ -12,9 +12,9 @@
     <div class="item-detail">
                     <span class="item-name">
                         {% if scope == 'salon' %}
-                        {{item.salon_name}}
+                        <a href="{% url 'salonrate:salon' item.slug %}">{{item.salon_name}}</a>
                         {% else %}
-                        {{item.service_name}}
+                        <a href="{% url 'salonrate:service' item.slug %}">{{item.service_name}}</a>
                         {% endif %}
                     </span>
         <div class="item-rate">
