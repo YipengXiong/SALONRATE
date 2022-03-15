@@ -385,17 +385,19 @@
         </form>
     </div>
     <div class="my-center">
-        {% if user.is_authenticated %}
-        {% if user.userprofile.avatar.url %}
-        <img class='me-img' src="{{ user.userprofile.avatar.url }}" alt="Avatar"/>
+    {% if user.is_authenticated %}
+        {% if user.userprofile.avatar %}
+            {% if user.userprofile.avatar.url %}
+            <img class='me-img' src="{{ user.userprofile.avatar.url }}" alt="Avatar" />
+            {% endif %}
         {% else %}
         <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
         {% endif %}
         <a>{{ user.username }}</a>
-        {% else %}
+    {% else %}
         <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
         <a>My Account</a>
-        {% endif %}
+    {% endif %}
 
     </div>
 </div>
