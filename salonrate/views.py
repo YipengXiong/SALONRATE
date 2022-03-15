@@ -84,6 +84,37 @@ def homepage(request):
 
 
 def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
+    salon = get_object_or_404(Salon, slug=salon_name_slug)
+    context_dict = {"salon": salon, "services": None, "comments": None}
+    comments = Comment.objects.filter(salon_or_service_id=salon.salon_id, type=1).order_by("-comment_id")
+    if comments:
+        context_dict["comments"] = comments
+        context_dict["comment_count"] = len(comments)
+        salon.rate = round(sum([c.star for c in comments])) / len(comments)
+        salon.save()
+        context_dict["salon"] = salon
+        context_dict["rate"] = salon.rate
+    else:
+        print("No Comments")
+
+    services = Service.objects.order_by("-service_id")
+    if services:
+        context_dict["services"] = services
+    else:
+        print("No services available yet")
+
+    form = CommentForm()
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.username = request.user
+            comment.salon_or_service_id = salon.salon_id
+            comment.type = 0
+            comment.save()
+        return redirect(reverse("salonrate:salon", kwargs={"salon_name_slug": salon_name_slug}))
+
     return render(request, 'salonrate/salon.html')
 
 
@@ -95,7 +126,7 @@ def service_detail(request, service_name_slug="eyebrows-eyelashes-191"):
         context_dict["comments"] = comments
         context_dict["comment_count"] = len(comments)
         # Calculate the average rate of the current service
-        service.service_rate = round(sum([c.star for c in comments]) / len(comments))
+        service.rate = round(sum([c.star for c in comments]) / len(comments))
         service.save()
         context_dict["service"] = service
         # context_dict["service_rate"] = service.service_rate
