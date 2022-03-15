@@ -4,13 +4,14 @@ from salonrate.models import UserProfile, Salon, Service, Comment, Follows
 from django.core import serializers
 from salonrate.forms import CommentForm, UserForm, UserProfileForm
 from django.urls import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from django.db.models import Q
 from django.template.loader import render_to_string
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 # Create your views here.
@@ -152,35 +153,67 @@ def service_detail(request, service_name_slug="eyebrows-eyelashes-191"):
 
 
 def search_result(request):
-    scope = request.POST.get("scope")
-    keyword = request.POST.get('keyword')
-    # print(f"{scope}::{keyword}")
-    # init search detail object
-    search_detail = None
-    if scope is None:
-        scope = ""
-    if keyword is None:
-        keyword = ""
+    para_count = len(request.POST)
+    # print(para_count)
+    if para_count <= 4:
+        print('Non ajax')
+        scope = request.POST.get("scope")
+        keyword = request.POST.get('keyword')
 
-    # keyword = "hair"
+        # print(f"{scope}::{keyword}")
+        # init search detail object
+        search_detail = None
+        if scope is None:
+            scope = ""
+        if keyword is None:
+            keyword = ""
 
-    # search in salon scope
-    if scope == "salon":
-        search_detail = Salon.objects.filter(salon_name__contains=keyword)
+        # keyword = "hair"
 
+        # search in salon scope
+        if scope == "salon":
+            search_detail = Salon.objects.filter(salon_name__contains=keyword)
+
+        else:
+            # create default query with name conditions
+            search_detail = Service.objects.filter(service_name__contains=keyword)
+
+        paginator = Paginator(search_detail, 6)
+        if request.method == 'POST' and not request.is_ajax():
+            page = paginator.page(1)
+
+            return render(request, 'salonrate/search_result.html', {'scope': scope, 'keyword': keyword, 'detail': page})
+
+        if request.is_ajax():
+            current_page = int(request.POST.get('current_page'))
+            page = paginator.page(current_page)
+            # print(page)
+            # page_li = list(page.object_list.values())
+            # result = {
+            #     'has_previous': page.has_previous(),
+            #     'has_next': page.has_next(),
+            #     'num_pages': page.paginator.num_pages,
+            #     'user_li': page_li
+            # }
+            # print(result)
+            return render(request, 'salonrate/ajax_search.html', {'scope': scope, 'keyword': keyword, 'detail': page})
     else:
-        # create default query with name conditions
-        search_detail = Service.objects.filter(service_name__contains=keyword)
+        return ajax_search(request)
 
-    context_dict = {'scope': scope, 'detail': search_detail}
-    print(context_dict)
-    # return HttpResponse(render_to_string('salonrate/search_result.html',context_dict))
-    return render(request, 'salonrate/search_result.html', context_dict)
+    # context_dict = {'scope': scope, 'detail': search_detail}
+    # print(context_dict)
+    # # return HttpResponse(render_to_string('salonrate/search_result.html',context_dict))
+    # return render(request, 'salonrate/search_result.html', context_dict)
 
 
 def ajax_search(request):
+    # para_count = len(request.POST)
+    # print(para_count)
+    print("Ajax")
     scope = request.POST.get("scope")
     keyword = request.POST.get('keyword')
+    current_page = int(request.POST.get('current_page'))
+
 
     # init search detail object
     search_detail = None
@@ -238,9 +271,13 @@ def ajax_search(request):
         # i.e. select * from service where service_name like "%xxx%" AND (tag1 OR tag2 OR tag3 ...)
         search_detail = search_detail.filter(q_query)
 
+    paginator = Paginator(search_detail, 6)
+    page = paginator.page(current_page)
+    print(page)
+    return render(request, 'salonrate/ajax_search.html', {'scope': scope, 'keyword': keyword, 'detail': page})
     # map object to json format
-    res = serializers.serialize('json', search_detail)
-    return HttpResponse(res)
+    # res = serializers.serialize('json', search_detail)
+    # return HttpResponse(res)
 
 # def jsonEncoder(data):
 #     json_data = []
