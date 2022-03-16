@@ -90,14 +90,19 @@ def populate_follows():
         f.save()
 
 def populate_save():
-    salons = Salon.objects.all()
-    services = Service.objects.all()
-    for s in salons:
-        s.save()
-    for serv in services:
-        serv.save()
+    # salons = Salon.objects.all()
+    # services = Service.objects.all()
+    comments = Comment.objects.all()
+    # for s in salons:
+    #     s.save()
+    # for serv in services:
+    #     serv.save()
+    for c in comments:
+        c.star = random.randint(1,5)
+        c.save()
     print("Finished")
 
 if __name__ == '__main__':
     print('Starting population script...')
-    populate_follows()
+    # populate_follows()
+    populate_save()
