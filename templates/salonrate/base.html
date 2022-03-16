@@ -393,7 +393,22 @@
             </div>
         </form>
     </div>
-
+{#    <div class="my-center">#}
+{#    {% if user.is_authenticated %}#}
+{#        {% if user.userprofile.avatar %}#}
+{#            {% if user.userprofile.avatar.url %}#}
+{#            <img class='me-img' src="{{ user.userprofile.avatar.url }}" alt="Avatar" />#}
+{#            {% endif %}#}
+{#        {% else %}#}
+{#        <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">#}
+{#        {% endif %}#}
+{#        <a>{{ user.username }}</a>#}
+{#    {% else %}#}
+{#        <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">#}
+{#        <a>My Account</a>#}
+{#    {% endif %}#}
+{##}
+{#    </div>#}
     <div class="my-center">
         <li class="dropdown" style="list-style-type: none">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: #FFFFFF">
@@ -429,19 +444,18 @@
 <div class="main">
     {% block body_block %}
     {% endblock %}
-    
-    <div class="about">
-        <hr/>
-        <dl>
-            <dt>· About Us: IT-17 ·</dt>
-            <br />
-            <dd>2589587C · Cui, Chong</li>
-            <dd>2647735Y · Ying, Heting</li>
-            <dd>2590260Y · Yang, Suiyi</li>
-            <dd>2612713X · Xiong, Yipeng</li>
-            <dd>2492428V · Varadhan, Reetu Thillai</li>
-        </dl>
-    </div>
+</div>
+<div class="about">
+    <hr/>
+    <dl>
+        <dt>· About Us: IT-17 ·</dt>
+        <br />
+        <dd>2589587C · Cui, Chong</li>
+        <dd>2647735Y · Ying, Heting</li>
+        <dd>2590260Y · Yang, Suiyi</li>
+        <dd>2612713X · Xiong, Yipeng</li>
+        <dd>2492428V · Varadhan, Reetu Thillai</li>
+    </dl>
 </div>
 </body>
 </html>
