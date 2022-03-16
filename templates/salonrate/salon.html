@@ -74,8 +74,8 @@
         transform: translate(0,-1%);
     }
     .sp{
-        width: 15vh;
-        height:15vh;
+        width: 200px;
+        height: 200px;
         object-fit: cover;
         object-position: center;
         margin-left:-15px;
@@ -179,8 +179,8 @@
     }
     .ava{
         border-radius: 50%;
-        width: 6vmin;
-        height:6vmin;
+        width: 30px;
+        height: 30px;
         object-fit: cover;
         object-position: center;
     }
@@ -221,15 +221,14 @@
         font-weight: bold;
         font-style: italic;
     }
-    /* .follow{
+    .followed{
         font-family: 'FontAwesome';
-    }
-    .follow:before{
         content:"\f004";
     }
-    .follow.ed:before{
-        content:"\f004";
-    } */
+    .unfollowed{
+        font-family: 'FontAwesome';
+        content:"\f08a";
+    }
 </style>
 {% endblock %}
 
@@ -240,7 +239,14 @@
             <div class="name">
                 <h1>{{ salon.salon_name }}</h1>
                 {% if user.is_authenticated %}
-                {% if follow %}
+                    {% if follow %}
+                    <label class="followed"></label>
+                    {% else %}
+                    <label class="unfollowed"></label>
+                    {% endif %}
+                {% else %}
+                <a href="{% url 'salonrate:login' %}"><label class="unfollowed"></label></a>
+                {% endif %}
             </div>
             <div class="item-rate">
                 <fieldset>
