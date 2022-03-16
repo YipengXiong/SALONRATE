@@ -2,11 +2,9 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    Service Detail
-    <!-- Can be replaced by the service name later-->
+    Service Detail - {{ service.service_name }}
 {% endblock %}
 {% block css_block %}
-<script src="{% static "js/star.js" %}" crossorigin="anonymous"></script>
 <style>
     .main{
         font-family: 'Courier New', Courier, monospace;
@@ -23,6 +21,44 @@
         width: 52%;
         height: 30vh;
     }
+    .rating {
+        font-family: 'FontAwesome';
+        margin: -1% 0 -1% 0;
+    }
+
+    .rating > fieldset {
+        padding: 0;
+        margin: 0;
+        border: none;
+        display: inline;
+    }
+
+    .rating > fieldset > label {
+        float: right;
+        width: 1em;
+        padding: 0 .05em;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 150%;
+        color: #fca757;
+    }
+    .rating > fieldset > label:before {
+        content: '\f006  ';
+    }
+    .rating > fieldset > label.rated:before {
+        content: '\f005  ';
+    }
+    .price{
+        font-size: 18px;
+        margin-top: 10px;
+    }
+    .comcount{
+        color: #fca757;
+        margin-top: -10px;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
     .right{
         float:right;
         width: 46%;
@@ -33,7 +69,7 @@
         border:2px;
     }
     .comment{
-        margin-top: 1px;
+        margin-top: 30px;
         width:100%;
         float:left;
     }
@@ -46,11 +82,60 @@
         width: 200px;
         height: 30px;
         margin-bottom: 12px;
+        cursor:pointer;
+    }
+    .cl{
+        color:rgb(191, 137, 242);
+        border: 0.6px solid rgb(191, 137, 242); 
+        padding:5px;
+        background-color: white;
+        border-radius: 3px;
+        width: 300px;
+        height: 30px;
+        margin-bottom: 12px;
+        cursor:pointer;
     }
     .cmf{
         font-family: 'Courier New', Courier, monospace;
         display: none;
     }
+    .star-rate {
+        font-family: 'FontAwesome';
+    }
+
+    .star-rate > fieldset {
+        padding: 0;
+        margin: 0;
+        border: none;
+        display: inline;
+    }
+
+    .star-rate > fieldset > label {
+        float: right;
+        width: 1em;
+        padding: 0 .05em;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 150%;
+        color: #fca757;
+    }
+    .star-rate > fieldset:not(:checked) > label:hover,
+    .star-rate > fieldset:not(:checked) > label:hover ~ label {
+        color: #fca757;
+        text-shadow: 0 0 3px #fca757;
+    }
+    .star-rate > fieldset:not(:checked) > label:hover:before,
+    .star-rate > fieldset:not(:checked) > label:hover ~ label:before {
+        content: '\f005  ';
+    }
+    .star-rate > fieldset > label:before {
+        content: '\f006  ';
+    }
+    .star-rate > fieldset > label.rated:before {
+        content: '\f005  ';
+    }
+    
     input{
         border: 1px solid lavender; 
         border-radius: 3px;
@@ -84,6 +169,7 @@
         font-family: 'Courier New', Courier, monospace;
         color:rgb(191, 137, 242);
         margin-bottom: 10px;
+        cursor:pointer;
     }
     .comment-item{
         -webkit-line-clamp: 2;
@@ -112,6 +198,9 @@
         font-size: 14px;
         vertical-align: top;
     }
+    .content{
+        margin-top: -10px;
+    }
     #tags {
         float: left;
         background-color: #fff9e8;
@@ -121,10 +210,8 @@
         padding: 6px 0 6px 0;
         text-align: center;
         font-size: 12px;
-        /* font-weight: bold; */
-        font-style: italic;
-    }
-    .content{
+        /* font-style: italic; */
+        font-weight: bold;
         margin-top: -10px;
     }
     .datetime{
@@ -132,7 +219,12 @@
         font-size:12px;
         /* color:rgb(208, 167, 245); */
         color: rgb(191, 137, 242);
-        margin-top: -10px;
+    }
+    .remind{
+        font-size: large;
+        color:rgb(208, 167, 245);
+        font-weight: bold;
+        font-style: italic;
     }
 </style>
 {% endblock %}
@@ -143,16 +235,43 @@
         <div class="left">
             <div class="back"><a href="{% url 'salonrate:salon' service.salon_id.slug %}">{{ service.salon_id.salon_name }}</a></div>
             <div class="name"><h2>{{ service.service_name }}</h2></div>
+            {% if comments %}
             <div class="item-rate">
                 <fieldset>
-                    <input type="radio" id="star5" name="rating" value="5"/><label for="star5" title="Outstanding">5 stars</label>
-                    <input type="radio" id="star4" name="rating" value="4"/><label for="star4" title="Very Good">4 stars</label>
-                    <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="Good">3 stars</label>
-                    <input type="radio" id="star2" name="rating" value="2"/><label for="star2" title="Poor">2 stars</label>
-                    <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="Very Poor">1 star</label>
+                    {% if service.rate > 4 %}
+                    <label class="star4 rated" title="Outstanding">5 stars</label>
+                    {% else %}
+                    <label class="star4" title="Outstanding">5 stars</label>
+                    {% endif %}
+
+                    {% if service.rate > 3 %}
+                    <label class="star3 rated" title="Very Good">4 stars</label>
+                    {% else %}
+                    <label class="star3" title="Very Good">4 stars</label>
+                    {% endif %}
+
+                    {% if service.rate > 2 %}
+                    <label class="star2 rated" title="Good">3 stars</label>
+                    {% else %}
+                    <label class="star2" title="Good">3 stars</label>
+                    {% endif %}
+
+                    {% if service.rate > 1 %}
+                    <label class="star1 rated" title="Poor">2 stars</label>
+                    {% else %}
+                    <label class="star1" title="Poor">2 stars</label>
+                    {% endif %}
+
+                    {% if service.rate > 0 %}
+                    <label class="star0 rated" title="Very Poor">1 star</label>
+                    {% else %}
+                    <label class="star0" title="Very Poor">1 star</label>
+                    {% endif %}
+
                 </fieldset>
             </div>
             <div class="comcount">{{ comment_count }} Comments</div>
+            {% endif %}
             <div class="price">Price: £ {{ service.service_price }}</div>
         </div>
         <div class="right">
@@ -173,43 +292,25 @@
     </div>
     <div class="comment">
         <div class="subtopic">
-            <h4>· Comments ·</h4>
+            <h4>· Comments on Service ·</h4>
+            {% if user.is_authenticated %}
             <button class="mac" id="mac">Write a Comment</button>
+            {% else %}
+            <a href="{% url 'salonrate:login' %}"><button class="cl">Log in to write a comment</button>
+            {% endif %}
         </div>
         <form class="cmf" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <!-- {{ form.as_p }} -->
-            <!-- <div class="item-rate">
+            <div class="star-rate">
                 <fieldset>
-                    <input type="radio" id="star5" name="rating" value="5"/><label for="star5" title="Outstanding">5
-                    stars</label>
-                    <input type="radio" id="star4" name="rating" value="4"/><label for="star4" title="Very Good">4
-                    stars</label>
-                    <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="Good">3
-                    stars</label>
-                    <input type="radio" id="star2" name="rating" value="2"/><label for="star2" title="Poor">2
-                    stars</label>
-                    <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="Very Poor">1
-                    star</label>
+                    <label class="star4" title="Outstanding" >5</label>
+                    <label class="star3" title="Very Good">4</label>
+                    <label class="star2" title="Good">3</label>
+                    <label class="star1" title="Poor">2</label>
+                    <label class="star0" title="Very Poor">1</label>
                 </fieldset>
-            </div> -->
-            <p>{{ form.star.label }}{{ form.star }}</p>
-
-            <input type="checkbox" name="tag_environ" id="id_tag_environ">
-            <label for="id_tag_environ" name="tag_environ">Nice Environment</label>
-            
-            <input type="checkbox" name="tag_service" id="id_tag_service">
-            <label for="id_tag_service" name="tag_service">Attentive Service</label>
-            
-            <input type="checkbox" name="tag_cost" id="id_tag_cost">
-            <label for="id_tag_cost" name="tag_cost">Cost Effective</label>
-            
-            <input type="checkbox" name="tag_skill" id="id_tag_skill">
-            <label for="id_tag_skill" name="tag_skill">Excellent Skill</label>
-            
-            <input type="checkbox" name="tag_attitude" id="id_tag_attitude">
-            <label for="id_tag_attitude" name="tag_attitude">Warm Attidute</label><br />
-        
+            </div>
+            <p>{{ form.star.label }}{{ form.star }}</p>        
             <textarea type="text" name="comment" maxlength="500" required id="id_comment" placeholder="Enter your comment here. No more than 500 letters." ></textarea></p>
             <input class="submit" type="submit" value="Submit" />
             <input class="submit" type="button" value="Cancel" id="cancel" />
@@ -224,6 +325,39 @@
             {% endif %}
             <div class="comright">
                 <div class="user">{{ comment.username.username }}</div><br />
+                <div class="item-rate">
+                    <fieldset>
+                        {% if comment.star > 4 %}
+                        <label class="star4 rated" title="Outstanding">5 stars</label>
+                        {% else %}
+                        <label class="star4" title="Outstanding">5 stars</label>
+                        {% endif %}
+
+                        {% if comment.star > 3 %}
+                        <label class="star3 rated" title="Very Good">4 stars</label>
+                        {% else %}
+                        <label class="star3" title="Very Good">4 stars</label>
+                        {% endif %}
+
+                        {% if comment.star > 2 %}
+                        <label class="star2 rated" title="Good">3 stars</label>
+                        {% else %}
+                        <label class="star2" title="Good">3 stars</label>
+                        {% endif %}
+
+                        {% if comment.star > 1 %}
+                        <label class="star1 rated" title="Poor">2 stars</label>
+                        {% else %}
+                        <label class="star1" title="Poor">2 stars</label>
+                        {% endif %}
+
+                        {% if comment.star > 0 %}
+                        <label class="star0 rated" title="Very Poor">1 star</label>
+                        {% else %}
+                        <label class="star0" title="Very Poor">1 star</label>
+                        {% endif %}
+                    </fieldset>
+                </div>
                 <div class="content">{{ comment.comment }}</div><br />
                 <ul class="tags">
                     {% if comment.tag_environ %}
@@ -246,8 +380,10 @@
             </div>
         </div>
         {% endfor %}
+        {% else %}
+        <div class="remind">Still waiting for the first comment~</div>
         {% endif %}
     </div>
 </div>
-
+<script src="{% static 'js/service.js' %}" crossorigin="anonymous"></script>
 {% endblock %}
