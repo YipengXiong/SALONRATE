@@ -87,18 +87,19 @@ def homepage(request):
 def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
     salon = get_object_or_404(Salon, slug=salon_name_slug)
     context_dict = {"salon": salon, "services": None, "comments": None}
-    comments = Comment.objects.filter(salon_or_service_id=salon.salon_id, type=1).order_by("-comment_id")
+    
+    comments = Comment.objects.filter(salon_or_service_id=salon.salon_id, type=0).order_by("-comment_id")
     if comments:
         context_dict["comments"] = comments
         context_dict["comment_count"] = len(comments)
-        salon.rate = round(sum([c.star for c in comments])) / len(comments)
+        salon.rate = round(sum([c.star for c in comments]) / len(comments))
         salon.save()
         context_dict["salon"] = salon
         context_dict["rate"] = salon.rate
     else:
         print("No Comments")
 
-    services = Service.objects.order_by("-service_id")
+    services = Service.objects.filter(salon_id = salon.salon_id).order_by("-service_id")
     if services:
         context_dict["services"] = services
     else:
@@ -116,7 +117,7 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
             comment.save()
         return redirect(reverse("salonrate:salon", kwargs={"salon_name_slug": salon_name_slug}))
 
-    return render(request, 'salonrate/salon.html')
+    return render(request, 'salonrate/salon.html', context_dict)
 
 
 def service_detail(request, service_name_slug="eyebrows-eyelashes-191"):
