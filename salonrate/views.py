@@ -80,6 +80,16 @@ def user_logout(request):
     return redirect(reverse('salonrate:homepage'))
 
 
+@login_required
+def user_profile(request):
+    user = request.user
+    profile = UserProfile.objects.filter(user=user)[0]
+    follows = Follows.objects.filter(username=user)
+    print("follows: ", len(follows))
+    context_dic = {'username': request.user.username, 'profile':profile, 'follows': follows}
+    return render(request, 'salonrate/userprofile.html', context_dic)
+
+
 def homepage(request):
     return render(request, 'salonrate/homepage.html')
 

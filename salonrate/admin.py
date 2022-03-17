@@ -1,7 +1,9 @@
 from csv import list_dialects
+import site
 from django.contrib import admin
 
-from salonrate.models import Salon, Service, Comment, Follows
+from salonrate.models import Salon, Service, Comment, Follows, UserProfile
+from salonrate.views import register
 
 
 # Register your models here.
@@ -19,7 +21,11 @@ class CommentAdmin(admin.ModelAdmin):
 class FollowsAdmin(admin.ModelAdmin):
     list_dispaly = ('username', 'salon_id')
 
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'avatar')
+
 admin.site.register(Salon, SalonAdmin)
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Follows, FollowsAdmin)
+admin.site.register(UserProfile, UserProfileAdmin)

@@ -15,7 +15,7 @@ class Salon(models.Model):
     rate = models.FloatField(null=False)
     salon_avg_price = models.FloatField(default=0.0)
     salon_busy = models.BooleanField(default=False)
-    image = models.ImageField(upload_to="salon_img", blank=True)
+    image = models.ImageField(default="salon_image/default.jpg", upload_to="salon_image", blank=True)
     # tag = models.CharField(max_length=16, default='0')
     phone = models.CharField(max_length=16)
     open_time = models.CharField(max_length=32, default='10:00am-5:00pm')
@@ -77,14 +77,14 @@ class Follows(models.Model):
     salon_id = models.ForeignKey(Salon, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.username), str(self.salon_id)
+        return self.username.username+self.salon_id.salon_name
     class Meta:
         verbose_name_plural = 'Follows'
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    avatar = models.ImageField(upload_to='avatar', blank = True)
+    avatar = models.ImageField(default="profile_image/default.jpg", upload_to='profile_image', blank=True)
 
     def __str__(self):
         return self.user.username

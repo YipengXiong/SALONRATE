@@ -1,0 +1,55 @@
+{% extends 'salonrate/base_lr.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Profile
+{% endblock %}
+<style>
+    .profile{
+        -webkit-line-clamp: 2;
+        font-family: 'Courier New', Courier, monospace;
+        display: table;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .avatar{
+        width: 5%;
+        display:table-cell;
+    }
+    .info{
+        display: table-cell;
+        width: 95%;
+    }
+</style>
+{% block body_block %}
+<h1 align="center">Profile of {{ username }} </h1>
+</hr>
+<h2>Personal Information</h2>
+<div class="profile">
+    <div class="avatar">
+        <div>
+            <img align="center" id="profile_photo" src="{{profile.avatar.url}}">
+        </div>
+        Username: {{username}}
+    </div>
+    <div class="info">
+        <div>
+            Location:
+        </div>
+    </div>
+</div>
+
+
+<h2>Your Follows:</h2>
+<div align="center">
+{% if follows %}
+    <dl>
+    {% for follow in follows %}
+        <dd>{{ follow.salon_id.salon_name }}</dd>
+        <img id="photo" src="{{follow.salon_id.image.url}}">
+    {% endfor %}
+    </dl>
+{% endif %}
+</div>
+
+{% endblock %}
