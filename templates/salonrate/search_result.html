@@ -478,6 +478,10 @@
 
             .item-img {
                 margin: 2% 1% 2% 1%;
+                width: 400px;
+                height: 200px;
+                object-fit: cover;
+                object-position: center;
             }
 
             .item-name {
@@ -718,7 +722,7 @@
             {% for item in detail %}
 
             <div class="item-content">
-                <img class="item-img" src="{% static 'images/item.png' %}" alt="item image">
+                <img class="item-img" src="{{ item.image.url }}" alt="item image">
                 <div class="item-detail">
                     <span class="item-name">
                         {% if scope == 'salon' %}
