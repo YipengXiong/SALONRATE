@@ -78,6 +78,85 @@
       font-weight: bold;
       color:black;
   }
+
+  .item-content {
+      border: 1px solid orange;
+      width: 70%;
+      display: flex;
+      margin: 1% 10% 1% 10%;
+      align-items: center;
+      position: relative;
+  }
+
+  .item-tags > li {
+      float: left;
+      background-color: #FFF2CC;
+      color: #FFB570;
+      width: 23%;
+      margin: 0 2% 0 2%;
+      padding: 1% 0 1% 0;
+      text-align: center;
+  }
+
+  .item-tags {
+      margin-top: 2%;
+  }
+
+  .item-address {
+      color: #A680B8;
+  }
+
+  .item-rate > fieldset > label:before {
+      content: '\f006  ';
+  }
+
+  .item-rate > fieldset > label.rated:before {
+      content: '\f005  ';
+  }
+
+  .item-img {
+      margin: 2% 1% 2% 1%;
+  }
+
+  .item-name {
+      font-weight: bolder;
+
+  }
+
+  .item-rate {
+      font-family: 'FontAwesome';
+      margin: 1% 0 3% 0;
+  }
+
+  .item-rate > fieldset {
+      padding: 0;
+      margin: 0;
+      border: none;
+      display: inline-block;
+  }
+
+  .item-rate > fieldset > label {
+      float: right;
+      width: 1em;
+      padding: 0 .05em;
+      overflow: hidden;
+      white-space: nowrap;
+      cursor: pointer;
+      font-size: 150%;
+      color: #F0A30A;
+  }
+
+  .busy {
+      border: 1px solid #B85450;
+      background-image: linear-gradient(#F8CECC, #EA6B66);
+      color: black;
+      font-weight: bolder;
+      font-style: italic;
+      padding: 4px 10px 4px 10px;
+      position: absolute;
+      right: 0;
+      top: 0;
+            }
   </style>
 <div class="container">
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="2000">
@@ -134,6 +213,79 @@
     </div>
 
 </div>
+
+<hr />
+<div class="item-container">
+    {% for salon in salons %}
+    <div class="item-content">
+        <img class="item-img" src="{% static 'images/item.png' %}" alt="item image">
+        <div class="item-detail">
+            <span class="item-name">
+            <a href="{% url 'salonrate:salon' salon.slug %}" target="_blank">{{ salon.salon_name }}</a>
+        </span>
+        <div class="item-rate">
+            <fieldset>
+                {% if salon.rate > 4 %}
+                            <label class="star4 rated" title="Outstanding">5 stars</label>
+                            {% else %}
+                            <label class="star4" title="Outstanding">5 stars</label>
+                            {% endif %}
+
+                            {% if salon.rate > 3 %}
+                            <label class="star3 rated" title="Very Good">4 stars</label>
+                            {% else %}
+                            <label class="star3" title="Very Good">4 stars</label>
+                            {% endif %}
+
+                            {% if salon.rate > 2 %}
+                            <label class="star2 rated" title="Good">3 stars</label>
+                            {% else %}
+                            <label class="star2" title="Good">3 stars</label>
+                            {% endif %}
+
+                            {% if salon.rate > 1 %}
+                            <label class="star1 rated" title="Poor">2 stars</label>
+                            {% else %}
+                            <label class="star1" title="Poor">2 stars</label>
+                            {% endif %}
+
+                            {% if salon.rate > 0 %}
+                            <label class="star0 rated" title="Very Poor">1 star</label>
+                            {% else %}
+                            <label class="star0" title="Very Poor">1 star</label>
+                            {% endif %}
+            </fieldset>
+        </div>
+        <span class="item-address">
+            {{ salon.salon_address }}
+        </span>
+        <ul class="item-tags">
+            {% if salon.good_env %}
+            <li>Nice Environment</li>
+            {% endif %}
+            {% if salon.good_service %}
+            <li>Attentive Service</li>
+            {% endif %}
+            {% if salon.cost_effective %}
+            <li>Cost Effective</li>
+            {% endif %}
+            {% if salon.good_skill %}
+            <li>Excellent Skill</li>
+            {% endif %}
+            {% if salon.good_attitude %}
+            <li>Warm Attidute</li>
+            {% endif %}
+        </ul>
+        </div>
+        {% if salon.salon_busy %}
+            <div class="busy">
+                BUSY
+            </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
 
 <div>
     <ul>

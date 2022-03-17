@@ -8,7 +8,7 @@
 </script>
 {% for item in detail %}
 <div class="item-content">
-    <img class="item-img" src="{% static 'images/item.png' %}" alt="item image">
+    <img class="item-img" src="{{ item.image.url }}" alt="item image">
     <div class="item-detail">
                     <span class="item-name">
                         {% if scope == 'salon' %}
