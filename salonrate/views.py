@@ -127,6 +127,7 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
         print(request.POST)
         if 'comment' in request.POST:
             commentform = CommentForm(request.POST)
+            print(commentform)
             if commentform.is_valid():
                 comment = commentform.save(commit=False)
                 comment.username = request.user
@@ -170,6 +171,7 @@ def service_detail(request, service_name_slug="eyebrows-eyelashes-191"):
     if request.method == 'POST':
         form = CommentForm(request.POST)
 
+        print(form)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.username = request.user

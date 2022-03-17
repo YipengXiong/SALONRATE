@@ -316,7 +316,7 @@
             {% if user.is_authenticated %}
             <button class="mac" id="mac">Write a Comment</button>
             {% else %}
-            <a href="{% url 'salonrate:login' %}"><button class="cl">Log in to write a comment</button>
+                <a href="{% url 'salonrate:login' %}"><button class="cl">Log in to write a comment</button></a>
             {% endif %}
         </div>
         <form class="cmf" method="post" enctype="multipart/form-data">

@@ -5,7 +5,6 @@
     Salon Detail
 {% endblock %}
 {% block css_block %}
-<script src="{% static 'js/salon.js' %}" crossorigin="anonymous"></script>
 <style>
     .main{
         font-family: 'Courier New', Courier, monospace;
@@ -299,6 +298,42 @@
         font-weight: bold;
         font-style: italic;
     }
+    .star-rate {
+        font-family: 'FontAwesome';
+    }
+
+    .star-rate > fieldset {
+        padding: 0;
+        margin: 0;
+        border: none;
+        display: inline;
+    }
+
+    .star-rate > fieldset > label {
+        float: right;
+        width: 1em;
+        padding: 0 .05em;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 150%;
+        color: #fca757;
+    }
+    .star-rate > fieldset:not(:checked) > label:hover,
+    .star-rate > fieldset:not(:checked) > label:hover ~ label {
+        color: #fca757;
+        text-shadow: 0 0 3px #fca757;
+    }
+    .star-rate > fieldset:not(:checked) > label:hover:before,
+    .star-rate > fieldset:not(:checked) > label:hover ~ label:before {
+        content: '\f005  ';
+    }
+    .star-rate > fieldset > label:before {
+        content: '\f006  ';
+    }
+    .star-rate > fieldset > label.rated:before {
+        content: '\f005  ';
+    }
 </style>
 {% endblock %}
 
@@ -444,21 +479,21 @@
             {% if user.is_authenticated %}
             <button class="mac" id="mac">Write a Comment</button>
             {% else %}
-            <a href="{% url 'salonrate:login' %}"><button class="cl">Log in to write a comment</button>
+                <a href="{% url 'salonrate:login' %}"><button class="cl">Log in to write a comment</button></a>
             {% endif %}
         </div>
         <form id="commentForm" class="cmf" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="star-rate">
                 <fieldset>
-                    <label class="star0" title="Very Poor">1</label>
-                    <label class="star1" title="Poor">2</label>
-                    <label class="star2" title="Good">3</label>
+                    <label class="star4" title="Outstanding">5</label>
                     <label class="star3" title="Very Good">4</label>
-                    <label class="star4" title="Outstanding" >5</label>
+                    <label class="star2" title="Good">3</label>
+                    <label class="star1" title="Poor">2</label>
+                    <label class="star0" title="Very Poor">1</label>
                 </fieldset>
             </div>
-
+            <p style="display: none" name="star">{{ form.star.label }}{{ form.star }}</p>
             <input type="checkbox" name="tag_environ" id="id_tag_environ">
             <label for="id_tag_environ" name="tag_environ">Nice Environment</label>
             
@@ -475,7 +510,7 @@
             <label for="id_tag_attitude" name="tag_attitude">Warm Attidute</label><br />
         
             <textarea type="text" name="comment" maxlength="500" required id="id_comment" placeholder="Enter your comment here. No more than 500 letters." ></textarea><br />
-            <input class="submit" type="submit" value="Submit" id="commentForm" name="{{commentForm.prefix}}"/>
+            <input class="submit" type="submit" value="Submit" id="commentForm"/>
             <input class="submit" type="button" value="Cancel" id="cancel" />
         </form>
         {% if comments %}
@@ -548,5 +583,5 @@
         {% endif %}
     </div>
 </div>
-
+<script src="{% static 'js/salon.js' %}" crossorigin="anonymous"></script>
 {% endblock %}
