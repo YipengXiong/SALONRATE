@@ -323,14 +323,14 @@
             {% csrf_token %}
             <div class="star-rate">
                 <fieldset>
-                    <label class="star4" title="Outstanding" >5</label>
+                    <label class="star4" title="Outstanding">5</label>
                     <label class="star3" title="Very Good">4</label>
                     <label class="star2" title="Good">3</label>
                     <label class="star1" title="Poor">2</label>
                     <label class="star0" title="Very Poor">1</label>
                 </fieldset>
             </div>
-            <p>{{ form.star.label }}{{ form.star }}</p>        
+            <p style="display: none">{{ form.star.label }}{{ form.star }}</p>
             <textarea type="text" name="comment" maxlength="500" required id="id_comment" placeholder="Enter your comment here. No more than 500 letters." ></textarea></p>
             <input class="submit" type="submit" value="Submit" />
             <input class="submit" type="button" value="Cancel" id="cancel" />
