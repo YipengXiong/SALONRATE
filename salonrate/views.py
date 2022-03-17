@@ -118,7 +118,7 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
     else:
         print("No services available yet")
 
-    if request.user:
+    if request.user.is_authenticated:
         follows = Follows.objects.filter(username=request.user)
         for follow in follows:
             if follow.salon_id == salon:
