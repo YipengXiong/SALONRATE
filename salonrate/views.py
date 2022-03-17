@@ -120,14 +120,15 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
         for follow in follows:
             if follow.salon_id == salon:
                 context_dict["follow"]=True
-    print(context_dict["follow"])
+    # print(context_dict["follow"])
 
     commentform = CommentForm()
+    # print(commentform)
+
     if request.method == 'POST':
-        print(request.POST)
         if 'comment' in request.POST:
             commentform = CommentForm(request.POST)
-            print(commentform)
+            # print(commentform)
             if commentform.is_valid():
                 comment = commentform.save(commit=False)
                 comment.username = request.user
@@ -148,7 +149,7 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
                 follow.save()
                 print('follow saved')
             return redirect(reverse("salonrate:salon", kwargs={"salon_name_slug": salon_name_slug}))
-            
+    context_dict['form'] = commentform
     return render(request, 'salonrate/salon.html', context_dict)
 
 
