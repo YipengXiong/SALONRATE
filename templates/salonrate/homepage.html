@@ -7,12 +7,80 @@
 
 {% block body_block %}
 <style>
+  div{margin:5px;border:0;padding:0;}
+
   .carousel-inner img {
       width: 100%;
   }
 
   .test {
       width: 70%;
+  }
+
+  .tag1 {
+      width: 100px;
+      height: 100px;
+      border-style: solid;
+      border-width: 1px;
+      border-radius: 50%;
+      border-color: rgb(208,206,226);
+      background-color: rgb(208,206,226);
+      -moz-border-radius: 50%; -webkit-border-radius: 50%;
+  }
+
+  .tag2 {
+      width: 100px;
+      height: 100px;
+      border-style: solid;
+      border-width: 1px;
+      border-radius: 50%;
+      border-color: rgb(255,242,204);
+      background-color: rgb(255,242,204);
+      -moz-border-radius: 50%; -webkit-border-radius: 50%;
+  }
+
+  .tag3 {
+      width: 100px;
+      height: 100px;
+      border-style: solid;
+      border-width: 1px;
+      border-radius: 50%;
+      border-color: rgb(240,163,10);
+      background-color: rgb(240,163,10);
+      -moz-border-radius: 50%; -webkit-border-radius: 50%;
+  }
+
+  .tag4 {
+      width: 100px;
+      height: 100px;
+      border-style: solid;
+      border-width: 1px;
+      border-radius: 50%;
+      border-color: rgb(255,230,204);
+      background-color: rgb(255,230,204);
+      -moz-border-radius: 50%; -webkit-border-radius: 50%;
+  }
+
+  .tag5 {
+      width: 100px;
+      height: 100px;
+      border-style: solid;
+      border-width: 1px;
+      border-radius: 50%;
+      border-color: rgb(225,213,231);
+      background-color: rgb(225,213,231);
+      -moz-border-radius: 50%; -webkit-border-radius: 50%;
+  }
+
+  .tags-text {
+      font-family: 'Courier New', Courier, monospace;
+      weight: 50px;
+      height: 100px;
+      line-height: 90px;
+      text-align: center;
+      font-size: 25px;
+      font-weight: bold;
+      color:black;
   }
   </style>
 <div class="container" id="test">
@@ -44,6 +112,31 @@
     </a>
 
 </div>
+</div>
+
+<div class="container" >
+    <div class="row row-cols-auto" style="justify-content: space-around">
+        <div class="tag1">
+            <div class="tags-text">Wash</div>
+        </div>
+
+        <div class="tag2">
+            <div class="tags-text">Cut</div>
+        </div>
+
+        <div class="tag3">
+            <div class="tags-text">Dye</div>
+        </div>
+
+        <div class="tag4">
+            <div class="tags-text">Perm</div>
+        </div>
+
+        <div class="tag5">
+            <div class="tags-text">Care</div>
+        </div>
+    </div>
+
 </div>
 
 <div>
