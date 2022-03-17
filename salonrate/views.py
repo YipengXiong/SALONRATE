@@ -143,7 +143,7 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
         else:
             print('followForm detected')
             if context_dict["follow"]==True:
-                follows =  Follows.objects.filter(username=request.user, salon_id = salon)
+                follows = Follows.objects.filter(username=request.user, salon_id = salon)
                 for f in follows:
                     f.delete()
                 print('follow deleted')

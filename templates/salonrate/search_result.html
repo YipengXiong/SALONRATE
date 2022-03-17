@@ -5,6 +5,9 @@
         <meta charset="UTF-8">
         <title>Search Result</title>
         <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
+        <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <link href="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.css" rel="stylesheet">
         <script src="{% static 'js/jquery.min.js' %}"></script>
         <script>
             const one_page_count = 6
@@ -478,6 +481,10 @@
 
             .item-img {
                 margin: 2% 1% 2% 1%;
+                width: 400px;
+                height: 200px;
+                object-fit: cover;
+                object-position: center;
             }
 
             .item-name {
@@ -627,21 +634,36 @@
                     </a>
                 </div>
             </div>
+            // todo: my-center drop down
             <div class="my-center">
-    {% if user.is_authenticated %}
-        {% if user.userprofile.avatar %}
-            {% if user.userprofile.avatar.url %}
-            <img class='me-img' src="{{ user.userprofile.avatar.url }}" alt="Avatar" />
-            {% endif %}
-        {% else %}
-        <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
-        {% endif %}
-        <a>{{ user.username }}</a>
-    {% else %}
-        <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
-        <a>My Account</a>
-    {% endif %}
-
+                <li class="dropdown" style="list-style-type: none">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: #FFFFFF">
+                        {% if user.is_authenticated %}
+                            {% if user.userprofile.avatar %}
+                                {% if user.userprofile.avatar.url %}
+                                <img class='me-img' src="{{ user.userprofile.avatar.url }}" alt="Avatar" />
+                                <span class="caret"></span>
+                                {% endif %}
+                            {% else %}
+                            <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
+                            <span class="caret"></span>
+                            {% endif %}
+                            <a>{{ user.username }}</a>
+                        {% else %}
+                            <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
+                            <a>My Account</a>
+                            <span class="caret"></span>
+                        {% endif %}
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url 'salonrate:logout' %}">Logout</a></li>
+                        {% else %}
+                        <li><a href="{% url 'salonrate:login' %}">Login</a></li>
+                        <li><a href="{% url 'salonrate:register' %}">Register</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
     </div>
         </div>
         <hr>
@@ -718,7 +740,7 @@
             {% for item in detail %}
 
             <div class="item-content">
-                <img class="item-img" src="{% static 'images/item.png' %}" alt="item image">
+                <img class="item-img" src="{{ item.image.url }}" alt="item image">
                 <div class="item-detail">
                     <span class="item-name">
                         {% if scope == 'salon' %}
