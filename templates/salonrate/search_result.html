@@ -156,7 +156,7 @@
                 })
 
 
-                // todo: 3. sort by rate, distance, price. Discuss how to show in item list
+                // todo: 1. rate, price sort
             })
 
             function text_remap(original_name) {
@@ -233,7 +233,7 @@
                         //             }
                         //             // console.log(tags)
                         //
-                        //             // todo: 4. css background color of tags
+                        //             // todo: 2. css background color of tags
                         //             $("div#" + j + " ul.item-tags li").hide()
                         //             let tag_index = 0
                         //             if (tag_index < 5) {
@@ -722,9 +722,9 @@
                 <div class="item-detail">
                     <span class="item-name">
                         {% if scope == 'salon' %}
-                        <a href="{% url 'salonrate:salon' item.slug %}">{{item.salon_name}}</a>
+                        <a href="{% url 'salonrate:salon' item.slug %}" target="_blank">{{item.salon_name}}</a>
                         {% else %}
-                        <a href="{% url 'salonrate:service' item.slug %}">{{item.service_name}}</a>
+                        <a href="{% url 'salonrate:service' item.slug %}" target="_blank">{{item.service_name}}</a>
                         {% endif %}
                     </span>
                     <div class="item-rate">
