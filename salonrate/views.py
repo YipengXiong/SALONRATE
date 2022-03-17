@@ -91,7 +91,10 @@ def user_profile(request):
 
 
 def homepage(request):
-    return render(request, 'salonrate/homepage.html')
+    sql = "SELECT * FROM salonrate_salon WHERE rate >=3 ORDER BY random() LIMIT 3"
+    salons = Salon.objects.raw(sql)
+    context_dict = {"salons":salons}
+    return render(request, 'salonrate/homepage.html', context_dict)
 
 
 def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
@@ -269,7 +272,7 @@ def ajax_search(request):
         for k, v in pre_filters.items():
             # if tag is selected, add to where limit conditions
             if v is not None:
-                if k is "not_busy":
+                if k == "not_busy":
                     filters["salon_busy"] = 1 if v == 1 else 0
                 else:
                     filters[k] = v
