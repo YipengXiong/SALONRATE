@@ -86,7 +86,7 @@ def homepage(request):
 
 def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
     salon = get_object_or_404(Salon, slug=salon_name_slug)
-    context_dict = {"salon": salon, "services": None, "comments": None}
+    context_dict = {"salon": salon, "services": None, "comments": None, "follow":False}
     
     comments = Comment.objects.filter(salon_or_service_id=salon.salon_id, type=0).order_by("-comment_id")
     if comments:
@@ -105,18 +105,39 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
     else:
         print("No services available yet")
 
-    form = CommentForm()
+    if request.user:
+        follows = Follows.objects.filter(username=request.user)
+        for follow in follows:
+            if follow.salon_id == salon:
+                context_dict["follow"]=True
+    print(context_dict["follow"])
+
+    commentform = CommentForm()
     if request.method == 'POST':
-        form = CommentForm(request.POST)
+        print(request.POST)
+        if 'comment' in request.POST:
+            commentform = CommentForm(request.POST)
+            if commentform.is_valid():
+                comment = commentform.save(commit=False)
+                comment.username = request.user
+                comment.salon_or_service_id = salon.salon_id
+                comment.type = 0
+                comment.save()
+            return redirect(reverse("salonrate:salon", kwargs={"salon_name_slug": salon_name_slug}))
 
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.username = request.user
-            comment.salon_or_service_id = salon.salon_id
-            comment.type = 0
-            comment.save()
-        return redirect(reverse("salonrate:salon", kwargs={"salon_name_slug": salon_name_slug}))
-
+        else:
+            print('followForm detected')
+            if context_dict["follow"]==True:
+                follows =  Follows.objects.filter(username=request.user, salon_id = salon)
+                for f in follows:
+                    f.delete()
+                print('follow deleted')
+            else:
+                follow = Follows(username=request.user, salon_id=salon)
+                follow.save()
+                print('follow saved')
+            return redirect(reverse("salonrate:salon", kwargs={"salon_name_slug": salon_name_slug}))
+            
     return render(request, 'salonrate/salon.html', context_dict)
 
 

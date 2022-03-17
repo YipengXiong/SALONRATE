@@ -18,8 +18,8 @@
     }
     .left{
         float:left;
-        width: 52%;
-        height: 30vh;
+        width: 70%;
+        height: 250px;
     }
     .rating {
         font-family: 'FontAwesome';
@@ -61,7 +61,7 @@
     }
     .right{
         float:right;
-        width: 46%;
+        width: 30%;
     }
     .promopic{
         float:right;
@@ -69,9 +69,15 @@
         border:2px;
     }
     .comment{
-        margin-top: 30px;
+        margin-top: 20px;
         width:100%;
         float:left;
+    }
+    .subtopic{
+        display:table;
+    }
+    h4{
+        display:table-cell;
     }
     .mac{
         color:rgb(191, 137, 242);
@@ -80,9 +86,10 @@
         background-color: white;
         border-radius: 3px;
         width: 200px;
-        height: 30px;
-        margin-bottom: 12px;
+        height: 35px;
+        margin-left: 12px;
         cursor:pointer;
+        display:table-cell;
     }
     .cl{
         color:rgb(191, 137, 242);
@@ -91,11 +98,14 @@
         background-color: white;
         border-radius: 3px;
         width: 300px;
-        height: 30px;
-        margin-bottom: 12px;
+        height: 35px;
+        margin-left: 12px;
         cursor:pointer;
+        display:table-cell;
     }
     .cmf{
+        margin-top: 20px;
+        margin-bottom: 20px;
         font-family: 'Courier New', Courier, monospace;
         display: none;
     }
@@ -221,6 +231,7 @@
         color: rgb(191, 137, 242);
     }
     .remind{
+        margin-top:20px;
         font-size: large;
         color:rgb(208, 167, 245);
         font-weight: bold;
@@ -236,41 +247,49 @@
             <div class="back"><a href="{% url 'salonrate:salon' service.salon_id.slug %}">{{ service.salon_id.salon_name }}</a></div>
             <div class="name"><h2>{{ service.service_name }}</h2></div>
             {% if comments %}
-            <div class="item-rate">
-                <fieldset>
-                    {% if service.rate > 4 %}
-                    <label class="star4 rated" title="Outstanding">5 stars</label>
-                    {% else %}
-                    <label class="star4" title="Outstanding">5 stars</label>
-                    {% endif %}
+            <div class="comline">
+                <div class="item-rate">
+                    <fieldset>
+                        {% if service.rate > 4 %}
+                        <label class="star4 rated" title="Outstanding">5 stars</label>
+                        {% else %}
+                        <label class="star4" title="Outstanding">5 stars</label>
+                        {% endif %}
 
-                    {% if service.rate > 3 %}
-                    <label class="star3 rated" title="Very Good">4 stars</label>
-                    {% else %}
-                    <label class="star3" title="Very Good">4 stars</label>
-                    {% endif %}
+                        {% if service.rate > 3 %}
+                        <label class="star3 rated" title="Very Good">4 stars</label>
+                        {% else %}
+                        <label class="star3" title="Very Good">4 stars</label>
+                        {% endif %}
 
-                    {% if service.rate > 2 %}
-                    <label class="star2 rated" title="Good">3 stars</label>
-                    {% else %}
-                    <label class="star2" title="Good">3 stars</label>
-                    {% endif %}
+                        {% if service.rate > 2 %}
+                        <label class="star2 rated" title="Good">3 stars</label>
+                        {% else %}
+                        <label class="star2" title="Good">3 stars</label>
+                        {% endif %}
 
-                    {% if service.rate > 1 %}
-                    <label class="star1 rated" title="Poor">2 stars</label>
-                    {% else %}
-                    <label class="star1" title="Poor">2 stars</label>
-                    {% endif %}
+                        {% if service.rate > 1 %}
+                        <label class="star1 rated" title="Poor">2 stars</label>
+                        {% else %}
+                        <label class="star1" title="Poor">2 stars</label>
+                        {% endif %}
 
-                    {% if service.rate > 0 %}
-                    <label class="star0 rated" title="Very Poor">1 star</label>
-                    {% else %}
-                    <label class="star0" title="Very Poor">1 star</label>
-                    {% endif %}
-
-                </fieldset>
+                        {% if service.rate > 0 %}
+                        <label class="star0 rated" title="Very Poor">1 star</label>
+                        {% else %}
+                        <label class="star0" title="Very Poor">1 star</label>
+                        {% endif %}
+                    </fieldset>
+                </div>
+                <div class="comcount">
+                    {{ comment_count }} 
+                        {% if comment_count == 1 %}
+                        Comment
+                        {% else %}
+                        Comments
+                        {% endif %}
+                </div>
             </div>
-            <div class="comcount">{{ comment_count }} Comments</div>
             {% endif %}
             <div class="price">Price: £ {{ service.service_price }}</div>
         </div>
@@ -290,6 +309,7 @@
             {% endif %}
         </div>
     </div>
+    <hr />
     <div class="comment">
         <div class="subtopic">
             <h4>· Comments on Service ·</h4>

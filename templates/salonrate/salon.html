@@ -5,7 +5,7 @@
     Salon Detail
 {% endblock %}
 {% block css_block %}
-<script src="{% static 'js/service.js' %}" crossorigin="anonymous"></script>
+<script src="{% static 'js/salon.js' %}" crossorigin="anonymous"></script>
 <style>
     .main{
         font-family: 'Courier New', Courier, monospace;
@@ -19,48 +19,115 @@
     }
     .left{
         float:left;
-        width: 48%;
-        height: 25vh;
+        width: 70%;
+        /* height: 250px; */
+    }
+    .name{
+        display:table;
+        margin-bottom:20px;
+    }
+    h2{
+        width: 100%;
+        display:table-cell;
+    }
+    .name label {
+        width: 5%;
+        display:table-cell;
+        font-family: 'FontAwesome';
+        color: #fca757;
+        font-size: large;
+    }
+    .name .f1{
+        border: 1px solid rgb(191, 137, 242); 
+        border-radius: 3px;
+        padding:5px;
+        width: 100px;
+        background-color: white;
+        color:rgb(191, 137, 242);
+        font-family: 'Courier New', Courier, monospace;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    .name .f2{
+        border: 1px solid lavender; 
+        border-radius: 3px;
+        padding:5px;
+        width: 100px;
+        color: rgb(144, 39, 242);
+        background-color: lavender;
+        font-family: 'Courier New', Courier, monospace;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    .followed:before{
+        content:"\f004";
+    }
+    .unfollowed:before{
+        content:"\f08a";
+    }
+    
+    .comline{
+        display: table;
+    }
+    .item-rate{
+        width: 40%;
+        display: table-cell;
     }
     .comcount{
+        margin-left: 10px;
+        width: 100%;
+        display: table-cell;
+        float:left;
         margin-top: -10px;
         margin-bottom: 10px;
         color: #fca757;
         font-weight: bold;
     }
-    .address{
-        font-size: 16px;
-    }
     .price{
-        margin-top: 30px;
-        font-size: 16px;
+        margin-top: 5px;
+        font-size: 18px;
     }
     .contact{
-        font-size: 16px;
+        font-size: 18px;
     }
     .open{
-        font-size: 16px;
+        font-size: 18px;
+    }
+    .address{
+        font-size: 18px;
+    }
+    .fa-money:before{
+        font-family: 'FontAwesome';
+        content:"\f0d6";
+    }
+    .fa-phone-square:before{
+        font-family: 'FontAwesome';
+        content:"\f098";
+    }
+    .fa-clock-o:before{
+        font-family: 'FontAwesome';
+        content:"\f017";
+    }
+    .fa-map-marker:before{
+        font-family: 'FontAwesome';
+        content:"\f041";
     }
     .right{
         float:right;
-        width: 48%;
+        width: 30%;
     }
     .promopic{
         float:right;
         height: 26vh;
     }
-    .hr-mid-square[multiple]::before {
-        box-shadow: 1.25em -1.25em, -1.25em 1.25em;
-        color: rgb(208, 167, 245);
-    }
     .services{
-        margin-top: 10px;
+        margin-top: 20px;
     }
     .container{
         float: left;
     }
     .col-lg-auto{
-        border:2px solid rgb(227, 205, 245);
+        border:2px solid white;
         box-shadow: 0 2px 2px lavender;
         border-radius: 5px;
         margin-right: 10px;
@@ -70,7 +137,7 @@
     }
     .col-lg-auto:hover{
         box-shadow: 0 0 10px lavender;
-        border:2px solid rgb(208, 167, 245);
+        border:2px solid lavender;
         transform: translate(0,-1%);
     }
     .sp{
@@ -81,11 +148,11 @@
         margin-left:-15px;
     }
     .service_name{
-        color:rgb(191, 137, 242);
+        color:black;
         font-size: 16px;
     }
     .service_price{
-        color:rgb(191, 137, 242);
+        color:black;
         font-size: 14px;
         margin-top:10px;
     }
@@ -94,31 +161,30 @@
         width:100%;
         float:left;
     }
+    .subtopic{
+        margin-top:20px;
+        display: table;
+    }
+    .subtopic > h4{
+        display: table-cell;
+        /* width: auto; */
+    }
     .mac{
         color:rgb(191, 137, 242);
-        border: 0.6px solid rgb(191, 137, 242); 
+        border: 1px solid rgb(191, 137, 242); 
         padding:5px;
         background-color: white;
         border-radius: 3px;
         width: 200px;
-        height: 30px;
+        height: 35px;
         margin-bottom: 12px;
         cursor:pointer;
+        display: table-cell;
+        margin-left: 20px;
     }
-    .cmf{
-        font-family: 'Courier New', Courier, monospace;
-        display: none;
-    }
-    .mac{
-        color:rgb(191, 137, 242);
-        border: 0.6px solid rgb(191, 137, 242); 
-        padding:5px;
-        background-color: white;
-        border-radius: 3px;
-        width: 200px;
-        height: 30px;
-        margin-bottom: 12px;
-        cursor:pointer;
+    .mac:hover{
+        color: white;
+        background-color: rgb(191, 137, 242);
     }
     .cl{
         color:rgb(191, 137, 242);
@@ -127,18 +193,26 @@
         background-color: white;
         border-radius: 3px;
         width: 300px;
-        height: 30px;
+        height: 35px;
         margin-bottom: 12px;
         cursor:pointer;
+        display: table-cell;
     }
-    input{
+    .cmf{
+        margin-top:20px;
+        margin-bottom:20px;
+        font-family: 'Courier New', Courier, monospace;
+        display: none;
+    }
+    .cmf input{
         border: 1px solid lavender; 
         border-radius: 3px;
         padding:5px;
         /* background-color: lavender; */
         font-family: 'Courier New', Courier, monospace;
-        }
-    label{
+        cursor: pointer;
+    }
+    .cmf label{
         cursor: pointer;
         vertical-align: middle;
         margin-right: 10px;
@@ -160,10 +234,13 @@
         border: 1px solid lavender; 
         border-radius: 3px;
         padding:5px;
+        width: 100px;
         background-color: lavender;
         font-family: 'Courier New', Courier, monospace;
+        font-weight: bold;
         color:rgb(191, 137, 242);
-        margin-bottom: 10px;
+        /* margin-bottom: 10px; */
+        margin-right: 10px;
         cursor:pointer;
     }
     .comment-item{
@@ -216,18 +293,11 @@
         color: rgb(191, 137, 242);
     }
     .remind{
+        margin-top:20px;
         font-size: large;
         color:rgb(208, 167, 245);
         font-weight: bold;
         font-style: italic;
-    }
-    .followed{
-        font-family: 'FontAwesome';
-        content:"\f004";
-    }
-    .unfollowed{
-        font-family: 'FontAwesome';
-        content:"\f08a";
     }
 </style>
 {% endblock %}
@@ -237,68 +307,72 @@
     <div class="detail">
         <div class="left">
             <div class="name">
-                <h1>{{ salon.salon_name }}</h1>
+                <h2>{{ salon.salon_name }}</h2>
                 {% if user.is_authenticated %}
                     {% if follow %}
                     <label class="followed"></label>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input class="f1" type="submit" value="Unfollow">
+                    </form>
                     {% else %}
                     <label class="unfollowed"></label>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input class="f2" type="submit" value="Follow">
+                    </form>
                     {% endif %}
                 {% else %}
                 <a href="{% url 'salonrate:login' %}"><label class="unfollowed"></label></a>
                 {% endif %}
             </div>
-            <div class="item-rate">
-                <fieldset>
-                    {% if salon.rate > 4 %}
-                    <label class="star4 rated" title="Outstanding">5 stars</label>
-                    {% else %}
-                    <label class="star4" title="Outstanding">5 stars</label>
-                    {% endif %}
+            <div class="comline">
+                <div class="item-rate">
+                    <fieldset>
+                        {% if salon.rate > 4 %}
+                        <label class="star4 rated" title="Outstanding">5 stars</label>
+                        {% else %}
+                        <label class="star4" title="Outstanding">5 stars</label>
+                        {% endif %}
 
-                    {% if salon.rate > 3 %}
-                    <label class="star3 rated" title="Very Good">4 stars</label>
-                    {% else %}
-                    <label class="star3" title="Very Good">4 stars</label>
-                    {% endif %}
+                        {% if salon.rate > 3 %}
+                        <label class="star3 rated" title="Very Good">4 stars</label>
+                        {% else %}
+                        <label class="star3" title="Very Good">4 stars</label>
+                        {% endif %}
 
-                    {% if salon.rate > 2 %}
-                    <label class="star2 rated" title="Good">3 stars</label>
-                    {% else %}
-                    <label class="star2" title="Good">3 stars</label>
-                    {% endif %}
+                        {% if salon.rate > 2 %}
+                        <label class="star2 rated" title="Good">3 stars</label>
+                        {% else %}
+                        <label class="star2" title="Good">3 stars</label>
+                        {% endif %}
 
-                    {% if salon.rate > 1 %}
-                    <label class="star1 rated" title="Poor">2 stars</label>
-                    {% else %}
-                    <label class="star1" title="Poor">2 stars</label>
-                    {% endif %}
+                        {% if salon.rate > 1 %}
+                        <label class="star1 rated" title="Poor">2 stars</label>
+                        {% else %}
+                        <label class="star1" title="Poor">2 stars</label>
+                        {% endif %}
 
-                    {% if salon.rate > 0 %}
-                    <label class="star0 rated" title="Very Poor">1 star</label>
+                        {% if salon.rate > 0 %}
+                        <label class="star0 rated" title="Very Poor">1 star</label>
+                        {% else %}
+                        <label class="star0" title="Very Poor">1 star</label>
+                        {% endif %}
+                    </fieldset>
+                </div>            
+                <div class="comcount">
+                    {{ comment_count }} 
+                    {% if comment_count == 1 %}
+                    Comment
                     {% else %}
-                    <label class="star0" title="Very Poor">1 star</label>
+                    Comments
                     {% endif %}
-                </fieldset>
-            </div>            
-            <div class="comcount">
-                {{ comment_count }} 
-                {% if comment_count == 1 %}
-                Comment
-                {% else %}
-                Comments
-                {% endif %}</div>
-            <div class="container">
-                <div class="row">Average Cost: £ {{ salon.salon_avg_price }}</div>
-                <div class="row">Phone Number: {{ salon.phone }}</div>
-                <div class="row">Opening Hours: {{ salon.open_time }}</div>
-                <div class="row">Salon Address: {{ salon.salon_address }}</div>
+                </div>
             </div>
-
-            <!-- <div class="price">· Average Cost: £ {{ salon.salon_avg_price }}</div>
-            <div class="contact">· Phone Number: {{ salon.phone }}</div>
-            <div class="open">· Opening Hours: {{ salon.open_time }}</div>
-            <div class="address">· {{ salon.salon_address }}</div> -->
+            <div class="price"><label class="fa-money"></label> Average Cost: £ {{ salon.salon_avg_price }}</div>
+            <div class="contact"><label class="fa-phone-square"></label> Phone: {{ salon.phone }}</div>
+            <div class="open"><label class="fa-clock-o"></label> Opening Hours: {{ salon.open_time }}</div>
+            <div class="address"><label class="fa-map-marker"></label> {{ salon.salon_address }}</div>
             {% if tags %}
             <ul class="item-tags">
                 <ul class="tags">
@@ -329,7 +403,7 @@
             {% endif %}
         </div>
     </div>
-    <hr class="hr-mid-square" multiple>
+    <hr />
     <div class="services">
         <h4>· Services Offered ·</h4>
         {% if services %}
@@ -373,7 +447,7 @@
             <a href="{% url 'salonrate:login' %}"><button class="cl">Log in to write a comment</button>
             {% endif %}
         </div>
-        <form class="cmf" method="post" enctype="multipart/form-data">
+        <form id="commentForm" class="cmf" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="star-rate">
                 <fieldset>
@@ -401,7 +475,7 @@
             <label for="id_tag_attitude" name="tag_attitude">Warm Attidute</label><br />
         
             <textarea type="text" name="comment" maxlength="500" required id="id_comment" placeholder="Enter your comment here. No more than 500 letters." ></textarea><br />
-            <input class="submit" type="submit" value="Submit" />
+            <input class="submit" type="submit" value="Submit" id="commentForm" name="{{commentForm.prefix}}"/>
             <input class="submit" type="button" value="Cancel" id="cancel" />
         </form>
         {% if comments %}
