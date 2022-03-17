@@ -135,6 +135,17 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
                 comment.salon_or_service_id = salon.salon_id
                 comment.type = 0
                 comment.save()
+                if comment.tag_environ == True:
+                    salon.good_env = True
+                if comment.tag_service == True:
+                    salon.good_service = True
+                if comment.tag_cost == True:
+                    salon.cost_effective = True
+                if comment.tag_skill == True:
+                    salon.good_skill = True 
+                if comment.tag_attitude == True:
+                    salon.good_attitude = True 
+                salon.save()
             return redirect(reverse("salonrate:salon", kwargs={"salon_name_slug": salon_name_slug}))
 
         else:
