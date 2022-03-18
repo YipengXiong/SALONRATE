@@ -5,9 +5,12 @@
         <meta charset="UTF-8">
         <title>Search Result</title>
         <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
-        <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-        <link href="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.css" rel="stylesheet">
+<!--        <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>-->
+<!--        <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>-->
+<!--        <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>-->
+<!--        <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet"-->
+<!--              integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">-->
+<!--        <link href="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.css" rel="stylesheet">-->
         <script src="{% static 'js/jquery.min.js' %}"></script>
         <script>
             const one_page_count = 6
@@ -156,6 +159,12 @@
                     })
                     // console.log("current tag-filter scope: " + checked_value)
                     // console.log(checked_value)
+                })
+
+                $("div.my-center").hover(function() {
+                    $("ul.dropdown-menu").show()
+                },function (){
+                    $("ul.dropdown-menu").hide()
                 })
 
 
@@ -605,13 +614,24 @@
             }
 
             .about {
-            margin-left: 10%;
-            align-items: center;
-            float: left;
-            text-align: center;
-            margin-left: 40%;
-            font-family: 'Courier New', Courier, monospace;
-        }
+                align-items: center;
+                float: left;
+                text-align: center;
+                margin-left: 40%;
+                font-family: 'Courier New', Courier, monospace;
+            }
+            .me-img {
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                object-fit: cover;
+                object-position: center;
+            }
+
+            img {
+    vertical-align: middle;
+    border-style: none;
+}
 
         </style>
     </head>
@@ -634,37 +654,36 @@
                     </a>
                 </div>
             </div>
-            // todo: my-center drop down
-            <div class="my-center">
-                <li class="dropdown" style="list-style-type: none">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: #FFFFFF">
-                        {% if user.is_authenticated %}
-                            {% if user.userprofile.avatar %}
-                                {% if user.userprofile.avatar.url %}
-                                <img class='me-img' src="{{ user.userprofile.avatar.url }}" alt="Avatar" />
-                                <span class="caret"></span>
+                <div class="my-center">
+                        <div class="dropdown" style="list-style-type: none">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: #FFFFFF">
+                                {% if user.is_authenticated %}
+                                    {% if user.userprofile.avatar %}
+                                        {% if user.userprofile.avatar.url %}
+                                        <img class='me-img' src="{{ user.userprofile.avatar.url }}" alt="Avatar" />
+                                        <span class="caret"></span>
+                                        {% endif %}
+                                    {% else %}
+                                    <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
+                                    <span class="caret"></span>
+                                    {% endif %}
+                                    <a>{{ user.username }}</a>
+                                {% else %}
+                                    <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
+                                    <a>My Account</a>
+                                    <span class="caret"></span>
                                 {% endif %}
-                            {% else %}
-                            <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
-                            <span class="caret"></span>
-                            {% endif %}
-                            <a>{{ user.username }}</a>
-                        {% else %}
-                            <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
-                            <a>My Account</a>
-                            <span class="caret"></span>
-                        {% endif %}
-                    </a>
-                    <ul class="dropdown-menu">
-                        {% if user.is_authenticated %}
-                        <li><a href="{% url 'salonrate:logout' %}">Logout</a></li>
-                        {% else %}
-                        <li><a href="{% url 'salonrate:login' %}">Login</a></li>
-                        <li><a href="{% url 'salonrate:register' %}">Register</a></li>
-                        {% endif %}
-                    </ul>
-                </li>
-    </div>
+                            </a>
+                            <ul class="dropdown-menu" hidden style="position: absolute;z-index: 9999; will-change: transform;">
+                                {% if user.is_authenticated %}
+                                <li><a href="{% url 'salonrate:logout' %}">Logout</a></li>
+                                {% else %}
+                                <li><a href="{% url 'salonrate:login' %}">Login</a></li>
+                                <li><a href="{% url 'salonrate:register' %}">Register</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                </div>
         </div>
         <hr>
         <div class="sort-filter">
