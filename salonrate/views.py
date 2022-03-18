@@ -86,21 +86,21 @@ def user_profile(request):
     profile = UserProfile.objects.filter(user=user)[0]
     comments = Comment.objects.filter(username=user)
     follows = Follows.objects.filter(username=user)
-    context_dic = {'user': request.user, 'profile':profile, 'comments':comments,'follows': follows}
+    context_dic = {'user': request.user, 'profile': profile, 'comments': comments, 'follows': follows}
     return render(request, 'salonrate/userprofile.html', context_dic)
 
 
 def homepage(request):
     sql = "SELECT * FROM salonrate_salon WHERE rate >=3 ORDER BY random() LIMIT 3"
     salons = Salon.objects.raw(sql)
-    context_dict = {"salons":salons}
+    context_dict = {"salons": salons}
     return render(request, 'salonrate/homepage.html', context_dict)
 
 
 def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
     salon = get_object_or_404(Salon, slug=salon_name_slug)
-    context_dict = {"salon": salon, "services": None, "comments": None, "follow":False}
-    
+    context_dict = {"salon": salon, "services": None, "comments": None, "follow": False}
+
     comments = Comment.objects.filter(salon_or_service_id=salon.salon_id, type=0).order_by("-comment_id")
     if comments:
         context_dict["comments"] = comments
@@ -112,7 +112,7 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
     else:
         print("No Comments")
 
-    services = Service.objects.filter(salon_id = salon.salon_id).order_by("-service_id")
+    services = Service.objects.filter(salon_id=salon.salon_id).order_by("-service_id")
     if services:
         context_dict["services"] = services
     else:
@@ -122,7 +122,7 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
         follows = Follows.objects.filter(username=request.user)
         for follow in follows:
             if follow.salon_id == salon:
-                context_dict["follow"]=True
+                context_dict["follow"] = True
     # print(context_dict["follow"])
 
     commentform = CommentForm()
@@ -145,16 +145,16 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
                 if comment.tag_cost == True:
                     salon.cost_effective = True
                 if comment.tag_skill == True:
-                    salon.good_skill = True 
+                    salon.good_skill = True
                 if comment.tag_attitude == True:
-                    salon.good_attitude = True 
+                    salon.good_attitude = True
                 salon.save()
             return redirect(reverse("salonrate:salon", kwargs={"salon_name_slug": salon_name_slug}))
 
         else:
             print('followForm detected')
-            if context_dict["follow"]==True:
-                follows = Follows.objects.filter(username=request.user, salon_id = salon)
+            if context_dict["follow"] == True:
+                follows = Follows.objects.filter(username=request.user, salon_id=salon)
                 for f in follows:
                     f.delete()
                 print('follow deleted')
@@ -204,10 +204,12 @@ def service_detail(request, service_name_slug="eyebrows-eyelashes-191"):
 def search_result(request):
     para_count = len(request.POST)
     # print(para_count)
-    if para_count <= 4:
+    if para_count <= 5:
         print('Non ajax')
         scope = request.POST.get("scope")
         keyword = request.POST.get('keyword')
+        current_sort = request.POST.get('current_sort')
+        print(current_sort)
 
         # print(f"{scope}::{keyword}")
         # init search detail object
@@ -226,8 +228,13 @@ def search_result(request):
         else:
             # create default query with name conditions
             search_detail = Service.objects.filter(service_name__contains=keyword)
-
-        search_detail = search_detail.order_by("-rate")
+        if current_sort == 'price':
+            if scope == "salon":
+                search_detail = search_detail.order_by("-salon_avg_price")
+            else:
+                search_detail = search_detail.order_by("-service_price")
+        else:
+            search_detail = search_detail.order_by("-rate")
         paginator = Paginator(search_detail, 6)
         if request.method == 'POST' and not request.is_ajax():
             page = paginator.page(1)
@@ -263,7 +270,8 @@ def ajax_search(request):
     scope = request.POST.get("scope")
     keyword = request.POST.get('keyword')
     current_page = int(request.POST.get('current_page'))
-
+    current_sort = request.POST.get('current_sort')
+    print(current_sort)
 
     # init search detail object
     search_detail = None
@@ -321,7 +329,13 @@ def ajax_search(request):
         # i.e. select * from service where service_name like "%xxx%" AND (tag1 OR tag2 OR tag3 ...)
         search_detail = search_detail.filter(q_query)
 
-    search_detail = search_detail.order_by("-rate")
+    if current_sort == 'price':
+        if scope == "salon":
+            search_detail = search_detail.order_by("-salon_avg_price")
+        else:
+            search_detail = search_detail.order_by("-service_price")
+    else:
+        search_detail = search_detail.order_by("-rate")
     paginator = Paginator(search_detail, 6)
     page = paginator.page(current_page)
     print(page)

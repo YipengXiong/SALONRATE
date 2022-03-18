@@ -13,6 +13,7 @@
             let checked_value = {}
             let scope
             let keyword
+            let current_sort
 
             scope = '{{scope}}'
             keyword = '{{keyword}}'
@@ -67,6 +68,7 @@
                             'keyword': keyword,
                             'current_page': current_page,
                             'sort_tag':checked_value,
+                            'current_sort':current_sort,
                             'csrfmiddlewaretoken': '{{ csrf_token }}'
                         },
                         success: function (res) {
@@ -105,6 +107,7 @@
                             'keyword': keyword,
                             'current_page': current_page,
                             'sort_tag':checked_value,
+                            'current_sort':current_sort,
                             'csrfmiddlewaretoken': '{{ csrf_token }}'
                         },
                         success: function (res) {
@@ -161,9 +164,30 @@
                     $("ul.dropdown-menu").hide()
                 })
 
-
-                // todo: price sort
+                
+                $(".sort li").on("click", sort)
             })
+
+            function sort(){
+                current_sort = $(this).text().trim().replace("/\s/g", "").toLowerCase()
+                console.log(current_sort)
+                $.ajax({
+                        type: 'post',
+                        url: '{% url "salonrate:search_result" %}',
+                        data: {
+                            'scope': scope,
+                            'keyword': keyword,
+                            'current_page': current_page,
+                            'sort_tag':checked_value,
+                            'current_sort':current_sort,
+                            'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        },
+                        success: function (res) {
+                            // console.log(res)
+                            $("div.item-container").html(res)
+                        }
+                    })
+            }
 
             function text_remap(original_name) {
                 switch (original_name) {
@@ -193,6 +217,7 @@
                         'keyword': keyword,
                         'sort_tag': checked_value,
                         'current_page': current_page,
+                        'current_sort':current_sort,
                         'csrfmiddlewaretoken': '{{ csrf_token }}'
                     },
                     // dataType: 'json',
