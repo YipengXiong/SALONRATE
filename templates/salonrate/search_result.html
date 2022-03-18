@@ -13,8 +13,9 @@
             let checked_value = {}
             let scope
             let keyword
-            let current_sort
+            let current_sort = 'rate'
             let current_type
+            let service_tag = ["Wash", "Cut", "Dye", "Perm", "Care"]
 
             scope = '{{scope}}'
             keyword = '{{keyword}}'
@@ -63,7 +64,7 @@
                             'current_page': current_page,
                             'sort_tag':checked_value,
                             'current_sort':current_sort,
-                            'current_type':current_type,
+                            // 'current_type':current_type,
                             'csrfmiddlewaretoken': '{{ csrf_token }}'
                         },
                         success: function (res) {
@@ -92,13 +93,13 @@
                             'current_page': current_page,
                             'sort_tag':checked_value,
                             'current_sort':current_sort,
-                            'current_type':current_type,
+                            // 'current_type':current_type,
                             'csrfmiddlewaretoken': '{{ csrf_token }}'
                         },
                         success: function (res) {
                             // console.log(res)
                             $("div.item-container").html(res)
-                            if (current_page===all_page_count){
+                            if (current_page===parseInt(all_page_count)){
                                 $("a#next-page").hide()
                             }
                         }
@@ -107,6 +108,12 @@
 
             }
 
+            function check_checked_value(){
+                checked_value = {}
+                $("div.tag-filter input:checkbox:checked").each(function () {
+                    checked_value[$(this).val().toLowerCase().replace(" ", "_")] = 1
+                })
+            }
 
             $(function () {
                 if (scope==='salon'){
@@ -117,6 +124,31 @@
                     $("ul.search-switch li").eq(-1).addClass("selected").siblings().removeClass("selected")
                     $("input.search-txt").attr("placeholder", keyword)
 
+                }
+
+                let current_scope_selected = $(".search-switch li.selected").text().toLowerCase();
+                console.log(current_scope_selected)
+                if (current_scope_selected === "service") {
+                    for (let i = 0; i < 5; i++) {
+                        $("div.tag-filter li input").eq(i).attr("value", service_tag[i]).attr("id", service_tag[i].toLowerCase())
+                        $("div.tag-filter li label").eq(i).attr("for", service_tag[i].toLowerCase())
+                        $("div.tag-filter li label").eq(i).text(service_tag[i])
+                    }
+                    $("div.tag-filter li").eq(-1).hide()
+                }
+                if (current_scope_selected === "salon") {
+                    let salon_tag = ["Good Env", "Good Service", "Cost Effective", "Good Skill", "Good Attitude", "Not Busy"]
+                    for (let i = 0; i < 6; i++) {
+                        $("div.tag-filter li input").eq(i).attr("value", salon_tag[i]).attr("id", salon_tag[i].toLowerCase().replace(" ", "_"))
+                        $("div.tag-filter li label").eq(i).attr("for", salon_tag[i].toLowerCase().replace(" ", "_"))
+                        $("div.tag-filter li label").eq(i).text(text_remap(salon_tag[i]))
+                    }
+                    $("div.tag-filter li").eq(-1).show()
+                }
+
+                if (current_type) {
+                    $("div.tag-filter input").eq(current_type).attr("checked","checked")
+                    check_checked_value()
                 }
 
                 $("a#next-page").on('click', getNextPage)
@@ -141,6 +173,7 @@
                     $("input:checkbox:checked").each(function () {
                         checked_value[$(this).val().toLowerCase().replace(" ", "_")] = 1
                     })
+                    getSearchData()
                     // console.log("current tag-filter scope: " + checked_value)
                     // console.log(checked_value)
                 })
@@ -159,7 +192,8 @@
 
             function sort(){
                 current_sort = $(this).text().trim().replace("/\s/g", "").toLowerCase()
-                console.log(current_sort)
+                // console.log(current_sort)
+                current_page=1
                 $.ajax({
                         type: 'post',
                         url: '{% url "salonrate:search_result" %}',
@@ -169,11 +203,12 @@
                             'current_page': current_page,
                             'sort_tag':checked_value,
                             'current_sort':current_sort,
-                            'current_type':current_type,
+                            // 'current_type':current_type,
                             'csrfmiddlewaretoken': '{{ csrf_token }}'
                         },
                         success: function (res) {
                             // console.log(res)
+                            $("span#current-page").text(current_page)
                             $("div.item-container").html(res)
                         }
                     })
@@ -199,6 +234,7 @@
                 // console.log("scope is " + scope)
                 let keyword = $('input.search-txt').val()
                 // console.log("keyword is " + keywords)
+                current_page=1
                 $.ajax({
                     type: 'post',
                     url: '{% url "salonrate:ajax_search" %}',
@@ -208,19 +244,29 @@
                         'sort_tag': checked_value,
                         'current_page': current_page,
                         'current_sort':current_sort,
-                        'current_type':current_type,
+                        // 'current_type':current_type,
                         'csrfmiddlewaretoken': '{{ csrf_token }}'
                     },
                     // dataType: 'json',
                     success: function (res) {
                         // console.log(res)
-                        current_page=1
-                        $("span#current-page").text(current_page)
                         $("div.item-container").html(res)
-                        $("a#next-page").show()
-                        if (current_page>=all_page_count){
+                        if (res.trim()===""){
+                            $("span#current-page").text(0)
+                            $("span#all-page").text(0)
                             $("a#next-page").hide()
+                            $("a#prev-page").hide()
+                        }else {
+                            $("span#current-page").text(current_page)
+                            $("a#next-page").show()
+                            if (current_page>=parseInt(all_page_count)){
+                                $("a#next-page").hide()
+                            }
+                            if (current_page===1){
+                                $("a#prev-page").hide()
+                            }
                         }
+
                     }
                 })
             }
@@ -231,7 +277,6 @@
                     // console.log($(this).text())
                     let scope = $(this).text().toLowerCase()
                     if (scope === "service") {
-                        let service_tag = ["Wash", "Cut", "Dye", "Perm", "Care"]
                         for (let i = 0; i < 5; i++) {
                             $("div.tag-filter li input").eq(i).attr("value", service_tag[i]).attr("id", service_tag[i].toLowerCase())
                             $("div.tag-filter li label").eq(i).attr("for", service_tag[i].toLowerCase())
@@ -248,6 +293,8 @@
                         }
                         $("div.tag-filter li").eq(-1).show()
                     }
+                    $("div.tag-filter input").removeAttr("checked")
+                    check_checked_value()
                 })
             })
 
