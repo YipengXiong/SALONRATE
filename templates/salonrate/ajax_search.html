@@ -51,6 +51,14 @@
 
             </fieldset>
         </div>
+        <span class="item-price">
+                        {% if scope == 'salon' %}
+                        <label class="fa-money"></label> Average Cost: £ {{ item.salon_avg_price }}
+                        {% else %}}
+                        <label class="fa-money"></label> Average Cost: £ {{ item.service_price }}
+                        {% endif %}
+                    </span>
+                    <br>
         <span class="item-address">
                         {% if scope == 'salon' %}
                         {{item.salon_address}}

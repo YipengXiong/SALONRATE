@@ -639,6 +639,10 @@
                 font-size: inherit;
                 line-height: inherit;
             }
+            .fa-money:before{
+                font-family: 'FontAwesome';
+                content:"\f0d6";
+            }
 
         </style>
     </head>
@@ -809,6 +813,14 @@
 
                         </fieldset>
                     </div>
+                    <span class="item-price">
+                        {% if scope == 'salon' %}
+                        <label class="fa-money"></label> Average Cost: £ {{ item.salon_avg_price }}
+                        {% else %}}
+                        {{ item.service_price }}
+                        <label class="fa-money"></label> Average Cost: £ {% endif %}
+                    </span>
+                    <br>
                     <span class="item-address">
                         {% if scope == 'salon' %}
                         {{item.salon_address}}
