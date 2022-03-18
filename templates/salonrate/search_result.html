@@ -14,11 +14,14 @@
             let scope
             let keyword
             let current_sort
-            let current_type={{current_type}}
+            let current_type
 
             scope = '{{scope}}'
             keyword = '{{keyword}}'
             all_page_count = {{detail.paginator.num_pages}}
+            if ('{{current_type}}'!=='None'){
+                current_type = '{{current_type}}'
+            }
 
 
 
