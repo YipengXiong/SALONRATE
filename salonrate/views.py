@@ -92,7 +92,7 @@ def user_profile(request):
     }
     comments_objs = Comment.objects.filter(username=user)
     comments = []
-    
+
     for comment in comments_objs:
         type = comment.type
         id = comment.salon_or_service_id
@@ -113,7 +113,7 @@ def user_profile(request):
 def homepage(request):
     sql = "SELECT * FROM salonrate_salon WHERE rate >=3 ORDER BY random() LIMIT 3"
     salons = Salon.objects.raw(sql)
-    context_dict = {"salons":salons, 'salon1':salons[0], 'salon2':salons[1], 'salon3':salons[2]}
+    context_dict = {"salons": salons, 'salon1': salons[0], 'salon2': salons[1], 'salon3': salons[2]}
     return render(request, 'salonrate/homepage.html', context_dict)
 
 
@@ -219,32 +219,37 @@ def service_detail(request, service_name_slug="eyebrows-eyelashes-191"):
 
 
 def search_result(request):
+    """
+    Search function with rendering the result.html page, handle many request and identify them for further process
+    :param request: request from page
+    :return: if non-ajax: {request, search_result.html, {'scope': scope, 'keyword': keyword, 'current_type':current_type, 'detail': page} }
+             ajax: {request, ajax_search.html, {'scope': scope, 'keyword': keyword, 'current_type':current_type, 'detail': page} }
+    """
+    # get the length of request parameters
     para_count = len(request.POST)
-    print(para_count)
+
+    # check the length to decide use this function or
+    # ajax_search function(return ajax_search.html which is html format of item-content)
     if para_count <= 4:
-        print('Non ajax')
         scope = request.POST.get("scope")
         keyword = request.POST.get('keyword')
         current_sort = request.POST.get('current_sort')
         current_type = request.POST.get('current_type')
 
-        # print(f"{scope}::{keyword}")
-        # init search detail object
-        search_detail = None
+        # if not exist, default is ""(blank)
         if scope is None:
             scope = ""
         if keyword is None:
             keyword = ""
-        print(f"{scope}::{keyword}::{current_type}")
-
 
         # search in salon scope
         if scope == "salon":
             search_detail = Salon.objects.filter(salon_name__contains=keyword)
-
         else:
             # create default query with name conditions
             search_detail = Service.objects.filter(service_name__contains=keyword)
+
+        # search with rate or price sort
         if current_sort == 'price':
             if scope == "salon":
                 search_detail = search_detail.order_by("-salon_avg_price")
@@ -253,53 +258,48 @@ def search_result(request):
         else:
             search_detail = search_detail.order_by("-rate")
 
+        # get the service type from homepage request
         if current_type:
             search_detail = search_detail.filter(service_type=current_type)
 
+        # divide the page by paginator, default is 6 item contents in one page
         paginator = Paginator(search_detail, 6)
+
+        # non ajax means this is the first request of page, return the first page
         if request.method == 'POST' and not request.is_ajax():
             page = paginator.page(1)
 
-            return render(request, 'salonrate/search_result.html', {'scope': scope, 'keyword': keyword,'current_type':current_type, 'detail': page})
+            return render(request, 'salonrate/search_result.html',
+                          {'scope': scope, 'keyword': keyword, 'current_type': current_type, 'detail': page})
 
+        # ajax means this is not the first request of page, return the item-content page(ajax_search.html)
         if request.is_ajax():
             current_page = int(request.POST.get('current_page'))
             page = paginator.page(current_page)
-            # print(page)
-            # page_li = list(page.object_list.values())
-            # result = {
-            #     'has_previous': page.has_previous(),
-            #     'has_next': page.has_next(),
-            #     'num_pages': page.paginator.num_pages,
-            #     'user_li': page_li
-            # }
-            # print(result)
-            return render(request, 'salonrate/ajax_search.html', {'scope': scope, 'keyword': keyword,'current_type':current_type, 'detail': page})
+
+            return render(request, 'salonrate/ajax_search.html',
+                          {'scope': scope, 'keyword': keyword, 'current_type': current_type, 'detail': page})
+
+    # transmit this request to ajax_search function to process pure ajax search without dividing page :)
     else:
         return ajax_search(request)
 
-    # context_dict = {'scope': scope, 'detail': search_detail}
-    # print(context_dict)
-    # # return HttpResponse(render_to_string('salonrate/search_result.html',context_dict))
-    # return render(request, 'salonrate/search_result.html', context_dict)
-
 
 def ajax_search(request):
-    # para_count = len(request.POST)
-    # print(para_count)
-    print("Ajax")
+    """
+    Pure ajax search function(because it doesn't handle page division)
+    :param request: request from page
+    :return: {request, ajax_search.html, {'scope': scope, 'keyword': keyword, 'current_type': current_type, 'detail': page} }
+    """
     scope = request.POST.get("scope")
     keyword = request.POST.get('keyword')
     current_page = int(request.POST.get('current_page'))
     current_sort = request.POST.get('current_sort')
     current_type = request.POST.get('current_type')
-    print(current_sort)
-
-    # init search detail object
-    search_detail = None
 
     # search in salon scope
     if scope == "salon":
+
         # prefilter to get which tag filters selected
         pre_filters = {
             'good_env': request.POST.get('sort_tag[good_env]'),
@@ -309,6 +309,7 @@ def ajax_search(request):
             'good_attitude': request.POST.get('sort_tag[good_attitude]'),
             'not_busy': request.POST.get('sort_tag[not_busy]')
         }
+
         # create customized where limit conditions(where xxx=xxx)
         filters = {}
         for k, v in pre_filters.items():
@@ -319,11 +320,12 @@ def ajax_search(request):
                 else:
                     filters[k] = v
         search_detail = Salon.objects.filter(salon_name__contains=keyword)
+
         # query with dynamic where limit conditions
         search_detail = search_detail.filter(**filters)
 
+    # prefilter to get which tag filters selected
     else:
-        # prefilter to get which tag filters selected
         pre_filters = {
             'wash': request.POST.get('sort_tag[wash]'),
             'cut': request.POST.get('sort_tag[cut]'),
@@ -331,6 +333,7 @@ def ajax_search(request):
             'perm': request.POST.get('sort_tag[perm]'),
             'care': request.POST.get('sort_tag[care]'),
         }
+
         # map type name to integer used in database
         service_tag_map = {'wash': 0, 'cut': 1, 'dye': 2, 'perm': 3, 'care': 4}
         sort_type = []
@@ -343,8 +346,6 @@ def ajax_search(request):
         # use Q query to create dynamic where limit conditions
         q_query = Q()
         for i in range(len(sort_type)):
-            # if tag is selected, add it into where limit conditions by *OR*
-            # i.e. tag_condition1 OR tag_condition2 OR ...
             q_query |= Q(service_type=sort_type[i])
 
         # update default querySet with dynamic Q where limit conditions
@@ -360,11 +361,8 @@ def ajax_search(request):
         search_detail = search_detail.order_by("-rate")
     paginator = Paginator(search_detail, 6)
     page = paginator.page(current_page)
-    print(page)
-    return render(request, 'salonrate/ajax_search.html', {'scope': scope, 'keyword': keyword,'current_type':current_type, 'detail': page})
-    # map object to json format
-    # res = serializers.serialize('json', search_detail)
-    # return HttpResponse(res)
+    return render(request, 'salonrate/ajax_search.html',
+                  {'scope': scope, 'keyword': keyword, 'current_type': current_type, 'detail': page})
 
 # def jsonEncoder(data):
 #     json_data = []
