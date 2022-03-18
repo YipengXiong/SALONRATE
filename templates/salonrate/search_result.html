@@ -5,12 +5,6 @@
         <meta charset="UTF-8">
         <title>Search Result</title>
         <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
-<!--        <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>-->
-<!--        <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>-->
-<!--        <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>-->
-<!--        <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet"-->
-<!--              integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">-->
-<!--        <link href="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.css" rel="stylesheet">-->
         <script src="{% static 'js/jquery.min.js' %}"></script>
         <script>
             const one_page_count = 6
@@ -168,7 +162,7 @@
                 })
 
 
-                // todo: 1. rate, price sort
+                // todo: price sort
             })
 
             function text_remap(original_name) {
@@ -245,7 +239,7 @@
                         //             }
                         //             // console.log(tags)
                         //
-                        //             // todo: 2. css background color of tags
+                        //
                         //             $("div#" + j + " ul.item-tags li").hide()
                         //             let tag_index = 0
                         //             if (tag_index < 5) {
@@ -325,6 +319,9 @@
             })
         </script>
         <style>
+            body {
+            font-size: .875rem;
+        }
             .result-header {
             margin-top: 15px;
             margin-left: 10%;
@@ -352,7 +349,7 @@
             height: 30px;
             text-align: center;
             margin: 0 -1px 0 -1px;
-            padding: 2px 10px 2px 10px;
+            padding: 4px 10px 2px 10px;
             font-weight: 500;
             font-size: 15px;
         }
@@ -629,9 +626,19 @@
             }
 
             img {
-    vertical-align: middle;
-    border-style: none;
-}
+                vertical-align: middle;
+                border-style: none;
+            }
+            *, ::after, ::before {
+                box-sizing: border-box;
+            }
+
+            button, input.search-txt, optgroup, select, textarea {
+                margin: 0;
+                font-family: inherit;
+                font-size: inherit;
+                line-height: inherit;
+            }
 
         </style>
     </head>
@@ -647,7 +654,7 @@
                 </ul>
                 <div class="search-area">
                     <label>
-                        <input class="search-txt" type="text" placeholder="Salon" name="keywords">
+                        <input class="search-txt" type="text" placeholder="Search for salon or service" name="keywords">
                     </label>
                     <a class="search-btn">
                         <img class="search-img" src="{% static 'images/search.png' %}" alt="Q">
@@ -688,14 +695,14 @@
         <hr>
         <div class="sort-filter">
             <ul class="sort">
-                <li>
+                <li class="selected">
                     Rate
                     <i class="arrow"></i>
                 </li>
-                <li>
-                    Distance
-                    <i class="arrow"></i>
-                </li>
+<!--                <li>-->
+<!--                    Distance-->
+<!--                    <i class="arrow"></i>-->
+<!--                </li>-->
                 <li>
                     Price
                     <i class="arrow"></i>
