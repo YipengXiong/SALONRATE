@@ -49,16 +49,6 @@
 
 
             function getPrevPage() {
-                // if (current_page > 1) {
-                //     $("div.item-content").hide()
-                //     current_page--
-                //     for (let i = (current_page - 1) * one_page_count; i < current_page * one_page_count; i++) {
-                //         $("div#" + i).show()
-                //     }
-                //     $("span#current-page").text(current_page)
-                // }
-
-
                 current_page--
                 $("span#current-page").text(current_page)
 
@@ -88,17 +78,6 @@
             }
 
             function getNextPage() {
-                // if (all_page_count > 1) {
-                //     if (current_page < all_page_count) {
-                //         $("div.item-content").hide()
-                //         for (let i = current_page * one_page_count; i < (current_page + 1) * one_page_count; i++) {
-                //             $("div#" + i).show()
-                //         }
-                //         current_page++
-                //         $("span#current-page").text(current_page)
-                //     }
-                // }
-
                 current_page++
                 $("span#current-page").text(current_page)
 
@@ -148,14 +127,6 @@
                     // console.log("current sort scope: " + $(this).text().trim().replace("/\s/g", ""))
                 })
                 $(".tag-filter input").change(function () {
-                    // checked_value = {
-                    //     'good_env': 0,
-                    //     'good_service': 0,
-                    //     'cost_effective': 0,
-                    //     'good_skill': 0,
-                    //     'good_attitude': 0,
-                    //     'not_busy': 0
-                    // }
                     checked_value = {}
                     $("input:checkbox:checked").each(function () {
                         checked_value[$(this).val().toLowerCase().replace(" ", "_")] = 1
@@ -238,79 +209,6 @@
                         if (current_page>=all_page_count){
                             $("a#next-page").hide()
                         }
-                        // console.log(res)
-                        // current_page = 0
-                        // all_page_count = 0
-                        // console.log(res.length)
-                        // setAllPages(res.length)
-
-                        // if (res.length) {
-                        //     $("div.item-content").not(":first").remove()
-                        //     if (res.length > 1) {
-                        //         $("div.item-content:last").clone().attr("id", 1).appendTo($("div.item-container"))
-                        //     }
-                        //     for (let i = 0; i < res.length - 1; i++) {
-                        //         $("div.item-content:last").clone().appendTo($("div.item-container"))
-                        //     }
-                        //     if (res[0].model === "salonrate.salon") {
-                        //         for (let j = 0; j < res.length; j++) {
-                        //             $("div.item-content").eq(j).attr("id", j)
-                        //             $("div#" + j + " div.item-detail span.item-name").text(res[j].fields.salon_name)
-                        //             $("div#" + j + " span.item-address").text(res[j].fields.salon_address)
-                        //             let rate = Math.floor(res[j].fields._rate)
-                        //             $("div#" + j + " label").removeClass("rated")
-                        //             for (let i = 0; i < rate; i++) {
-                        //                 $("div#" + j + " label.star" + i).addClass("rated")
-                        //             }
-                        //
-                        //             let tags = {
-                        //                 'Good Env': res[j].fields.good_env,
-                        //                 'Good Service': res[j].fields.good_service,
-                        //                 'Cost Effective': res[j].fields.cost_effective,
-                        //                 'Good Skill': res[j].fields.good_skill,
-                        //                 'Good Attitude': res[j].fields.good_attitude
-                        //             }
-                        //             // console.log(tags)
-                        //
-                        //
-                        //             $("div#" + j + " ul.item-tags li").hide()
-                        //             let tag_index = 0
-                        //             if (tag_index < 5) {
-                        //                 $.each(tags, function (k, v) {
-                        //                     if (v) {
-                        //                         $("div#" + j + " ul.item-tags li").eq(tag_index).text(text_remap(k)).show()
-                        //                         tag_index++
-                        //                     }
-                        //                 })
-                        //             }
-                        //
-                        //             if (res[j].fields.salon_busy === false) {
-                        //                 $("div#" + j + " div.busy").hide()
-                        //             } else {
-                        //                 $("div#" + j + " div.busy").show()
-                        //             }
-                        //         }
-                        //     } else if (res[0].model === "salonrate.service") {
-                        //         for (let j = 0; j < res.length; j++) {
-                        //             $("div.item-content").eq(j).attr("id", j)
-                        //             $("div#" + j + " div.item-detail span.item-name").text(res[j].fields.service_name)
-                        //             let rate = Math.floor(res[j].fields.service_rate)
-                        //             $("div#" + j + " label").removeClass("rated")
-                        //             for (let i = 0; i < rate; i++) {
-                        //                 $("div#" + j + " label.star" + i).addClass("rated")
-                        //             }
-                        //             $("div#" + j + " span.item-address").hide()
-                        //             $("div#" + j + " ul.item-tags").hide()
-                        //             $("div#" + j + " div.busy").hide()
-                        //         }
-                        //     }
-                        //     $("div.item-content").hide()
-                        //     dividePages()
-                        // } else {
-                        //     $("div.item-content").hide()
-                        //     $("span#current-page").text(0)
-                        // }
-
                     }
                 })
             }
@@ -576,10 +474,6 @@
                 margin: 3px;
             }
 
-            /*.item-rate > fieldset > label:before {*/
-            /*    content: '\f006  ';*/
-            /*}*/
-
             .item-rate > fieldset > label:before {
                 content: '\f006  ';
             }
@@ -588,25 +482,6 @@
                 content: '\f005  ';
             }
 
-            /*.item-rate > fieldset:not(:checked) > label:hover,*/
-            /*.item-rate > fieldset:not(:checked) > label:hover ~ label {*/
-            /*    color: #F0A30A;*/
-            /*    text-shadow: 0 0 3px #F0A30A;*/
-            /*}*/
-
-            /*.item-rate > fieldset:not(:checked) > label:hover:before,*/
-            /*.item-rate > fieldset:not(:checked) > label:hover ~ label:before {*/
-            /*    content: '\f005  ';*/
-            /*}*/
-
-            /*.item-rate > fieldset > input:checked ~ label:before {*/
-            /*    content: '\f005  ';*/
-            /*}*/
-
-            /*.item-rate > fieldset > label:active {*/
-            /*    position: relative;*/
-            /*    top: 2px;*/
-            /*}*/
             .fa-money:before{
                 font-family: 'FontAwesome';
                 content:"\f0d6";
@@ -628,7 +503,6 @@
                 color:rgb(167, 81, 247)
             }
             .item-address {
-                /* color: rgb(167, 81, 247); */
                 font-size: 16px;
                 font-family: 'Courier New', Courier, monospace;
                 vertical-align: bottom;
@@ -781,10 +655,6 @@
                     Rate
                     <i class="arrow"></i>
                 </li>
-<!--                <li>-->
-<!--                    Distance-->
-<!--                    <i class="arrow"></i>-->
-<!--                </li>-->
                 <li>
                     Price
                     <i class="arrow"></i>
