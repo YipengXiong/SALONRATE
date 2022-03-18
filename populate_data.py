@@ -76,7 +76,7 @@ def populate_comment():
                     id = random.randint(1, 193)
                 users = User.objects.all()
                 user = users[random.randint(0,1)]
-                c = Comment(username=user, salon_or_service_id=id, type=comment_type, comment=comment_content,
+                c = Comment(username=user, salon_or_service_id=id, type=comment_type, comment=comment_content, star=random.randint(0,5),
                             tag_environ=randomBool(), tag_service=randomBool(), tag_cost=randomBool(), tag_skill=randomBool(), tag_attitude=randomBool(),)
                 c.save()
         f.close()
@@ -102,7 +102,14 @@ def populate_save():
         c.save()
     print("Finished")
 
+def revise_stars():
+    comments=Comment.objects.all()
+    for comment in comments:
+        comment.star=random.randint(0,5)
+        comment.save()
+
+
 if __name__ == '__main__':
     print('Starting population script...')
     # populate_follows()
-    populate_save()
+    revise_stars()

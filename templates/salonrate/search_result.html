@@ -13,38 +13,15 @@
             let checked_value = {}
             let scope
             let keyword
-            let current_sort
+            let current_sort = 'rate'
             let current_type
+            let service_tag = ["Wash", "Cut", "Dye", "Perm", "Care"]
 
             scope = '{{scope}}'
             keyword = '{{keyword}}'
             all_page_count = '{{detail.paginator.num_pages}}'
             if ('{{current_type}}'!=='None'){
                 current_type = '{{current_type}}'
-            }
-
-
-
-            function setAllPages(resLength) {
-                all_page_count = Math.ceil(resLength / one_page_count)
-                $("span#all-page").text(all_page_count)
-            }
-
-            function dividePages() {
-                let item_count = $("div.item-content").size();
-                if (item_count > 6) {
-                    for (let i = 0; i < one_page_count; i++) {
-                        $("div#" + i).show()
-                    }
-                    current_page++
-                } else {
-                    for (let i = 0; i < item_count; i++) {
-                        $("div#" + i).show()
-                    }
-                    current_page++
-                }
-                $("span#current-page").text(current_page)
-                $("span#all-page").text(all_page_count)
             }
 
 
@@ -63,7 +40,6 @@
                             'current_page': current_page,
                             'sort_tag':checked_value,
                             'current_sort':current_sort,
-                            'current_type':current_type,
                             'csrfmiddlewaretoken': '{{ csrf_token }}'
                         },
                         success: function (res) {
@@ -92,13 +68,12 @@
                             'current_page': current_page,
                             'sort_tag':checked_value,
                             'current_sort':current_sort,
-                            'current_type':current_type,
                             'csrfmiddlewaretoken': '{{ csrf_token }}'
                         },
                         success: function (res) {
                             // console.log(res)
                             $("div.item-container").html(res)
-                            if (current_page===all_page_count){
+                            if (current_page===parseInt(all_page_count)){
                                 $("a#next-page").hide()
                             }
                         }
@@ -107,6 +82,12 @@
 
             }
 
+            function check_checked_value(){
+                checked_value = {}
+                $("div.tag-filter input:checkbox:checked").each(function () {
+                    checked_value[$(this).val().toLowerCase().replace(" ", "_")] = 1
+                })
+            }
 
             $(function () {
                 if (scope==='salon'){
@@ -119,13 +100,36 @@
 
                 }
 
+                let current_scope_selected = $(".search-switch li.selected").text().toLowerCase();
+                console.log(current_scope_selected)
+                if (current_scope_selected === "service") {
+                    for (let i = 0; i < 5; i++) {
+                        $("div.tag-filter li input").eq(i).attr("value", service_tag[i]).attr("id", service_tag[i].toLowerCase())
+                        $("div.tag-filter li label").eq(i).attr("for", service_tag[i].toLowerCase())
+                        $("div.tag-filter li label").eq(i).text(service_tag[i])
+                    }
+                    $("div.tag-filter li").eq(-1).hide()
+                }
+                if (current_scope_selected === "salon") {
+                    let salon_tag = ["Good Env", "Good Service", "Cost Effective", "Good Skill", "Good Attitude", "Not Busy"]
+                    for (let i = 0; i < 6; i++) {
+                        $("div.tag-filter li input").eq(i).attr("value", salon_tag[i]).attr("id", salon_tag[i].toLowerCase().replace(" ", "_"))
+                        $("div.tag-filter li label").eq(i).attr("for", salon_tag[i].toLowerCase().replace(" ", "_"))
+                        $("div.tag-filter li label").eq(i).text(text_remap(salon_tag[i]))
+                    }
+                    $("div.tag-filter li").eq(-1).show()
+                }
+
+                if (current_type) {
+                    $("div.tag-filter input").eq(current_type).attr("checked","checked")
+                    check_checked_value()
+                }
+
                 $("a#next-page").on('click', getNextPage)
                 $("a#prev-page").on('click', getPrevPage)
-                // $("span#current-page").text(current_page)
-                // $("span#all-page").text(all_page_count)
+
                 $(".search-switch li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
-                    // console.log("current search scope: " + $(this).text())
                     if ($(this).text() === "Salon") {
                         $("div.search-box div.search-area input").attr("placeholder", "Salon Name")
                     } else {
@@ -134,15 +138,13 @@
                 })
                 $(".sort li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
-                    // console.log("current sort scope: " + $(this).text().trim().replace("/\s/g", ""))
                 })
                 $(".tag-filter input").change(function () {
                     checked_value = {}
                     $("input:checkbox:checked").each(function () {
                         checked_value[$(this).val().toLowerCase().replace(" ", "_")] = 1
                     })
-                    // console.log("current tag-filter scope: " + checked_value)
-                    // console.log(checked_value)
+                    getSearchData()
                 })
 
                 $("div.my-center").hover(function() {
@@ -159,7 +161,7 @@
 
             function sort(){
                 current_sort = $(this).text().trim().replace("/\s/g", "").toLowerCase()
-                console.log(current_sort)
+                current_page=1
                 $.ajax({
                         type: 'post',
                         url: '{% url "salonrate:search_result" %}',
@@ -169,11 +171,11 @@
                             'current_page': current_page,
                             'sort_tag':checked_value,
                             'current_sort':current_sort,
-                            'current_type':current_type,
                             'csrfmiddlewaretoken': '{{ csrf_token }}'
                         },
                         success: function (res) {
                             // console.log(res)
+                            $("span#current-page").text(current_page)
                             $("div.item-container").html(res)
                         }
                     })
@@ -196,9 +198,8 @@
 
             function getSearchData() {
                 let scope = $('ul.search-switch li.selected').text().toLowerCase()
-                // console.log("scope is " + scope)
                 let keyword = $('input.search-txt').val()
-                // console.log("keyword is " + keywords)
+                current_page=1
                 $.ajax({
                     type: 'post',
                     url: '{% url "salonrate:ajax_search" %}',
@@ -208,19 +209,26 @@
                         'sort_tag': checked_value,
                         'current_page': current_page,
                         'current_sort':current_sort,
-                        'current_type':current_type,
                         'csrfmiddlewaretoken': '{{ csrf_token }}'
                     },
-                    // dataType: 'json',
                     success: function (res) {
-                        // console.log(res)
-                        current_page=1
-                        $("span#current-page").text(current_page)
                         $("div.item-container").html(res)
-                        $("a#next-page").show()
-                        if (current_page>=all_page_count){
+                        if (res.trim()===""){
+                            $("span#current-page").text(0)
+                            $("span#all-page").text(0)
                             $("a#next-page").hide()
+                            $("a#prev-page").hide()
+                        }else {
+                            $("span#current-page").text(current_page)
+                            $("a#next-page").show()
+                            if (current_page>=parseInt(all_page_count)){
+                                $("a#next-page").hide()
+                            }
+                            if (current_page===1){
+                                $("a#prev-page").hide()
+                            }
                         }
+
                     }
                 })
             }
@@ -228,10 +236,8 @@
             $(function () {
                 $(".search-switch li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
-                    // console.log($(this).text())
                     let scope = $(this).text().toLowerCase()
                     if (scope === "service") {
-                        let service_tag = ["Wash", "Cut", "Dye", "Perm", "Care"]
                         for (let i = 0; i < 5; i++) {
                             $("div.tag-filter li input").eq(i).attr("value", service_tag[i]).attr("id", service_tag[i].toLowerCase())
                             $("div.tag-filter li label").eq(i).attr("for", service_tag[i].toLowerCase())
@@ -248,6 +254,8 @@
                         }
                         $("div.tag-filter li").eq(-1).show()
                     }
+                    $("div.tag-filter input").removeAttr("checked")
+                    check_checked_value()
                 })
             })
 
@@ -652,6 +660,7 @@
                             <ul class="dropdown-menu" hidden style="position: absolute;z-index: 9999; will-change: transform;">
                                 {% if user.is_authenticated %}
                                 <li><a href="{% url 'salonrate:logout' %}">Logout</a></li>
+                                <li><a href="{% url 'salonrate:profile' %}">Profile</a> </li>
                                 {% else %}
                                 <li><a href="{% url 'salonrate:login' %}">Login</a></li>
                                 <li><a href="{% url 'salonrate:register' %}">Register</a></li>

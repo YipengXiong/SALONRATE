@@ -16,13 +16,14 @@ class ServiceAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug':('service_name',)}
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('comment_id', 'username', 'salon_or_service_id', 'comment')
+    list_display = ('comment_id', 'username', 'type', 'salon_or_service_id', 'star', 'comment')
 
 class FollowsAdmin(admin.ModelAdmin):
     list_dispaly = ('username', 'salon_id')
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'avatar')
+
 
 admin.site.register(Salon, SalonAdmin)
 admin.site.register(Service, ServiceAdmin)

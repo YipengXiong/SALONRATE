@@ -382,6 +382,7 @@
             <ul class="dropdown-menu">
                 {% if user.is_authenticated %}
                 <li><a href="{% url 'salonrate:logout' %}">Logout</a></li>
+                <li><a href="{% url 'salonrate:profile' %}">Profile</a> </li>
                 {% else %}
                 <li><a href="{% url 'salonrate:login' %}">Login</a></li>
                 <li><a href="{% url 'salonrate:register' %}">Register</a></li>
