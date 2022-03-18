@@ -220,13 +220,13 @@ def service_detail(request, service_name_slug="eyebrows-eyelashes-191"):
 
 def search_result(request):
     para_count = len(request.POST)
-    # print(para_count)
-    if para_count <= 5:
+    print(para_count)
+    if para_count <= 6:
         print('Non ajax')
         scope = request.POST.get("scope")
         keyword = request.POST.get('keyword')
         current_sort = request.POST.get('current_sort')
-        print(current_sort)
+        current_type = request.POST.get('current_type')
 
         # print(f"{scope}::{keyword}")
         # init search detail object
@@ -235,8 +235,8 @@ def search_result(request):
             scope = ""
         if keyword is None:
             keyword = ""
+        print(f"{scope}::{keyword}::{current_type}")
 
-        # keyword = "hair"
 
         # search in salon scope
         if scope == "salon":
@@ -252,11 +252,15 @@ def search_result(request):
                 search_detail = search_detail.order_by("-service_price")
         else:
             search_detail = search_detail.order_by("-rate")
+
+        if current_type:
+            search_detail = search_detail.filter(service_type=current_type)
+
         paginator = Paginator(search_detail, 6)
         if request.method == 'POST' and not request.is_ajax():
             page = paginator.page(1)
 
-            return render(request, 'salonrate/search_result.html', {'scope': scope, 'keyword': keyword, 'detail': page})
+            return render(request, 'salonrate/search_result.html', {'scope': scope, 'keyword': keyword,'current_type':current_type, 'detail': page})
 
         if request.is_ajax():
             current_page = int(request.POST.get('current_page'))
@@ -270,7 +274,7 @@ def search_result(request):
             #     'user_li': page_li
             # }
             # print(result)
-            return render(request, 'salonrate/ajax_search.html', {'scope': scope, 'keyword': keyword, 'detail': page})
+            return render(request, 'salonrate/ajax_search.html', {'scope': scope, 'keyword': keyword,'current_type':current_type, 'detail': page})
     else:
         return ajax_search(request)
 
@@ -288,6 +292,7 @@ def ajax_search(request):
     keyword = request.POST.get('keyword')
     current_page = int(request.POST.get('current_page'))
     current_sort = request.POST.get('current_sort')
+    current_type = request.POST.get('current_type')
     print(current_sort)
 
     # init search detail object
@@ -356,7 +361,7 @@ def ajax_search(request):
     paginator = Paginator(search_detail, 6)
     page = paginator.page(current_page)
     print(page)
-    return render(request, 'salonrate/ajax_search.html', {'scope': scope, 'keyword': keyword, 'detail': page})
+    return render(request, 'salonrate/ajax_search.html', {'scope': scope, 'keyword': keyword,'current_type':current_type, 'detail': page})
     # map object to json format
     # res = serializers.serialize('json', search_detail)
     # return HttpResponse(res)

@@ -189,26 +189,66 @@
 </div>
 </div>
 
+<script>
+    $(function (){
+        $("div.row-cols-auto>div>div").each(function() {
+        $(this).on("click",getType)
+    })
+    })
+
+    function getType(){
+        let current_type = $(this).attr("data-id")
+        console.log(current_type)
+        let form = $('<form></form>');
+        form.attr('action', '{% url "salonrate:search_result" %}');
+        form.attr('method', 'post');
+        form.attr('target', '_self');
+
+        let keyword_input = $('<input type="text" name="keyword" />');
+        keyword_input.attr('value', '');
+
+        let scope_input = $('<input type="text" name="scope" />');
+        scope_input.attr('value', 'service');
+
+        let type_input = $('<input type="text" name="current_type" />');
+        type_input.attr('value', current_type);
+
+        let csrf_input = $('<input type="text" name="csrfmiddlewaretoken" />');
+        csrf_input.attr('value', '{{ csrf_token }}');
+
+        form.append(csrf_input)
+        form.append(scope_input)
+        form.append(keyword_input)
+        form.append(type_input);
+        form.appendTo("body")
+
+        form.submit();
+    }
+
+
+</script>
+
 <div class="container" style="margin-top:10px">
+    {% csrf_token %}
     <div class="row row-cols-auto" style="justify-content: space-around">
         <div class="tag1">
-            <div class="tags-text">Wash</div>
+            <div class="tags-text" data-id="0">Wash</div>
         </div>
 
         <div class="tag2">
-            <div class="tags-text">Cut</div>
+            <div class="tags-text" data-id="1">Cut</div>
         </div>
 
         <div class="tag3">
-            <div class="tags-text">Dye</div>
+            <div class="tags-text" data-id="2">Dye</div>
         </div>
 
         <div class="tag4">
-            <div class="tags-text">Perm</div>
+            <div class="tags-text" data-id="3">Perm</div>
         </div>
 
         <div class="tag5">
-            <div class="tags-text">Care</div>
+            <div class="tags-text" data-id="4">Care</div>
         </div>
     </div>
 

@@ -14,6 +14,7 @@
             let scope
             let keyword
             let current_sort
+            let current_type={{current_type}}
 
             scope = '{{scope}}'
             keyword = '{{keyword}}'
@@ -69,6 +70,7 @@
                             'current_page': current_page,
                             'sort_tag':checked_value,
                             'current_sort':current_sort,
+                            'current_type':current_type,
                             'csrfmiddlewaretoken': '{{ csrf_token }}'
                         },
                         success: function (res) {
@@ -108,6 +110,7 @@
                             'current_page': current_page,
                             'sort_tag':checked_value,
                             'current_sort':current_sort,
+                            'current_type':current_type,
                             'csrfmiddlewaretoken': '{{ csrf_token }}'
                         },
                         success: function (res) {
@@ -180,6 +183,7 @@
                             'current_page': current_page,
                             'sort_tag':checked_value,
                             'current_sort':current_sort,
+                            'current_type':current_type,
                             'csrfmiddlewaretoken': '{{ csrf_token }}'
                         },
                         success: function (res) {
@@ -218,6 +222,7 @@
                         'sort_tag': checked_value,
                         'current_page': current_page,
                         'current_sort':current_sort,
+                        'current_type':current_type,
                         'csrfmiddlewaretoken': '{{ csrf_token }}'
                     },
                     // dataType: 'json',
