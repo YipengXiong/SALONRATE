@@ -77,13 +77,14 @@ class Follows(models.Model):
     salon_id = models.ForeignKey(Salon, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.username.username+self.salon_id.salon_name
+        return self.username.username + self.salon_id.salon_name
+
     class Meta:
         verbose_name_plural = 'Follows'
 
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
     avatar = models.ImageField(default="profile_image/default.jpg", upload_to='profile_image', blank=True)
 
     def __str__(self):

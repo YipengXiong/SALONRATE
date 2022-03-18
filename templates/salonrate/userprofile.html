@@ -32,7 +32,10 @@
         display: table-cell;
         width: 85%;
         font-size: 18px;
-        vertical-align: top;
+        vertical-align: center;
+    }
+    .text_info{
+        margin-left: 20px;
     }
     span{
         color:rgb(198, 136, 252);
@@ -40,9 +43,15 @@
     }
     .comment-item{
         margin-bottom: 20px;
+        border: 2px solid #eee;
+        border-radius: 8px;
+    }
+    .comment-container{
+        margin-left: 10px;
     }
     .title{
         font-size: 18px;
+        font-weight:bold;
     }
     .content{
         margin-top: -10px;
@@ -73,13 +82,17 @@
         font-weight: bold;
         font-style: italic;
     }
+    .follows{
+        float: left;
+    }
     .salon-item{
         border:2px solid white;
         box-shadow: 0 2px 2px lavender;
         border-radius: 5px;
         margin-right: 10px;
         margin-bottom: 10px;
-        width: 18%;
+        width: 375px;
+        float: left;
         /* text-align: center; */
     }
     .salon-item:hover{
@@ -95,6 +108,9 @@
     }
     dd{
         font-size: 18px;
+    }
+    .clear-float{
+        clear: both;
     }
     /* dl{
         margin-top:0;
@@ -118,7 +134,7 @@
     <div class="profile">
         <img id="avatar" src="{{ profile.avatar.url }}">
         <div class="info">
-            <div>
+            <div class="text_info">
                 Username: <span>{{user.username}}</span> <br />
                 Email: <span>{{user.email}}</span>
                 <!-- Location: -->
@@ -131,69 +147,75 @@
     <div class="comments">
         {% for comment in comments %}
         <div class="comment-item">
-            {% if comment.type == 0 %}
-            <div class="salon">
-                <div class="title">· Salon:</div>
-                <!-- {{ comment.salon.salon_name }} -->
-            </div><br />
-            {% elif comment.type == 1 %}
-            <div class="service">
-                <div class="title">· Service:</div>
-                <!-- {{ comment.service.service_name }} -->
-            </div><br />
-            {% endif %}
-            <div class="item-rate">
-                <fieldset>
-                    {% if comment.star > 4 %}
-                    <label class="star4 rated" title="Outstanding">5 stars</label>
-                    {% else %}
-                    <label class="star4" title="Outstanding">5 stars</label>
+            <div class="comment-container">
+                <div>
+                    
+                </div>
+                {% if comment.service %}
+                <div class="service">
+                    <div class="title">· Service:</div>
+                    {{ comment.service.service_name }}
+                </div><br />
+                
+                {% else %}
+                <div class="salon">
+                    <div class="title">· Salon:</div>
+                    {{ comment.salon.salon_name }}
+                </div><br />
+                {% endif %}
+                <div class="item-rate">
+                    <fieldset>
+                        {% if comment.comment.star > 4 %}
+                        <label class="star4 rated" title="Outstanding">5 stars</label>
+                        {% else %}
+                        <label class="star4" title="Outstanding">5 stars</label>
+                        {% endif %}
+    
+                        {% if comment.comment.star > 3 %}
+                        <label class="star3 rated" title="Very Good">4 stars</label>
+                        {% else %}
+                        <label class="star3" title="Very Good">4 stars</label>
+                        {% endif %}
+    
+                        {% if comment.comment.star > 2 %}
+                        <label class="star2 rated" title="Good">3 stars</label>
+                        {% else %}
+                        <label class="star2" title="Good">3 stars</label>
+                        {% endif %}
+    
+                        {% if comment.comment.star > 1 %}
+                        <label class="star1 rated" title="Poor">2 stars</label>
+                        {% else %}
+                        <label class="star1" title="Poor">2 stars</label>
+                        {% endif %}
+    
+                        {% if comment.comment.star > 0 %}
+                        <label class="star0 rated" title="Very Poor">1 star</label>
+                        {% else %}
+                        <label class="star0" title="Very Poor">1 star</label>
+                        {% endif %}
+                    </fieldset>
+                </div>
+                <div class="content">{{ comment.comment.comment }}</div><br />
+                <ul class="tags">
+                    {% if comment.comment.tag_environ %}
+                    <li id="tags">Nice Environment</li>
                     {% endif %}
-
-                    {% if comment.star > 3 %}
-                    <label class="star3 rated" title="Very Good">4 stars</label>
-                    {% else %}
-                    <label class="star3" title="Very Good">4 stars</label>
+                    {% if comment.comment.tag_service %}
+                    <li id="tags">Attentive Service</li>
                     {% endif %}
-
-                    {% if comment.star > 2 %}
-                    <label class="star2 rated" title="Good">3 stars</label>
-                    {% else %}
-                    <label class="star2" title="Good">3 stars</label>
+                    {% if comment.comment.tag_cost %}
+                    <li id="tags">Cost Effective</li>
                     {% endif %}
-
-                    {% if comment.star > 1 %}
-                    <label class="star1 rated" title="Poor">2 stars</label>
-                    {% else %}
-                    <label class="star1" title="Poor">2 stars</label>
+                    {% if comment.comment.tag_skill %}
+                    <li id="tags">Excellent Skill</li>
                     {% endif %}
-
-                    {% if comment.star > 0 %}
-                    <label class="star0 rated" title="Very Poor">1 star</label>
-                    {% else %}
-                    <label class="star0" title="Very Poor">1 star</label>
+                    {% if comment.comment.tag_attitude %}
+                    <li id="tags">Warm Attidute</li>
                     {% endif %}
-                </fieldset>
+                </ul>
+                <div class="datetime"> {{ comment.comment.comment_time }}</div>
             </div>
-            <div class="content">{{ comment.comment }}</div><br />
-            <ul class="tags">
-                {% if comment.tag_environ %}
-                <li id="tags">Nice Environment</li>
-                {% endif %}
-                {% if comment.tag_service %}
-                <li id="tags">Attentive Service</li>
-                {% endif %}
-                {% if comment.tag_cost %}
-                <li id="tags">Cost Effective</li>
-                {% endif %}
-                {% if comment.tag_skill %}
-                <li id="tags">Excellent Skill</li>
-                {% endif %}
-                {% if comment.tag_attitude %}
-                <li id="tags">Warm Attidute</li>
-                {% endif %}
-            </ul>
-            <div class="datetime"> {{ comment.comment_time }}</div>
         </div>
         {% endfor %}
     </div>
@@ -201,21 +223,24 @@
     <div class="remind">No Comments Yet~</div>
     {% endif %}
     <hr />
+
     <h2>My Follows</h2>
     {% if follows %}
-    <dl>
+    <dl class="follows">
     {% for follow in follows %}
-        <a href="{% url 'salonrate:salon' follow.salon_id.slug %}">
-            <div class="salon-item">
+        <div class="salon-item">
+            <a href="{% url 'salonrate:salon' follow.salon_id.slug %}">
+            
                 <img id="salon_img" src="{{ follow.salon_id.image.url }}">
-                <dd>{{ follow.salon_id.salon_name }}</dd>
-            </div>
-        </a>
+                <dd align="center">{{ follow.salon_id.salon_name }}</dd>
+            </a>
+        </div>
     {% endfor %}
     </dl>
     {% else %}
     <div class="remind">No Follows Yet~</div>
     {% endif %}
+    <div class="clear-float"></div>
     
 </div>
 
