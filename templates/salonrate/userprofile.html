@@ -6,6 +6,9 @@
 {% endblock %}
 {% block css_block %}
 <style>
+    a{
+        color: #000;
+    }
     .main {
         margin-left: 5%;
         margin-right: 5%;
@@ -21,8 +24,8 @@
         width: 100%;
         margin-bottom: 20px;
     }
-    .avatar{
-        width: 15%;
+    .profile-picture{
+        margin-left: 20px;
         display:table-cell;
     }
     #avatar{
@@ -32,10 +35,11 @@
         display: table-cell;
         width: 85%;
         font-size: 18px;
-        vertical-align: center;
+        vertical-align: top;
     }
-    .text_info{
+    .text-info{
         margin-left: 20px;
+        margin-top: 40px;
     }
     span{
         color:rgb(198, 136, 252);
@@ -89,8 +93,8 @@
         border:2px solid white;
         box-shadow: 0 2px 2px lavender;
         border-radius: 5px;
-        margin-right: 10px;
-        margin-bottom: 10px;
+        margin-right: 20px;
+        margin-bottom: 20px;
         width: 375px;
         float: left;
         /* text-align: center; */
@@ -106,9 +110,13 @@
         object-fit: cover;
         object-position: center;
     }
-    dd{
+    .salon-name{
         font-size: 18px;
-    }
+        text-align: center;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+   }
     .clear-float{
         clear: both;
     }
@@ -134,9 +142,16 @@
     <div class="profile">
         <img id="avatar" src="{{ profile.avatar.url }}">
         <div class="info">
-            <div class="text_info">
+            <div class="text-info">
                 Username: <span>{{user.username}}</span> <br />
-                Email: <span>{{user.email}}</span>
+                Email: <span>{{user.email}}</span> <br />
+                Upload Your Profile Picture:
+                <form enctype="multipart/form-data" action="#" method="post" class="profile-picture">
+                    {% csrf_token %}
+                    <input type="text" name="name">
+                    <input type="file" name="profile_picture">
+                    <input type="submit" value="upload">
+                </form>
                 <!-- Location: -->
             </div>
         </div>
@@ -147,75 +162,78 @@
     <div class="comments">
         {% for comment in comments %}
         <div class="comment-item">
-            <div class="comment-container">
-                <div>
+            {% if comment.service %}
+            <a href="{% url 'salonrate:service' comment.service.slug %}">
+            {% else %}
+            <a href="{% url 'salonrate:salon' comment.salon.slug %}">
+            {% endif %}
+                <div class="comment-container">
+                    {% if comment.service %}
+                    <div class="service">
+                        <div class="title">· Service:</div>
+                        {{ comment.service.service_name }}
+                    </div><br />
                     
+                    {% else %}
+                    <div class="salon">
+                        <div class="title">· Salon:</div>
+                        {{ comment.salon.salon_name }}
+                    </div><br />
+                    {% endif %}
+                    <div class="item-rate">
+                        <fieldset>
+                            {% if comment.comment.star > 4 %}
+                            <label class="star4 rated" title="Outstanding">5 stars</label>
+                            {% else %}
+                            <label class="star4" title="Outstanding">5 stars</label>
+                            {% endif %}
+        
+                            {% if comment.comment.star > 3 %}
+                            <label class="star3 rated" title="Very Good">4 stars</label>
+                            {% else %}
+                            <label class="star3" title="Very Good">4 stars</label>
+                            {% endif %}
+        
+                            {% if comment.comment.star > 2 %}
+                            <label class="star2 rated" title="Good">3 stars</label>
+                            {% else %}
+                            <label class="star2" title="Good">3 stars</label>
+                            {% endif %}
+        
+                            {% if comment.comment.star > 1 %}
+                            <label class="star1 rated" title="Poor">2 stars</label>
+                            {% else %}
+                            <label class="star1" title="Poor">2 stars</label>
+                            {% endif %}
+        
+                            {% if comment.comment.star > 0 %}
+                            <label class="star0 rated" title="Very Poor">1 star</label>
+                            {% else %}
+                            <label class="star0" title="Very Poor">1 star</label>
+                            {% endif %}
+                        </fieldset>
+                    </div>
+                    <div class="content">{{ comment.comment.comment }}</div><br />
+                    <ul class="tags">
+                        {% if comment.comment.tag_environ %}
+                        <li id="tags">Nice Environment</li>
+                        {% endif %}
+                        {% if comment.comment.tag_service %}
+                        <li id="tags">Attentive Service</li>
+                        {% endif %}
+                        {% if comment.comment.tag_cost %}
+                        <li id="tags">Cost Effective</li>
+                        {% endif %}
+                        {% if comment.comment.tag_skill %}
+                        <li id="tags">Excellent Skill</li>
+                        {% endif %}
+                        {% if comment.comment.tag_attitude %}
+                        <li id="tags">Warm Attidute</li>
+                        {% endif %}
+                    </ul>
+                    <div class="datetime"> {{ comment.comment.comment_time }}</div>
                 </div>
-                {% if comment.service %}
-                <div class="service">
-                    <div class="title">· Service:</div>
-                    {{ comment.service.service_name }}
-                </div><br />
-                
-                {% else %}
-                <div class="salon">
-                    <div class="title">· Salon:</div>
-                    {{ comment.salon.salon_name }}
-                </div><br />
-                {% endif %}
-                <div class="item-rate">
-                    <fieldset>
-                        {% if comment.comment.star > 4 %}
-                        <label class="star4 rated" title="Outstanding">5 stars</label>
-                        {% else %}
-                        <label class="star4" title="Outstanding">5 stars</label>
-                        {% endif %}
-    
-                        {% if comment.comment.star > 3 %}
-                        <label class="star3 rated" title="Very Good">4 stars</label>
-                        {% else %}
-                        <label class="star3" title="Very Good">4 stars</label>
-                        {% endif %}
-    
-                        {% if comment.comment.star > 2 %}
-                        <label class="star2 rated" title="Good">3 stars</label>
-                        {% else %}
-                        <label class="star2" title="Good">3 stars</label>
-                        {% endif %}
-    
-                        {% if comment.comment.star > 1 %}
-                        <label class="star1 rated" title="Poor">2 stars</label>
-                        {% else %}
-                        <label class="star1" title="Poor">2 stars</label>
-                        {% endif %}
-    
-                        {% if comment.comment.star > 0 %}
-                        <label class="star0 rated" title="Very Poor">1 star</label>
-                        {% else %}
-                        <label class="star0" title="Very Poor">1 star</label>
-                        {% endif %}
-                    </fieldset>
-                </div>
-                <div class="content">{{ comment.comment.comment }}</div><br />
-                <ul class="tags">
-                    {% if comment.comment.tag_environ %}
-                    <li id="tags">Nice Environment</li>
-                    {% endif %}
-                    {% if comment.comment.tag_service %}
-                    <li id="tags">Attentive Service</li>
-                    {% endif %}
-                    {% if comment.comment.tag_cost %}
-                    <li id="tags">Cost Effective</li>
-                    {% endif %}
-                    {% if comment.comment.tag_skill %}
-                    <li id="tags">Excellent Skill</li>
-                    {% endif %}
-                    {% if comment.comment.tag_attitude %}
-                    <li id="tags">Warm Attidute</li>
-                    {% endif %}
-                </ul>
-                <div class="datetime"> {{ comment.comment.comment_time }}</div>
-            </div>
+            </a>
         </div>
         {% endfor %}
     </div>
@@ -232,7 +250,7 @@
             <a href="{% url 'salonrate:salon' follow.salon_id.slug %}">
             
                 <img id="salon_img" src="{{ follow.salon_id.image.url }}">
-                <dd align="center">{{ follow.salon_id.salon_name }}</dd>
+                <dd class="salon-name">{{ follow.salon_id.salon_name }}</dd>
             </a>
         </div>
     {% endfor %}
