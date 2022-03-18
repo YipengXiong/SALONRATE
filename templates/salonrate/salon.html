@@ -19,44 +19,56 @@
     .left{
         float:left;
         width: 70%;
-        /* height: 250px; */
     }
     .name{
+        width: 100%;
         display:table;
         margin-bottom:20px;
+        float:left;
     }
     h2{
-        width: 100%;
+        width: 80%;
         display:table-cell;
+        float:left;
+    }
+    .f{
+        width: 20%;
+        display: table-cell;
     }
     .name label {
-        width: 5%;
-        display:table-cell;
+        float:left;
         font-family: 'FontAwesome';
         color: #fca757;
         font-size: large;
     }
     .name .f1{
+        float:left;
         border: 1px solid rgb(191, 137, 242); 
         border-radius: 3px;
-        padding:5px;
-        width: 100px;
+        padding:3px;
+        width: 80px;
         background-color: white;
         color:rgb(191, 137, 242);
         font-family: 'Courier New', Courier, monospace;
+        text-align: center;
         cursor: pointer;
-        margin-left: 10px;
+        /* margin-left: 10px; */
+        margin-right: 10px;
     }
     .name .f2{
+        float:left;
         border: 1px solid lavender; 
         border-radius: 3px;
-        padding:5px;
-        width: 100px;
+        padding:3px;
+        width: 80px;
+        display:table-cell;
         color: rgb(144, 39, 242);
         background-color: lavender;
         font-family: 'Courier New', Courier, monospace;
+        text-align: center;
         cursor: pointer;
-        margin-left: 10px;
+        /* margin-left: 10px; */
+        margin-right: 10px;
     }
     .followed:before{
         content:"\f004";
@@ -67,21 +79,20 @@
     
     .comline{
         display: table;
+        width: 100%;
     }
     .item-rate{
-        width: 40%;
+        width: 120px;
         display: table-cell;
     }
     .comcount{
-        margin-left: 10px;
-        width: 100%;
         display: table-cell;
         float:left;
-        margin-top: -10px;
         margin-bottom: 10px;
         color: #fca757;
         font-weight: bold;
     }
+
     .price{
         margin-top: 5px;
         font-size: 18px;
@@ -113,11 +124,10 @@
     }
     .right{
         float:right;
-        width: 30%;
     }
     .promopic{
         float:right;
-        width:300px;
+        width:330px;
     }
     .services{
         margin-top: 20px;
@@ -345,20 +355,27 @@
                 <h2>{{ salon.salon_name }}</h2>
                 {% if user.is_authenticated %}
                     {% if follow %}
-                    <label class="followed"></label>
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <input class="f1" type="submit" value="Unfollow">
-                    </form>
+                    <div class="f">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input class="f1" type="submit" value="Unfollow">
+                        </form>
+                        <label class="followed"></label>
+                    </div>
                     {% else %}
-                    <label class="unfollowed"></label>
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <input class="f2" type="submit" value="Follow">
-                    </form>
+                    <div class="f">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input class="f2" type="submit" value="Follow">
+                        </form>
+                        <label class="unfollowed"></label>
+                    </div>
                     {% endif %}
                 {% else %}
-                <a href="{% url 'salonrate:login' %}"><label class="unfollowed"></label></a>
+                    <div class="f">
+                        <a href="{% url 'salonrate:login' %}"><input class="f2" value="Follow"></a>
+                        <a href="{% url 'salonrate:login' %}"><label class="unfollowed"></label></a>
+                    </div>
                 {% endif %}
             </div>
             <div class="comline">
@@ -446,27 +463,29 @@
             <div class="row row-cols-auto">
                 {% for service in services %}
                 <div class="col-lg-auto">
-                    <a href="{% url 'salonrate:service' service.slug %}"><div class="service-item" href>
-                        <div class="service_img">
-                            {% if service.service_type == 0 %}
-                            <img class="sp" src="{% static 'images/wash.png' %}" alt="wash_img" />
-                            {% elif service.service_type == 1 %}
-                            <img class="sp" src="{% static 'images/cut.jpeg' %}" alt="cut_img" />
-                            {% elif service.service_type == 2 %}
-                            <img class="sp" src="{% static 'images/dye.jpeg' %}" alt="dye_img" />
-                            {% elif service.service_type == 3 %}
-                            <img class="sp" src="{% static 'images/perm.jpg' %}" alt="perm_img" />
-                            {% elif service.service_type == 4 %}
-                            <img class="sp" src="{% static 'images/care.jpeg' %}" alt="care_img" />
-                            {% else %}
-                            <img class="sp" src="{% static 'images/item.png' %}" alt="care_img" />
-                            {% endif %}
+                    <a href="{% url 'salonrate:service' service.slug %}">
+                        <div class="service-item">
+                            <div class="service_img">
+                                {% if service.service_type == 0 %}
+                                <img class="sp" src="{% static 'images/wash.png' %}" alt="wash_img" />
+                                {% elif service.service_type == 1 %}
+                                <img class="sp" src="{% static 'images/cut.jpeg' %}" alt="cut_img" />
+                                {% elif service.service_type == 2 %}
+                                <img class="sp" src="{% static 'images/dye.jpeg' %}" alt="dye_img" />
+                                {% elif service.service_type == 3 %}
+                                <img class="sp" src="{% static 'images/perm.jpg' %}" alt="perm_img" />
+                                {% elif service.service_type == 4 %}
+                                <img class="sp" src="{% static 'images/care.jpeg' %}" alt="care_img" />
+                                {% else %}
+                                <img class="sp" src="{% static 'images/item.png' %}" alt="care_img" />
+                                {% endif %}
+                            </div>
+                            <div class="service_info">
+                                <div class="service_name">{{ service.service_name }}</div>
+                                <div class="service_price">£{{ service.service_price }}</div>
+                            </div>
                         </div>
-                        <div class="service_info">
-                            <div class="service_name">{{ service.service_name }}</div>
-                            <div class="service_price">£{{ service.service_price }}</div>
-                        </div>
-                    </div></a>
+                    </a>
                 </div>
                 {% endfor %}
             </div>

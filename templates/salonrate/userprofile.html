@@ -1,10 +1,19 @@
-{% extends 'salonrate/base_lr.html' %}
+{% extends 'salonrate/base.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
     Profile
 {% endblock %}
+{% block css_block %}
 <style>
+    .main {
+        margin-left: 5%;
+        margin-right: 5%;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    h1 {
+        text-align: center;
+    }
     .profile{
         -webkit-line-clamp: 2;
         font-family: 'Courier New', Courier, monospace;
@@ -13,43 +22,201 @@
         margin-bottom: 20px;
     }
     .avatar{
-        width: 5%;
+        width: 15%;
         display:table-cell;
+    }
+    #avatar{
+        width: 200px;
     }
     .info{
         display: table-cell;
-        width: 95%;
+        width: 85%;
+        font-size: 18px;
+        vertical-align: top;
     }
+    span{
+        color:rgb(198, 136, 252);
+        font-size: 20px;
+    }
+    .comment-item{
+        margin-bottom: 20px;
+    }
+    .title{
+        font-size: 18px;
+    }
+    .content{
+        margin-top: -10px;
+    }
+    #tags {
+        float: left;
+        background-color: #fff9e8;
+        color: #fe9b3e;
+        width: 140px;
+        margin: 0 6px 0 0;
+        padding: 6px 0 6px 0;
+        text-align: center;
+        font-size: 12px;
+        /* font-style: italic; */
+        font-weight: bold;
+        margin-top: -10px;
+    }
+    .datetime{
+        clear:both;
+        font-size:12px;
+        /* color:rgb(208, 167, 245); */
+        color: rgb(191, 137, 242);
+    }
+    .remind{
+        margin-top:20px;
+        font-size: large;
+        color:rgb(208, 167, 245);
+        font-weight: bold;
+        font-style: italic;
+    }
+    .salon-item{
+        border:2px solid white;
+        box-shadow: 0 2px 2px lavender;
+        border-radius: 5px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        width: 18%;
+        /* text-align: center; */
+    }
+    .salon-item:hover{
+        box-shadow: 0 0 10px lavender;
+        border:2px solid lavender;
+        transform: translate(0,-1%);
+    }
+    #salon_img{
+        width: 370px;
+        height: 250px;
+        object-fit: cover;
+        object-position: center;
+    }
+    dd{
+        font-size: 18px;
+    }
+    /* dl{
+        margin-top:0;
+        margin-bottom:1rem
+    }
+    dt{
+        font-weight:700
+    }
+    dd{
+        margin-bottom:.5rem;
+        margin-left:0
+    } */
 </style>
+{% endblock %}
+
 {% block body_block %}
-<h1 align="center">Profile of {{ username }} </h1>
-</hr>
-<h2>Personal Information</h2>
-<div class="profile">
-    <div class="avatar">
-        <div>
-            <img align="center" id="profile_photo" src="{{profile.avatar.url}}">
+<div class="main">
+    <h1>Profile of {{ user.username }} </h1>
+    <hr />
+    <h2>Personal Information</h2>
+    <div class="profile">
+        <img id="avatar" src="{{ profile.avatar.url }}">
+        <div class="info">
+            <div>
+                Username: <span>{{user.username}}</span> <br />
+                Email: <span>{{user.email}}</span>
+                <!-- Location: -->
+            </div>
         </div>
-        Username: {{username}}
     </div>
-    <div class="info">
-        <div>
-            Location:
+    <hr />
+    <h2>My Comments</h2>
+    {% if comments %}
+    <div class="comments">
+        {% for comment in comments %}
+        <div class="comment-item">
+            {% if comment.type == 0 %}
+            <div class="salon">
+                <div class="title">· Salon:</div>
+                <!-- {{ comment.salon.salon_name }} -->
+            </div><br />
+            {% elif comment.type == 1 %}
+            <div class="service">
+                <div class="title">· Service:</div>
+                <!-- {{ comment.service.service_name }} -->
+            </div><br />
+            {% endif %}
+            <div class="item-rate">
+                <fieldset>
+                    {% if comment.star > 4 %}
+                    <label class="star4 rated" title="Outstanding">5 stars</label>
+                    {% else %}
+                    <label class="star4" title="Outstanding">5 stars</label>
+                    {% endif %}
+
+                    {% if comment.star > 3 %}
+                    <label class="star3 rated" title="Very Good">4 stars</label>
+                    {% else %}
+                    <label class="star3" title="Very Good">4 stars</label>
+                    {% endif %}
+
+                    {% if comment.star > 2 %}
+                    <label class="star2 rated" title="Good">3 stars</label>
+                    {% else %}
+                    <label class="star2" title="Good">3 stars</label>
+                    {% endif %}
+
+                    {% if comment.star > 1 %}
+                    <label class="star1 rated" title="Poor">2 stars</label>
+                    {% else %}
+                    <label class="star1" title="Poor">2 stars</label>
+                    {% endif %}
+
+                    {% if comment.star > 0 %}
+                    <label class="star0 rated" title="Very Poor">1 star</label>
+                    {% else %}
+                    <label class="star0" title="Very Poor">1 star</label>
+                    {% endif %}
+                </fieldset>
+            </div>
+            <div class="content">{{ comment.comment }}</div><br />
+            <ul class="tags">
+                {% if comment.tag_environ %}
+                <li id="tags">Nice Environment</li>
+                {% endif %}
+                {% if comment.tag_service %}
+                <li id="tags">Attentive Service</li>
+                {% endif %}
+                {% if comment.tag_cost %}
+                <li id="tags">Cost Effective</li>
+                {% endif %}
+                {% if comment.tag_skill %}
+                <li id="tags">Excellent Skill</li>
+                {% endif %}
+                {% if comment.tag_attitude %}
+                <li id="tags">Warm Attidute</li>
+                {% endif %}
+            </ul>
+            <div class="datetime"> {{ comment.comment_time }}</div>
         </div>
+        {% endfor %}
     </div>
-</div>
-
-
-<h2>Your Follows:</h2>
-<div align="center">
-{% if follows %}
+    {% else %}
+    <div class="remind">No Comments Yet~</div>
+    {% endif %}
+    <hr />
+    <h2>My Follows</h2>
+    {% if follows %}
     <dl>
     {% for follow in follows %}
-        <dd>{{ follow.salon_id.salon_name }}</dd>
-        <img id="photo" src="{{follow.salon_id.image.url}}">
+        <a href="{% url 'salonrate:salon' follow.salon_id.slug %}">
+            <div class="salon-item">
+                <img id="salon_img" src="{{ follow.salon_id.image.url }}">
+                <dd>{{ follow.salon_id.salon_name }}</dd>
+            </div>
+        </a>
     {% endfor %}
     </dl>
-{% endif %}
+    {% else %}
+    <div class="remind">No Follows Yet~</div>
+    {% endif %}
+    
 </div>
 
 {% endblock %}

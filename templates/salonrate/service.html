@@ -50,8 +50,19 @@
         content: '\f005  ';
     }
     .price{
-        font-size: 18px;
-        margin-top: 10px;
+        font-size: 20px;
+        margin-top: 20px;
+    }
+    .fa-money:before{
+        font-family: 'FontAwesome';
+        content:"\f0d6";
+    }
+    .comline{
+        width: 100%;
+    }
+    .item-rate{
+        width: 200px;
+        display: table-cell;
     }
     .comcount{
         color: #fca757;
@@ -291,7 +302,7 @@
                 </div>
             </div>
             {% endif %}
-            <div class="price">Price: £ {{ service.service_price }}</div>
+            <div class="price"><label class="fa-money"></label>Price: £ {{ service.service_price }}</div>
         </div>
         <div class="right">
             {% if service.service_type == 0 %}

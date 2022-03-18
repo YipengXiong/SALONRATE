@@ -84,9 +84,9 @@ def user_logout(request):
 def user_profile(request):
     user = request.user
     profile = UserProfile.objects.filter(user=user)[0]
+    comments = Comment.objects.filter(username=user)
     follows = Follows.objects.filter(username=user)
-    print("follows: ", len(follows))
-    context_dic = {'username': request.user.username, 'profile':profile, 'follows': follows}
+    context_dic = {'user': request.user, 'profile':profile, 'comments':comments,'follows': follows}
     return render(request, 'salonrate/userprofile.html', context_dic)
 
 
