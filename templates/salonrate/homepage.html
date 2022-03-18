@@ -218,7 +218,7 @@
 <div class="item-container">
     {% for salon in salons %}
     <div class="item-content">
-        <img class="item-img" src="{% static 'images/item.png' %}" alt="item image">
+        <img class="item-img" src="{{ salon.image.url }}" alt="item image">
         <div class="item-detail">
             <span class="item-name">
             <a href="{% url 'salonrate:salon' salon.slug %}" target="_blank">{{ salon.salon_name }}</a>
@@ -226,34 +226,34 @@
         <div class="item-rate">
             <fieldset>
                 {% if salon.rate > 4 %}
-                            <label class="star4 rated" title="Outstanding">5 stars</label>
-                            {% else %}
-                            <label class="star4" title="Outstanding">5 stars</label>
-                            {% endif %}
+                    <label class="star4 rated" title="Outstanding">5 stars</label>
+                {% else %}
+                    <label class="star4" title="Outstanding">5 stars</label>
+                {% endif %}
 
-                            {% if salon.rate > 3 %}
-                            <label class="star3 rated" title="Very Good">4 stars</label>
-                            {% else %}
-                            <label class="star3" title="Very Good">4 stars</label>
-                            {% endif %}
+                {% if salon.rate > 3 %}
+                    <label class="star3 rated" title="Very Good">4 stars</label>
+                {% else %}
+                    <label class="star3" title="Very Good">4 stars</label>
+                {% endif %}
 
-                            {% if salon.rate > 2 %}
-                            <label class="star2 rated" title="Good">3 stars</label>
-                            {% else %}
-                            <label class="star2" title="Good">3 stars</label>
-                            {% endif %}
+                {% if salon.rate > 2 %}
+                    <label class="star2 rated" title="Good">3 stars</label>
+                {% else %}
+                    <label class="star2" title="Good">3 stars</label>
+                {% endif %}
 
-                            {% if salon.rate > 1 %}
-                            <label class="star1 rated" title="Poor">2 stars</label>
-                            {% else %}
-                            <label class="star1" title="Poor">2 stars</label>
-                            {% endif %}
+                {% if salon.rate > 1 %}
+                    <label class="star1 rated" title="Poor">2 stars</label>
+                {% else %}
+                    <label class="star1" title="Poor">2 stars</label>
+                {% endif %}
 
-                            {% if salon.rate > 0 %}
-                            <label class="star0 rated" title="Very Poor">1 star</label>
-                            {% else %}
-                            <label class="star0" title="Very Poor">1 star</label>
-                            {% endif %}
+                {% if salon.rate > 0 %}
+                    <label class="star0 rated" title="Very Poor">1 star</label>
+                {% else %}
+                    <label class="star0" title="Very Poor">1 star</label>
+                {% endif %}
             </fieldset>
         </div>
         <span class="item-address">
