@@ -7,7 +7,6 @@
         <link rel="stylesheet" type="text/css" href="http://www.jq22.com/jquery/font-awesome.4.6.0.css">
         <script src="{% static 'js/jquery.min.js' %}"></script>
         <script>
-            const one_page_count = 6
             let current_page = 1
             let all_page_count = 0
             let checked_value = {}
@@ -20,11 +19,13 @@
             scope = '{{scope}}'
             keyword = '{{keyword}}'
             all_page_count = '{{detail.paginator.num_pages}}'
+
+            get current service type from homepage type click
             if ('{{current_type}}'!=='None'){
                 current_type = '{{current_type}}'
             }
 
-
+            // use ajax to get previous page
             function getPrevPage() {
                 current_page--
                 $("span#current-page").text(current_page)
@@ -53,6 +54,7 @@
                 }
             }
 
+            // use ajax to get next page
             function getNextPage() {
                 current_page++
                 $("span#current-page").text(current_page)
@@ -79,9 +81,9 @@
                         }
                     })
                 }
-
             }
 
+            // check the checked value in checkbox and store in checked_value dict
             function check_checked_value(){
                 checked_value = {}
                 $("div.tag-filter input:checkbox:checked").each(function () {
@@ -89,7 +91,10 @@
                 })
             }
 
+            // document ready functions
             $(function () {
+
+                // dynamic add search keyword when switch the search scope
                 if (scope==='salon'){
                     $("ul.search-switch li").eq(0).addClass("selected").siblings().removeClass("selected")
                     $("input.search-txt").attr("placeholder", keyword)
@@ -100,6 +105,7 @@
 
                 }
 
+                // dynamic change the tag filter when switch the search scope
                 let current_scope_selected = $(".search-switch li.selected").text().toLowerCase();
                 console.log(current_scope_selected)
                 if (current_scope_selected === "service") {
@@ -120,14 +126,17 @@
                     $("div.tag-filter li").eq(-1).show()
                 }
 
+                // dynamic check the checked value based on the checkbox
                 if (current_type) {
                     $("div.tag-filter input").eq(current_type).attr("checked","checked")
                     check_checked_value()
                 }
 
+                // bind next_page and previous_page function
                 $("a#next-page").on('click', getNextPage)
                 $("a#prev-page").on('click', getPrevPage)
 
+                // dynamic change the placeholder when change the search scope
                 $(".search-switch li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
                     if ($(this).text() === "Salon") {
@@ -136,29 +145,31 @@
                         $("div.search-box div.search-area input").attr("placeholder", "Service Name")
                     }
                 })
+
+                // dynamic change the background when click sort
                 $(".sort li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
                 })
+
+                // dynamic refresh the page when change the tag
                 $(".tag-filter input").change(function () {
-                    checked_value = {}
-                    $("input:checkbox:checked").each(function () {
-                        checked_value[$(this).val().toLowerCase().replace(" ", "_")] = 1
-                    })
+                    check_checked_value()
                     getSearchData()
                 })
-
+                // mouse hover to show my center operation
                 $("div.my-center").hover(function() {
                     $("ul.dropdown-menu").show()
                 },function (){
                     $("ul.dropdown-menu").hide()
                 })
 
-                
+                // bind sort function on two sort button
                 $(".sort li").on("click", sort)
 
 
             })
 
+            // use ajax to refresh the item by selected sort rule
             function sort(){
                 current_sort = $(this).text().trim().replace("/\s/g", "").toLowerCase()
                 current_page=1
@@ -181,6 +192,7 @@
                     })
             }
 
+            // remap the words
             function text_remap(original_name) {
                 switch (original_name) {
                     case ("Good Env"):
@@ -196,6 +208,7 @@
                 }
             }
 
+            // use ajax to get item data, return ajax_search.html(item content)
             function getSearchData() {
                 let scope = $('ul.search-switch li.selected').text().toLowerCase()
                 let keyword = $('input.search-txt').val()
@@ -233,6 +246,7 @@
                 })
             }
 
+            // change the tag filter checkbox when change the search scope
             $(function () {
                 $(".search-switch li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
@@ -259,6 +273,7 @@
                 })
             })
 
+            // bind ENTER key to search function
             $(function search() {
                 $('input.search-txt').keydown(function (e) {
                     if (e.keyCode === 13) {
@@ -266,6 +281,7 @@
                     }
                 })
 
+                // bind search icon to search function
                 $(".search-btn").on("click", getSearchData)
             })
         </script>
