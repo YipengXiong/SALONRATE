@@ -25,30 +25,6 @@
             }
 
 
-
-            function setAllPages(resLength) {
-                all_page_count = Math.ceil(resLength / one_page_count)
-                $("span#all-page").text(all_page_count)
-            }
-
-            function dividePages() {
-                let item_count = $("div.item-content").size();
-                if (item_count > 6) {
-                    for (let i = 0; i < one_page_count; i++) {
-                        $("div#" + i).show()
-                    }
-                    current_page++
-                } else {
-                    for (let i = 0; i < item_count; i++) {
-                        $("div#" + i).show()
-                    }
-                    current_page++
-                }
-                $("span#current-page").text(current_page)
-                $("span#all-page").text(all_page_count)
-            }
-
-
             function getPrevPage() {
                 current_page--
                 $("span#current-page").text(current_page)
@@ -64,7 +40,6 @@
                             'current_page': current_page,
                             'sort_tag':checked_value,
                             'current_sort':current_sort,
-                            // 'current_type':current_type,
                             'csrfmiddlewaretoken': '{{ csrf_token }}'
                         },
                         success: function (res) {
@@ -93,7 +68,6 @@
                             'current_page': current_page,
                             'sort_tag':checked_value,
                             'current_sort':current_sort,
-                            // 'current_type':current_type,
                             'csrfmiddlewaretoken': '{{ csrf_token }}'
                         },
                         success: function (res) {
@@ -153,11 +127,9 @@
 
                 $("a#next-page").on('click', getNextPage)
                 $("a#prev-page").on('click', getPrevPage)
-                // $("span#current-page").text(current_page)
-                // $("span#all-page").text(all_page_count)
+
                 $(".search-switch li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
-                    // console.log("current search scope: " + $(this).text())
                     if ($(this).text() === "Salon") {
                         $("div.search-box div.search-area input").attr("placeholder", "Salon Name")
                     } else {
@@ -166,7 +138,6 @@
                 })
                 $(".sort li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
-                    // console.log("current sort scope: " + $(this).text().trim().replace("/\s/g", ""))
                 })
                 $(".tag-filter input").change(function () {
                     checked_value = {}
@@ -174,8 +145,6 @@
                         checked_value[$(this).val().toLowerCase().replace(" ", "_")] = 1
                     })
                     getSearchData()
-                    // console.log("current tag-filter scope: " + checked_value)
-                    // console.log(checked_value)
                 })
 
                 $("div.my-center").hover(function() {
@@ -192,7 +161,6 @@
 
             function sort(){
                 current_sort = $(this).text().trim().replace("/\s/g", "").toLowerCase()
-                // console.log(current_sort)
                 current_page=1
                 $.ajax({
                         type: 'post',
@@ -203,7 +171,6 @@
                             'current_page': current_page,
                             'sort_tag':checked_value,
                             'current_sort':current_sort,
-                            // 'current_type':current_type,
                             'csrfmiddlewaretoken': '{{ csrf_token }}'
                         },
                         success: function (res) {
@@ -231,9 +198,7 @@
 
             function getSearchData() {
                 let scope = $('ul.search-switch li.selected').text().toLowerCase()
-                // console.log("scope is " + scope)
                 let keyword = $('input.search-txt').val()
-                // console.log("keyword is " + keywords)
                 current_page=1
                 $.ajax({
                     type: 'post',
@@ -244,12 +209,9 @@
                         'sort_tag': checked_value,
                         'current_page': current_page,
                         'current_sort':current_sort,
-                        // 'current_type':current_type,
                         'csrfmiddlewaretoken': '{{ csrf_token }}'
                     },
-                    // dataType: 'json',
                     success: function (res) {
-                        // console.log(res)
                         $("div.item-container").html(res)
                         if (res.trim()===""){
                             $("span#current-page").text(0)
@@ -274,7 +236,6 @@
             $(function () {
                 $(".search-switch li").on("click", function () {
                     $(this).addClass("selected").siblings().removeClass("selected").end()
-                    // console.log($(this).text())
                     let scope = $(this).text().toLowerCase()
                     if (scope === "service") {
                         for (let i = 0; i < 5; i++) {
