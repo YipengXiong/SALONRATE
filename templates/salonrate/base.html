@@ -18,6 +18,7 @@
     <link href="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.css" rel="stylesheet">
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script>
+        // get search scope, salon or service
         $(function getSearchScope() {
             $(".search-switch li").on("click", function () {
                 $(this).addClass("selected").siblings().removeClass("selected").end()
@@ -25,30 +26,13 @@
                 console.log("current search scope: " + $(this).text())
             })
         })
+
+        // form submit
         function getSearchData() {
-            let scope = $('ul.search-switch li.selected').text().toLowerCase()
-            // console.log("scope is " + scope)
-            let keyword = $('input.search-txt').val()
-            // console.log("keyword is " + keywords)
-
             $("form#search-form").submit()
-
-            // $.ajax({
-            //     type: 'post',
-            //     url: '{% url "salonrate:search_result" %}',
-            //     data: {
-            //         'scope': scope,
-            //         'keyword': keyword,
-            //         'csrfmiddlewaretoken': '{{ csrf_token }}'
-            //     },
-            //     dataType: 'json',
-            //     success: function (res) {
-            //         $.write(res)
-            //
-            //     }
-            // })
         }
 
+        // bind ENTER key to search function
         $(function search() {
             $('input.search-txt').keydown(function (e) {
                 if (e.keyCode === 13) {
@@ -56,6 +40,7 @@
                 }
             })
 
+            // bind search icon to search function
             $(".search-btn").on("click", getSearchData)
         })
     </script>
