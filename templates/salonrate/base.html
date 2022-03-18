@@ -219,14 +219,14 @@
             float: left;
         }
 
-        .item-content {
+        /* .item-content {
             border: 1px solid orange;
             width: 70%;
             display: flex;
             margin: 1% 10% 1% 10%;
             align-items: center;
             position: relative;
-        }
+        } */
 
         .item-img {
             margin: 2% 1% 2% 1%;
@@ -238,7 +238,7 @@
 
         .item-rate {
             font-family: 'FontAwesome';
-            margin: -10px 0 -5px 0;
+            /* margin: -10px 0 -5px 0; */
         }
 
         .item-rate > fieldset {
@@ -257,48 +257,9 @@
             cursor: pointer;
             font-size: 150%;
             color: #fca757;
+            margin:3px;
         }
 
-        /* .item-rate > fieldset:not(:checked) > input {
-            position: absolute;
-            top: -9999px;
-            clip: rect(0, 0, 0, 0);
-        }
-
-        .item-rate > fieldset:not(:checked) > label {
-            float: right;
-            width: 1em;
-            padding: 0 .05em;
-            overflow: hidden;
-            white-space: nowrap;
-            cursor: pointer;
-            font-size: 150%;
-            color: #F0A30A;
-        }
-
-        .item-rate > fieldset:not(:checked) > label:before {
-            content: '\f006  ';
-        }
-
-        .item-rate > fieldset:not(:checked) > label:hover,
-        .item-rate > fieldset:not(:checked) > label:hover ~ label {
-            color: #F0A30A;
-            text-shadow: 0 0 3px #F0A30A;
-        }
-
-        .item-rate > fieldset:not(:checked) > label:hover:before,
-        .item-rate > fieldset:not(:checked) > label:hover ~ label:before {
-            content: '\f005  ';
-        }
-
-        .item-rate > fieldset > input:checked ~ label:before {
-            content: '\f005  ';
-        }
-
-        .item-rate > fieldset > label:active {
-            position: relative;
-            top: 2px;
-        } */
         .item-rate > fieldset > label:before {
             content: '\f006  ';
         }
@@ -308,19 +269,19 @@
         }
 
         .item-address {
-            color: #A680B8;
+            color: rgb(191, 137, 242);
         }
 
         .item-tags {
-            margin-top: 2%;
+            display: inline;
+            margin-top: 10px;
+            width: 100%;
         }
 
         .item-tags > li {
-            float: left;
             background-color: #fff9e8;
             color: #fe9b3e;
             width: 140px;
-            margin: 0 6px 0 0;
             padding: 6px 0 6px 0;
             text-align: center;
         }
@@ -357,17 +318,6 @@
         .about {
             text-align: center;
         }
-        /* .about {
-            align-items: center;
-            float: left;
-            text-align: center;
-            font-family: 'Courier New', Courier, monospace;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 60px;
-            clear:both;
-        } */
     </style>
 </head>
 
