@@ -241,7 +241,7 @@ def service_detail(request, service_name_slug="eyebrows-eyelashes-191"):
 def search_result(request):
     para_count = len(request.POST)
     print(para_count)
-    if para_count <= 6:
+    if para_count <= 4:
         print('Non ajax')
         scope = request.POST.get("scope")
         keyword = request.POST.get('keyword')
