@@ -1,4 +1,5 @@
 import os
+import profile
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'itech_cw_group_17.settings')
 import django
 django.setup()
@@ -109,7 +110,14 @@ def revise_stars():
         comment.save()
 
 
+def revise_avatar():
+    profiles=UserProfile.objects.all()
+    for profile in profiles:
+        profile.avatar="profile_image/default.jpg"
+        profile.save()
+
+
 if __name__ == '__main__':
     print('Starting population script...')
     # populate_follows()
-    revise_stars()
+    revise_avatar()
