@@ -227,6 +227,7 @@ def search_result(request):
             # create default query with name conditions
             search_detail = Service.objects.filter(service_name__contains=keyword)
 
+        search_detail = search_detail.order_by("-rate")
         paginator = Paginator(search_detail, 6)
         if request.method == 'POST' and not request.is_ajax():
             page = paginator.page(1)
@@ -320,6 +321,7 @@ def ajax_search(request):
         # i.e. select * from service where service_name like "%xxx%" AND (tag1 OR tag2 OR tag3 ...)
         search_detail = search_detail.filter(q_query)
 
+    search_detail = search_detail.order_by("-rate")
     paginator = Paginator(search_detail, 6)
     page = paginator.page(current_page)
     print(page)
