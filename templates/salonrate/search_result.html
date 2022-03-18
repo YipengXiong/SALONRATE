@@ -109,6 +109,16 @@
 
 
             $(function () {
+                if (scope==='salon'){
+                    $("ul.search-switch li").eq(0).addClass("selected").siblings().removeClass("selected")
+                    $("input.search-txt").attr("placeholder", keyword)
+                }
+                else {
+                    $("ul.search-switch li").eq(-1).addClass("selected").siblings().removeClass("selected")
+                    $("input.search-txt").attr("placeholder", keyword)
+
+                }
+
                 $("a#next-page").on('click', getNextPage)
                 $("a#prev-page").on('click', getPrevPage)
                 // $("span#current-page").text(current_page)
@@ -143,6 +153,8 @@
 
                 
                 $(".sort li").on("click", sort)
+
+
             })
 
             function sort(){
