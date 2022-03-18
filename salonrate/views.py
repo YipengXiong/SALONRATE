@@ -91,9 +91,26 @@ def user_profile(request):
 
 
 def homepage(request):
+    scope = "service"
+    keyword = ""
     sql = "SELECT * FROM salonrate_salon WHERE rate >=3 ORDER BY random() LIMIT 3"
     salons = Salon.objects.raw(sql)
-    context_dict = {"salons": salons}
+    sql0 = "SELECT * FROM salonrate_service WHERE service_type = 0"
+    wash = Salon.objects.raw(sql0)
+    sql1 = "SELECT * FROM salonrate_service WHERE service_type = 1"
+    cut = Salon.objects.raw(sql1)
+    sql2 = "SELECT * FROM salonrate_service WHERE service_type = 2"
+    dye = Salon.objects.raw(sql2)
+    sql3 = "SELECT * FROM salonrate_service WHERE service_type = 3"
+    perm = Salon.objects.raw(sql3)
+    sql4 = "SELECT * FROM salonrate_service WHERE service_type = 4"
+    care = Salon.objects.raw(sql4)
+    context_dict = {"salons":salons}
+    paginator = Paginator(wash, 6)
+    if request.method == 'POST' and not request.is_ajax():
+        page = paginator.page(1)
+
+        return render(request, 'salonrate/search_result.html', {'scope': scope, 'keyword': keyword, 'detail': page})
     return render(request, 'salonrate/homepage.html', context_dict)
 
 
