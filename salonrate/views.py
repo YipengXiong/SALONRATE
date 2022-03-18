@@ -1,11 +1,9 @@
-import json
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from salonrate.models import UserProfile, Salon, Service, Comment, Follows
 from django.core import serializers
 from salonrate.forms import CommentForm, UserForm, UserProfileForm
 from django.urls import reverse
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
@@ -53,7 +51,7 @@ def register(request):
 
 
 def user_login(request):
-    # If receiving a 'POST' request, check whether the user can log in 
+    # If receiving a 'POST' request, check whether the user can log in
     if request.method == 'POST':
         # Acquire the messages entered by the user
         username = request.POST.get('username')
@@ -86,31 +84,36 @@ def user_profile(request):
     profile = UserProfile.objects.filter(user=user)[0]
     comments = Comment.objects.filter(username=user)
     follows = Follows.objects.filter(username=user)
-    context_dic = {'user': request.user, 'profile': profile, 'comments': comments, 'follows': follows}
+    print("follows: ", len(follows))
+    context_dic = {
+        'username': request.user.username,
+        'profile': profile,
+        'follows': follows
+    }
+    comments_objs = Comment.objects.filter(username=user)
+    comments = []
+    
+    for comment in comments_objs:
+        type = comment.type
+        id = comment.salon_or_service_id
+        comment_dic = {}
+        if (type == 0):
+            salon = Salon.objects.filter(salon_id=id)[0]
+        else:
+            service = Service.objects.filter(service_id=id)[0]
+            salon = Salon.objects.filter(salon_id=service.salon_id.salon_id)[0]
+            comment_dic['service'] = service
+        comment_dic['salon'] = salon
+        comment_dic['comment'] = comment
+        comments.append(comment_dic)
+    context_dic['comments'] = comments
     return render(request, 'salonrate/userprofile.html', context_dic)
 
 
 def homepage(request):
-    scope = "service"
-    keyword = ""
     sql = "SELECT * FROM salonrate_salon WHERE rate >=3 ORDER BY random() LIMIT 3"
     salons = Salon.objects.raw(sql)
-    sql0 = "SELECT * FROM salonrate_service WHERE service_type = 0"
-    wash = Salon.objects.raw(sql0)
-    sql1 = "SELECT * FROM salonrate_service WHERE service_type = 1"
-    cut = Salon.objects.raw(sql1)
-    sql2 = "SELECT * FROM salonrate_service WHERE service_type = 2"
-    dye = Salon.objects.raw(sql2)
-    sql3 = "SELECT * FROM salonrate_service WHERE service_type = 3"
-    perm = Salon.objects.raw(sql3)
-    sql4 = "SELECT * FROM salonrate_service WHERE service_type = 4"
-    care = Salon.objects.raw(sql4)
-    context_dict = {"salons":salons}
-    paginator = Paginator(wash, 6)
-    if request.method == 'POST' and not request.is_ajax():
-        page = paginator.page(1)
-
-        return render(request, 'salonrate/search_result.html', {'scope': scope, 'keyword': keyword, 'detail': page})
+    context_dict = {"salons":salons, 'salon1':salons[0], 'salon2':salons[1], 'salon3':salons[2]}
     return render(request, 'salonrate/homepage.html', context_dict)
 
 
@@ -140,15 +143,12 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
         for follow in follows:
             if follow.salon_id == salon:
                 context_dict["follow"] = True
-    # print(context_dict["follow"])
 
     commentform = CommentForm()
-    # print(commentform)
 
     if request.method == 'POST':
         if 'comment' in request.POST:
             commentform = CommentForm(request.POST)
-            # print(commentform)
             if commentform.is_valid():
                 comment = commentform.save(commit=False)
                 comment.username = request.user
@@ -371,5 +371,5 @@ def ajax_search(request):
 #     for p in data:
 #         print(p.__dict__)
 #         p.__dict__.pop("_state") # Remove '_state'
-#         json_data.append(p.__dict__) 
+#         json_data.append(p.__dict__)
 #     return json_data
