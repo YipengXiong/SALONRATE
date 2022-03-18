@@ -18,7 +18,7 @@
 
             scope = '{{scope}}'
             keyword = '{{keyword}}'
-            all_page_count = {{detail.paginator.num_pages}}
+            all_page_count = '{{detail.paginator.num_pages}}'
             if ('{{current_type}}'!=='None'){
                 current_type = '{{current_type}}'
             }
@@ -353,16 +353,16 @@
         </script>
         <style>
             body {
-            font-size: .875rem;
-        }
+                font-size: .875rem;
+            }
             .result-header {
-            margin-top: 15px;
-            margin-left: 10%;
-            margin-right: 10%;
-            display: flex;
-            align-items: center;
-            font-family: 'Courier New', Courier, monospace;
-        }
+                margin-top: 15px;
+                margin-left: 10%;
+                margin-right: 10%;
+                display: flex;
+                align-items: center;
+                font-family: 'Courier New', Courier, monospace;
+            }
 
             ul {
                 list-style: none;
@@ -372,98 +372,98 @@
             }
 
             .sort-filter > ul {
-                margin-left: 5%;
+                margin-left: 10%;
             }
 
             .search-switch li {
-            float: left;
-            border: 1px solid rgb(208, 167, 245);
-            width: 80px;
-            height: 30px;
-            text-align: center;
-            margin: 0 -1px 0 -1px;
-            padding: 4px 10px 2px 10px;
-            font-weight: 500;
-            font-size: 15px;
-        }
+                float: left;
+                border: 1px solid rgb(208, 167, 245);
+                width: 80px;
+                height: 30px;
+                text-align: center;
+                margin: 0 -1px 0 -1px;
+                padding: 4px 10px 2px 10px;
+                font-weight: 500;
+                font-size: 15px;
+            }
 
             .search-switch li:first-child {
-            border-radius: 2px 0 0 2px;
-        }
+                border-radius: 2px 0 0 2px;
+            }
 
             .search-switch li:last-child {
-            border-radius: 0 2px 2px 0;
-        }
+                border-radius: 0 2px 2px 0;
+            }
 
             .logo-img {
-            display: block;
-            height: 50px;
-            /* margin: 0 0 0 10%; */
-        }
+                display: block;
+                height: 50px;
+                /* margin: 0 0 0 10%; */
+            }
 
 
             .me-img {
-            border-radius: 50%;
-            width: 4vmin;
-            height: 4vmin;
-            object-fit: cover;
-            object-position: center;
-        }
+                border-radius: 50%;
+                width: 4vmin;
+                height: 4vmin;
+                object-fit: cover;
+                object-position: center;
+            }
 
 
             .search-switch {
-            color: rgb(191, 137, 242);
-            background-color: #FFFFFF;
-            float: left;
-            margin: 0 20px 0 0;
-        }
+                color: rgb(191, 137, 242);
+                background-color: #FFFFFF;
+                float: left;
+                margin: 0 20px 0 0;
+            }
 
 
             .selected {
-            color: #FFFFFF;
-            background-color: rgb(208, 167, 245);
-        }
-
-            .search-box {
-                flex: 1;
-                display: flex;
-                justify-content: center;
+                color: #FFFFFF;
+                background-color: rgb(208, 167, 245);
             }
 
+            .search-box {
+                    flex: 1;
+                    display: flex;
+                    justify-content: center;
+                }
+
             .search-area {
-            float: left;
-            border: 1px solid rgb(208, 167, 245);
-            border-radius: 2px;
-            height: 30px;
-            width: 300px;
-        }
+                float: left;
+                border: 1px solid rgb(208, 167, 245);
+                border-radius: 2px;
+                height: 30px;
+                width: 300px;
+            }
 
             .search-txt {
-            height: 28px;
-            width: 248px;
-            border: none;
-            background: transparent;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            font-style: italic;
-            color: rgb(191, 137, 242);
-            outline: none;
-        }
+                height: 28px;
+                width: 248px;
+                border: none;
+                background: transparent;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                font-style: italic;
+                color: rgb(191, 137, 242);
+                outline: none;
+            }
 
             .search-txt::placeholder {
-            color: rgb(191, 137, 242);
-        }
+                color: rgb(191, 137, 242);
+            }
 
             .search-btn {
-            color: rgb(191, 137, 242);
-            display: inline-block;
-            width: 10%;
-        }
+                color: rgb(191, 137, 242);
+                display: inline-block;
+                width: 10%;
+            }
 
             .search-img {
-            width: 25px;
-            margin-top: -5px;
-        }
+                width: 25px;
+                margin-top: -5px;
+            }
 
             .sort-filter {
                 display: flex;
@@ -472,37 +472,44 @@
             }
 
             .sort li {
-            float: left;
-            border: 2px solid #E1D5E7;
-            margin: 0 -1px 0 -1px;
-            padding: 2px 10px 2px 10px;
-            color: #A680B8;
-        }
+                float: left;
+                border: 2px solid rgb(208, 167, 245);
+                margin: 0 -1px 0 -1px;
+                padding: 2px 10px 2px 10px;
+                color: rgb(191, 137, 242);
+                cursor: pointer;
+            }
 
             .sort li.selected {
-            color: #FFFFFF;
-        }
+                color: #FFFFFF;
+            }
 
             .tag-filter li {
                 float: left;
                 font-weight: bold;
-
+                margin-right: 10px;
             }
 
             .tag-filter input {
                 height: 14px;
                 width: 14px;
                 display: inline-block;
-                float: left;
-                border: 1px solid #E1D5E7;
+                /* float: left; */
+                border: 1px solid rgb(208, 167, 245);
             }
-
+            .pages{
+                display: flex;
+                align-items: center;
+                margin-right: 10%
+            }
             #prev-page, #next-page {
                 float: left;
-                border: 2px solid #E1D5E7;
+                border: 2px solid rgb(208, 167, 245);
+                border-radius: 1px;
                 margin: 0 -1px 0 -1px;
                 padding: 0 15px 0 15px;
-                color: #A680B8;
+                color: rgb(191, 137, 242);
+                cursor: pointer;
             }
 
             .page-control, .page-show {
@@ -511,29 +518,43 @@
 
             .item-content {
                 border: 1px solid orange;
-                width: 70%;
+                width: 80%;
                 display: flex;
                 margin: 1% 10% 1% 10%;
-                align-items: center;
+                /* align-items: center; */
                 position: relative;
             }
-
             .item-img {
                 margin: 2% 1% 2% 1%;
                 width: 400px;
-                height: 200px;
+                height: 220px;
                 object-fit: cover;
                 object-position: center;
             }
-
+            .item-detail{
+                height:200px;
+                padding-top: 40px;
+                width: 60%; 
+            }
             .item-name {
+                font-family: 'Courier New', Courier, monospace;
                 font-weight: bolder;
-
+                font-size: 20px;
+                
+            }
+            .item-name:hover{
+                color:rgb(167, 81, 247);
+            }
+            a {
+                color: inherit;
+            }
+            a:link {
+                text-decoration: none;
             }
 
             .item-rate {
                 font-family: 'FontAwesome';
-                margin: 1% 0 3% 0;
+                margin: 10px 0 10px 0;
             }
 
             .item-rate > fieldset {
@@ -552,6 +573,7 @@
                 cursor: pointer;
                 font-size: 150%;
                 color: #F0A30A;
+                margin: 3px;
             }
 
             /*.item-rate > fieldset > label:before {*/
@@ -585,9 +607,37 @@
             /*    position: relative;*/
             /*    top: 2px;*/
             /*}*/
-
+            .fa-money:before{
+                font-family: 'FontAwesome';
+                content:"\f0d6";
+            }
+            .fa-scissors:before{
+                font-family: 'FontAwesome';
+                content:"\f0c4";
+                margin-right: 5px;
+            }
+            .item-price{
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 18px;
+                margin-top: 20px;
+                vertical-align: bottom;
+            }
+            .item-salon-name{
+                font-size: 16px;
+                font-family: 'Courier New', Courier, monospace;
+                color:rgb(167, 81, 247)
+            }
             .item-address {
-                color: #A680B8;
+                /* color: rgb(167, 81, 247); */
+                font-size: 16px;
+                font-family: 'Courier New', Courier, monospace;
+                vertical-align: bottom;
+            }
+            
+            .fa-map-marker:before{
+                font-family: 'FontAwesome';
+                content:"\f041";
+                margin-right: 10px;
             }
 
             .item-tags {
@@ -597,9 +647,9 @@
             .item-tags > li {
                 float: left;
                 background-color: #FFF2CC;
-                color: #FFB570;
-                width: 23%;
-                margin: 0 2% 0 2%;
+                color: #fca95b;
+                width: 120px;
+                margin: 0 1% 0 1%;
                 padding: 1% 0 1% 0;
                 text-align: center;
             }
@@ -617,7 +667,7 @@
             }
 
             .arrow {
-                border: solid black;
+                border: solid rgb(191, 137, 242);
                 border-width: 0 3px 3px 0;
                 display: inline-block;
                 padding: 3px;
@@ -672,11 +722,6 @@
                 font-size: inherit;
                 line-height: inherit;
             }
-            .fa-money:before{
-                font-family: 'FontAwesome';
-                content:"\f0d6";
-            }
-
         </style>
     </head>
     <body>
@@ -748,15 +793,15 @@
             <div class="tag-filter">
                 <ul>
                     <li>
-                        <input type="checkbox" class="flagged" value="Good Env" id="good_env"/>
+                        <input type="checkbox" class="flagged" value="Nice Environment" id="good_env"/>
                         <label for="good_env">
-                            Good Env
+                            Nice Environment
                         </label>
                     </li>
                     <li>
-                        <input type="checkbox" class="flagged" value="Good Service" id="good_service">
+                        <input type="checkbox" class="flagged" value="Attentive Service" id="good_service">
                         <label for="good_service">
-                            Good Service
+                            Attentive Service
                         </label>
                     </li>
                     <li>
@@ -766,15 +811,15 @@
                         </label>
                     </li>
                     <li>
-                        <input type="checkbox" class="flagged" value="Good Skill" id="good_skill">
+                        <input type="checkbox" class="flagged" value="Excellent Skill" id="good_skill">
                         <label for="good_skill">
-                            Good Skill
+                            Excellent Skill
                         </label>
                     </li>
                     <li>
-                        <input type="checkbox" class="flagged" value="Good Attitude" id="good_attitude">
+                        <input type="checkbox" class="flagged" value="Warm Attitude" id="good_attitude">
                         <label for="good_attitude">
-                            Good Attitude
+                            Warm Attitude
                         </label>
                     </li>
                     <li>
@@ -785,7 +830,7 @@
                     </li>
                 </ul>
             </div>
-            <div style="display: flex;align-items: center;margin-right: 5%">
+            <div class="pages">
                 <div class="page-show" style="margin-right: 15px">
                     <span id="current-page">{{ detail.number }}</span>
                     <span>/</span>
@@ -801,16 +846,12 @@
         <div class="item-container">
             {% if detail %}
             {% for item in detail %}
-
+            {% if scope == 'salon' %}
             <div class="item-content">
                 <img class="item-img" src="{{ item.image.url }}" alt="item image">
                 <div class="item-detail">
                     <span class="item-name">
-                        {% if scope == 'salon' %}
                         <a href="{% url 'salonrate:salon' item.slug %}" target="_blank">{{item.salon_name}}</a>
-                        {% else %}
-                        <a href="{% url 'salonrate:service' item.slug %}" target="_blank">{{item.service_name}}</a>
-                        {% endif %}
                     </span>
                     <div class="item-rate">
                         <fieldset>
@@ -846,20 +887,6 @@
 
                         </fieldset>
                     </div>
-                    <span class="item-price">
-                        {% if scope == 'salon' %}
-                        <label class="fa-money"></label> Average Cost: £ {{ item.salon_avg_price }}
-                        {% else %}
-                        {{ item.service_price }}
-                        <label class="fa-money"></label> Average Cost: £ {% endif %}
-                    </span>
-                    <br>
-                    <span class="item-address">
-                        {% if scope == 'salon' %}
-                        {{item.salon_address}}
-                        {% endif %}
-                    </span>
-                    {% if scope == 'salon' %}
                     <ul class="item-tags">
                         {% if item.good_env %}
                         <li>Nice Environment</li>
@@ -876,17 +903,87 @@
                         {% if item.good_attitude %}
                         <li>Warm Attidute</li>
                         {% endif %}
-                    </ul>
-                    {% endif %}
+                    </ul><br /><br />
+                    <div class="item-price">
+                        <label class="fa-money"></label> Average Cost: £ {{ item.salon_avg_price }}
+                    </div>
+                    <br />
+                    <span class="item-address">
+                        <label class="fa-map-marker"></label>{{item.salon_address}}
+                    </span>
                 </div>
-                {% if scope == 'salon' %}
                 {% if item.salon_busy %}
                 <div class="busy">
                     BUSY
                 </div>
                 {% endif %}
-                {% endif %}
             </div>
+            {% else %}
+            <div class="item-content">
+                {% if item.service_type == 0 %}
+                <img class="item-img" src="{% static 'images/wash.png' %}" alt="wash_img" />
+                {% elif item.service_type == 1 %}
+                <img class="item-img" src="{% static 'images/cut.jpeg' %}" alt="cut_img" />
+                {% elif item.service_type == 2 %}
+                <img class="item-img" src="{% static 'images/dye.jpeg' %}" alt="dye_img" />
+                {% elif item.service_type == 3 %}
+                <img class="item-img" src="{% static 'images/perm.jpg' %}" alt="perm_img" />
+                {% elif item.service_type == 4 %}
+                <img class="item-img" src="{% static 'images/care.jpeg' %}" alt="care_img" />
+                {% else %}
+                <img class="item-img" src="{% static 'images/item.png' %}" alt="care_img" />
+                {% endif %}
+                <div class="item-detail">
+                    <span class="item-name">
+                        <a href="{% url 'salonrate:service' item.slug %}" target="_blank">{{item.service_name}}</a>
+                    </span>
+                    <div class="item-rate">
+                        <fieldset>
+                            {% if item.rate > 4 %}
+                            <label class="star4 rated" title="Outstanding">5 stars</label>
+                            {% else %}
+                            <label class="star4" title="Outstanding">5 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 3 %}
+                            <label class="star3 rated" title="Very Good">4 stars</label>
+                            {% else %}
+                            <label class="star3" title="Very Good">4 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 2 %}
+                            <label class="star2 rated" title="Good">3 stars</label>
+                            {% else %}
+                            <label class="star2" title="Good">3 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 1 %}
+                            <label class="star1 rated" title="Poor">2 stars</label>
+                            {% else %}
+                            <label class="star1" title="Poor">2 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 0 %}
+                            <label class="star0 rated" title="Very Poor">1 star</label>
+                            {% else %}
+                            <label class="star0" title="Very Poor">1 star</label>
+                            {% endif %}
+                        </fieldset>
+                    </div>
+                    <div class="item-price">
+                        <label class="fa-money"></label> Average Cost: £ {{ item.service_price }}
+                    </div>
+                    <br /><br />
+                    <span class="item-salon-name">
+                        <label class="fa-scissors"></label>
+                        <a href="{% url 'salonrate:salon' item.salon_id.slug %}">{{item.salon_id.salon_name}}</a>
+                    </span><br />
+                    <span class="item-address">
+                        <label class="fa-map-marker"></label>{{item.salon_id.salon_address}}
+                    </span>
+                </div>
+            </div>
+            {% endif %}
             {% endfor %}
             {% endif %}
         </div>
