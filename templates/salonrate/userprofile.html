@@ -30,6 +30,7 @@
     }
     #avatar{
         width: 200px;
+        border-radius: 50%;
     }
     .info{
         display: table-cell;
@@ -148,7 +149,6 @@
                 Upload Your Profile Picture:
                 <form enctype="multipart/form-data" action="#" method="post" class="profile-picture">
                     {% csrf_token %}
-                    <input type="text" name="name">
                     <input type="file" name="profile_picture">
                     <input type="submit" value="upload">
                 </form>
