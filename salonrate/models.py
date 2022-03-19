@@ -5,6 +5,7 @@ from django.forms import CharField, FloatField, IntegerField
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.core.validators import MaxValueValidator, MinValueValidator
+from zmq import DEALER
 # Create your models here.
 
 
@@ -12,7 +13,7 @@ class Salon(models.Model):
     salon_id = models.AutoField(primary_key=True, null=False)
     salon_name = models.CharField(max_length=50, null=False)
     salon_address = models.CharField(max_length=100, null=False)
-    rate = models.FloatField(null=False)
+    rate = models.FloatField(null=False, default=0.0)
     salon_avg_price = models.FloatField(default=0.0)
     salon_busy = models.BooleanField(default=False)
     image = models.ImageField(default="salon_image/default.jpg", upload_to="salon_image", blank=True)
