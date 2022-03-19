@@ -21,6 +21,9 @@
         width: 70%;
         height: 250px;
     }
+    .back{
+        color:rgb(144, 39, 242);
+    }
     .rating {
         font-family: 'FontAwesome';
         margin: -1% 0 -1% 0;
@@ -255,7 +258,7 @@
 <div class="main">
     <div class="detail">
         <div class="left">
-            <div class="back"><a href="{% url 'salonrate:salon' service.salon_id.slug %}">{{ service.salon_id.salon_name }}</a></div>
+            <div class="back"><a href="{% url 'salonrate:salon' service.salon_id.slug %}"><< {{ service.salon_id.salon_name }}</a></div>
             <div class="name"><h2>{{ service.service_name }}</h2></div>
             {% if comments %}
             <div class="comline">
@@ -390,23 +393,6 @@
                     </fieldset>
                 </div>
                 <div class="content">{{ comment.comment }}</div><br />
-                <ul class="tags">
-                    {% if comment.tag_environ %}
-                    <li id="tags">Nice Environment</li>
-                    {% endif %}
-                    {% if comment.tag_service %}
-                    <li id="tags">Attentive Service</li>
-                    {% endif %}
-                    {% if comment.tag_cost %}
-                    <li id="tags">Cost Effective</li>
-                    {% endif %}
-                    {% if comment.tag_skill %}
-                    <li id="tags">Excellent Skill</li>
-                    {% endif %}
-                    {% if comment.tag_attitude %}
-                    <li id="tags">Warm Attidute</li>
-                    {% endif %}
-                </ul><br />
                 <div class="datetime">{{ comment.comment_time }}</div>
             </div>
         </div>

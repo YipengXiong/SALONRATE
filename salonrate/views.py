@@ -122,12 +122,43 @@ def homepage(request):
     context_dict = {"salons": salons, 'salon1': salons[0], 'salon2': salons[1], 'salon3': salons[2]}
     return render(request, 'salonrate/homepage.html', context_dict)
 
+def refresh_salon(salon, comments):
+    if comments:
+        salon.rate = round(sum([c.star for c in comments]) / len(comments))
+        salon.save()
+    else:
+        salon.rate = 0
+        salon.save()
+    for comment in comments:
+        if comment.tag_environ == True:
+            salon.good_env = True
+        if comment.tag_service == True:
+            salon.good_service = True
+        if comment.tag_cost == True:
+            salon.cost_effective = True
+        if comment.tag_skill == True:
+            salon.good_skill = True
+        if comment.tag_attitude == True:
+            salon.good_attitude = True
+        salon.save()
+    return salon
+
+def refresh_service(service, comments):
+    if comments:
+        service.rate = round(sum([c.star for c in comments]) / len(comments))
+        service.save()
+    else:
+        service.rate = 0
+        service.save()
+    return service
 
 def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
     salon = get_object_or_404(Salon, slug=salon_name_slug)
-    context_dict = {"salon": salon, "services": None, "comments": None, "follow": False}
-
     comments = Comment.objects.filter(salon_or_service_id=salon.salon_id, type=0).order_by("-comment_id")
+    services = Service.objects.filter(salon_id=salon.salon_id).order_by("-service_id")
+    salon = refresh_salon(salon, comments)
+    context_dict = {"salon": salon, "services": None, "comments": comments, "follow": False}
+
     if comments:
         context_dict["comments"] = comments
         context_dict["comment_count"] = len(comments)
@@ -138,7 +169,6 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
     else:
         print("No Comments")
 
-    services = Service.objects.filter(salon_id=salon.salon_id).order_by("-service_id")
     if services:
         context_dict["services"] = services
     else:
@@ -192,8 +222,10 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
 
 def service_detail(request, service_name_slug="eyebrows-eyelashes-191"):
     service = get_object_or_404(Service, slug=service_name_slug)
-    context_dict = {"service": service, "comments": None}
     comments = Comment.objects.filter(salon_or_service_id=service.service_id, type=1).order_by("-comment_id")
+    service = refresh_service(service, comments)
+    context_dict = {"service": service, "comments": comments}
+    
     if comments:
         context_dict["comments"] = comments
         context_dict["comment_count"] = len(comments)
@@ -216,7 +248,6 @@ def service_detail(request, service_name_slug="eyebrows-eyelashes-191"):
             comment.salon_or_service_id = service.service_id
             comment.type = 1
             comment.save()
-            # return redirect(reverse('salonrate:service'))
             return redirect(reverse('salonrate:service', kwargs={'service_name_slug': service_name_slug}))
         else:
             print(form.errors)

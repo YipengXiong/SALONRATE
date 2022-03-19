@@ -91,16 +91,19 @@ def populate_follows():
         f.save()
 
 def populate_save():
-    # salons = Salon.objects.all()
+    salons = Salon.objects.all()
     services = Service.objects.all()
-    comments = Comment.objects.all()
-    # for s in salons:
-    #     s.save()
+    comments = Comment.objects.filter(type=1)
+    comment_service(comments)
+    for s in salons:
+        comments = Comment.objects.filter(salon_or_service_id=s.salon_id, type=0)
+        refresh_salon(s, comments)
     for serv in services:
-        serv.save()
-    for c in comments:
-        c.star = random.randint(1,5)
-        c.save()
+        comments = Comment.objects.filter(salon_or_service_id=serv.service_id, type=1)
+        refresh_service(serv, comments)
+    # for c in comments:
+    #     c.star = random.randint(1,5)
+    #     c.save()
     print("Finished")
 
 def revise_stars():
@@ -116,8 +119,58 @@ def revise_avatar():
         profile.avatar="profile_image/default.jpg"
         profile.save()
 
+def refresh_salon(salon, comments):
+    if comments:
+        salon.rate = round(sum([c.star for c in comments]) / len(comments))
+        salon.save()
+    else:
+        salon.rate = 0
+        salon.save()
+        
+    for comment in comments:
+        if comment.tag_environ == True:
+            salon.good_env = True
+        if comment.tag_service == True:
+            salon.good_service = True
+        if comment.tag_cost == True:
+            salon.cost_effective = True
+        if comment.tag_skill == True:
+            salon.good_skill = True
+        if comment.tag_attitude == True:
+            salon.good_attitude = True
+        salon.save()
+    return salon
+
+def refresh_service(service, comments):
+    if comments:
+        service.rate = round(sum([c.star for c in comments]) / len(comments))
+        service.save()
+    else:
+        service.rate = 0
+        service.save()
+    return service
+
+def comment_service(comments):
+    for comment in comments:
+        if comment.tag_environ == True:
+            comment.tag_environ = False
+            comment.save()
+        if comment.tag_service == True:
+            comment.tag_service = False
+            comment.save()
+        if comment.tag_cost == True:
+            comment.tag_cost = False
+            comment.save()
+        if comment.tag_skill == True:
+            comment.tag_skill = False
+            comment.save()
+        if comment.tag_attitude == True:
+            comment.tag_attitude = False
+            comment.save()
+    return
 
 if __name__ == '__main__':
     print('Starting population script...')
     # populate_follows()
-    revise_avatar()
+    # revise_avatar()
+    populate_save()
