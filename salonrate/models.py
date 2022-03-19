@@ -85,6 +85,7 @@ class Follows(models.Model):
 
 
 class UserProfile(models.Model):
+    id = models.AutoField(primary_key=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.ImageField(default="profile_image/default.jpg", upload_to='profile_image', blank=True)
 
