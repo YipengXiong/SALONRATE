@@ -73,6 +73,7 @@ class Comment(models.Model):
 
 
 class Follows(models.Model):
+    id = models.AutoField(primary_key=True)
     username = models.ForeignKey(User, on_delete=models.CASCADE)
     salon_id = models.ForeignKey(Salon, on_delete=models.CASCADE)
 
