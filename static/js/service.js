@@ -12,7 +12,6 @@ $(document).ready(function () {
     // Click a star, transfer the value to the "star" field in the comment form 
     $(".star-rate > label").click(function () {
         var rate = $(this).val();
-        console.log(rate)
         $(".star-rate > label").removeClass("rated")
         for (let i = 0; i < rate; i++) {
             $(".star-rate > label.class" + rate).addClass("rated")

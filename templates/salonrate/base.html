@@ -23,7 +23,6 @@
             $(".search-switch li").on("click", function () {
                 $(this).addClass("selected").siblings().removeClass("selected").end()
                 $("input.dynamic-scope").val($(this).text().toLowerCase())
-                console.log("current search scope: " + $(this).text())
             })
         })
 

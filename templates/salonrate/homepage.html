@@ -272,7 +272,6 @@
 
     function getType(){
         let current_type = $(this).attr("data-id")
-        console.log(current_type)
         let form = $('<form></form>');
         form.attr('action', '{% url "salonrate:search_result" %}');
         form.attr('method', 'post');
