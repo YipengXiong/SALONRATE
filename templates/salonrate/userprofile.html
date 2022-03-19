@@ -70,10 +70,19 @@
         background-color: white;
         color:rgb(191, 137, 242);
     }
-    span{
-        color:rgb(198, 136, 252);
-        font-size: 20px;
+    #name{
+        color:rgb(180, 100, 250);
+        font-size: 14px;
     }
+    #title{
+        font-size: 16px;
+        color:black;
+    }
+    #userinfo{
+        color:rgb(198, 136, 252);
+        font-size: 18px;
+    }
+    
     .comment-item{
         margin-bottom: 20px;
         border: 2px solid #eee;
@@ -165,22 +174,21 @@
 
 {% block body_block %}
 <div class="main">
-    <h1>Profile of {{ user.username }} </h1>
+    <h1>My Profile</h1>
     <hr />
     <h2>Personal Information</h2>
     <div class="profile">
         <img id="avatar" src="{{ profile.avatar.url }}">
         <div class="info">
             <div class="text-info">
-                Username: <span>{{user.username}}</span> <br -/>
-                Email: <span>{{user.email}}</span> <br />
-                Upload Your Profile Picture:
+                <span id="title">Username: </span><span id="userinfo">{{user.username}}</span> <br -/>
+                <span id="title">Email: </span><span id="userinfo">{{user.email}}</span> <br />
+                <span id="title">Upload Your Profile Picture:</span>
                 <form enctype="multipart/form-data" action="#" method="post" class="profile-picture">
                     {% csrf_token %}
-                    <input type="file" name="profile_picture" class="upload-btn">
-                    <input type="submit" value="upload" class="submit-btn">
+                    <input type="file" name="profile_picture" accept="image/*" class="upload-btn">
+                    <input type="submit" value="Upload" class="submit-btn">
                 </form>
-                <!-- Location: -->
             </div>
         </div>
     </div>
@@ -199,13 +207,13 @@
                     {% if comment.service %}
                     <div class="service">
                         <div class="title">· Service:</div>
-                        {{ comment.service.service_name }}
+                        <span id="name">{{ comment.service.service_name }}</span>
                     </div><br />
                     
                     {% else %}
                     <div class="salon">
                         <div class="title">· Salon:</div>
-                        {{ comment.salon.salon_name }}
+                        <span id="name">{{ comment.salon.salon_name }}</span>
                     </div><br />
                     {% endif %}
                     <div class="item-rate">
