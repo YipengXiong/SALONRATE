@@ -438,7 +438,7 @@
         </div>
         <div class="right">
             {% if salon.image %}
-            <img class="promopic" src="{% static 'images/item.png' %}" alt="salon_img" />
+            <img class="promopic" src="{{ salon.image.url }}" alt="salon_img" />
             {% else %}
             <img class="promopic" src="{% static 'images/salondefault.jpeg' %}" alt="salon_img" />
             {% endif %}
