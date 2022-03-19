@@ -482,7 +482,7 @@
             }
             .item-detail{
                 height:200px;
-                padding-top: 40px;
+                padding-top: 20px;
                 width: 60%; 
             }
             .item-name {
@@ -829,7 +829,7 @@
                         {% if item.good_attitude %}
                         <li>Warm Attidute</li>
                         {% endif %}
-                    </ul><br /><br />
+                    </ul><br />
                     <div class="item-price">
                         <label class="fa-money"></label> Average Cost: £ {{ item.salon_avg_price }}
                     </div>
@@ -899,7 +899,7 @@
                     <div class="item-price">
                         <label class="fa-money"></label> Average Cost: £ {{ item.service_price }}
                     </div>
-                    <br /><br />
+                    <br />
                     <span class="item-salon-name">
                         <label class="fa-scissors"></label>
                         <a href="{% url 'salonrate:salon' item.salon_id.slug %}">{{item.salon_id.salon_name}}</a>

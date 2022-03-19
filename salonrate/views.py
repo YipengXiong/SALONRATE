@@ -80,13 +80,12 @@ def user_logout(request):
 
 @login_required
 def user_profile(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.FILES:
         file = request.FILES['profile_picture']
         if file:
             profile = UserProfile.objects.filter(user=request.user)[0]
             profile.avatar=file
             profile.save()
-    
     user = request.user
     profile = UserProfile.objects.filter(user=user)[0]
     comments = Comment.objects.filter(username=user)
