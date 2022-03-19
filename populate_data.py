@@ -1,3 +1,4 @@
+import email
 import os
 import profile
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'itech_cw_group_17.settings')
@@ -9,6 +10,8 @@ import json
 import random
 from django.contrib.auth.models import User
 
+
+#generate data from json files
 def populate_saloninfo():
     open_time_list=["10:00am-5:00pm","09:00am-4:00pm","10:00am-6:00pm"]
     with open("salon_info.json","r") as f:
@@ -16,7 +19,7 @@ def populate_saloninfo():
         #salon_url = salon_info.keys()
         for salon_info in salon_info_list:
             info = list(salon_info.values())[0]
-            print("info:",info)
+            #print("info:",info)
             salon_name = info[0]["name"]
             salon_rate = info[1]["rate"]
             salon_address = info[2]["address"]
@@ -28,26 +31,26 @@ def populate_saloninfo():
             salon_phone = "0000000" + str(random.randint(0,999))
             salon_time = open_time_list[random.randint(0,2)]
             
-            print(salon_name, salon_rate, salon_address, salon_price, salon_busy, salon_phone, salon_time)
-            s = Salon(salon_name=salon_name, salon_rate=salon_rate, salon_address=salon_address, salon_avg_price=salon_price, salon_busy=salon_busy, phone=salon_phone, open_time=salon_time)
+            #print(salon_name, salon_rate, salon_address, salon_price, salon_busy, salon_phone, salon_time)
+            s = Salon(salon_name=salon_name, rate=salon_rate, salon_address=salon_address, salon_avg_price=salon_price, salon_busy=salon_busy, phone=salon_phone, open_time=salon_time)
             s.save()
         f.close()
 
 def populate_service():
     with open("details.json","r") as f:
         salon_detail_list = json.load(f)
-        salon_id = 2
+        salon_id = 1
         for salon_detail in salon_detail_list:
             detail = list(salon_detail.values())[0]
             salon_object = Salon.objects.filter(salon_id=salon_id)[0]
             
             for name in detail[0]:
                 service_name = name[0]["name"]
-                print(service_name)
+                #print(service_name)
                 service_type = random.randint(0,4)
                 service_price = float(random.randint(15, 150))
                 service_rate = float(random.randint(0,50)) / 10
-                s = Service(salon_id=salon_object, service_name=service_name, service_price=service_price, service_rate=service_rate, service_type=service_type)
+                s = Service(salon_id=salon_object, service_name=service_name, service_price=service_price, rate=service_rate, service_type=service_type)
                 s.save()
             salon_id = salon_id + 1
         f.close()
@@ -59,10 +62,24 @@ def randomBool():
     else:
         return True
 
+def populate_users():
+    superuser=User.objects.create_superuser(username="group17", email="group17@group.com", password="group17")
+    user=User.objects.create(username="name1", email="name1@name.com", password="name1")
+    user.set_password(user.password)
+    user.save()
+    users=User.objects.all()
+    for user in users:
+        profile=UserProfile(user=user)
+        profile.save()
+
+
 def populate_comment():
     with open("details.json","r") as f:
         salon_detail_list = json.load(f)
-        
+        salons=Salon.objects.all()
+        services=Service.objects.all()
+        salon_num=len(salons)
+        service_num=len(services)
         for salon_detail in salon_detail_list:
             detail = list(salon_detail.values())[0]
             comments = detail[2]['comment']
@@ -72,9 +89,9 @@ def populate_comment():
                 #0 is salon, 1 is service
                 id = 0
                 if comment_type == 0:
-                    id = random.randint(2, 21)
+                    id = salons[random.randint(0, salon_num - 1)].salon_id
                 else:
-                    id = random.randint(1, 193)
+                    id = services[random.randint(0, service_num - 1)].service_id
                 users = User.objects.all()
                 user = users[random.randint(0,1)]
                 c = Comment(username=user, salon_or_service_id=id, type=comment_type, comment=comment_content, star=random.randint(0,5),
@@ -90,22 +107,7 @@ def populate_follows():
         f = Follows(salon_id=salon, username=user)
         f.save()
 
-def populate_save():
-    salons = Salon.objects.all()
-    services = Service.objects.all()
-    comments = Comment.objects.filter(type=1)
-    comment_service(comments)
-    for s in salons:
-        comments = Comment.objects.filter(salon_or_service_id=s.salon_id, type=0)
-        refresh_salon(s, comments)
-    for serv in services:
-        comments = Comment.objects.filter(salon_or_service_id=serv.service_id, type=1)
-        refresh_service(serv, comments)
-    # for c in comments:
-    #     c.star = random.randint(1,5)
-    #     c.save()
-    print("Finished")
-
+#some specific change of data
 def revise_stars():
     comments=Comment.objects.all()
     for comment in comments:
@@ -169,8 +171,29 @@ def comment_service(comments):
             comment.save()
     return
 
+def populate_save():
+    salons = Salon.objects.all()
+    services = Service.objects.all()
+    comments = Comment.objects.filter(type=1)
+    comment_service(comments)
+    for s in salons:
+        comments = Comment.objects.filter(salon_or_service_id=s.salon_id, type=0)
+        refresh_salon(s, comments)
+    for serv in services:
+        comments = Comment.objects.filter(salon_or_service_id=serv.service_id, type=1)
+        refresh_service(serv, comments)
+    # for c in comments:
+    #     c.star = random.randint(1,5)
+    #     c.save()
+    print("Finished")
+
 if __name__ == '__main__':
     print('Starting population script...')
     # populate_follows()
     # revise_avatar()
+    populate_saloninfo()
+    populate_service()
+    populate_users()
+    populate_comment()
+    populate_follows()
     populate_save()

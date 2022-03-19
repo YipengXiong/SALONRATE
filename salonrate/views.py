@@ -87,7 +87,9 @@ def user_profile(request):
             profile.avatar=file
             profile.save()
     user = request.user
+    print(user)
     profile = UserProfile.objects.filter(user=user)[0]
+    print(profile)
     comments = Comment.objects.filter(username=user)
     follows = Follows.objects.filter(username=user)
     print("follows: ", len(follows))
@@ -103,6 +105,7 @@ def user_profile(request):
         type = comment.type
         id = comment.salon_or_service_id
         comment_dic = {}
+        print(comment.comment_id)
         if (type == 0):
             salon = Salon.objects.filter(salon_id=id)[0]
         else:
