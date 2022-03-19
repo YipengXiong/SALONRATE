@@ -1,0 +1,595 @@
+{% extends 'salonrate/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Salon Detail
+{% endblock %}
+{% block css_block %}
+<style>
+    .main{
+        font-family: 'Courier New', Courier, monospace;
+        overflow:auto;
+        margin-left:5%;
+        margin-right:5%;
+        margin-top: 10px;
+    }
+    .detail{
+        overflow: auto;
+    }
+    .left{
+        float:left;
+        width: 70%;
+    }
+    .name{
+        width: 100%;
+        display:table;
+        float:left;
+    }
+    h2{
+        width: 80%;
+        display:table-cell;
+        float:left;
+    }
+    .f{
+        width: 20%;
+        display: table-cell;
+    }
+    .name label {
+        float:left;
+        font-family: 'FontAwesome';
+        color: #fca757;
+        font-size: large;
+    }
+    .name .f1{
+        float:left;
+        border: 1px solid rgb(191, 137, 242); 
+        border-radius: 3px;
+        padding:3px;
+        width: 80px;
+        background-color: white;
+        color:rgb(191, 137, 242);
+        font-family: 'Courier New', Courier, monospace;
+        text-align: center;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+    .name .f2{
+        float:left;
+        border: 1px solid lavender; 
+        border-radius: 3px;
+        padding:3px;
+        width: 80px;
+        display:table-cell;
+        color: rgb(144, 39, 242);
+        background-color: lavender;
+        font-family: 'Courier New', Courier, monospace;
+        text-align: center;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+    .followed:before{
+        content:"\f004";
+    }
+    .unfollowed:before{
+        content:"\f08a";
+    }
+    
+    .comline{
+        display: table;
+        width: 100%;
+    }
+    .item-rate{
+        width: 150px;
+        display: table-cell;
+    }
+    .comcount{
+        display: table-cell;
+        float:left;
+        margin-bottom: 10px;
+        color: #fca757;
+        font-weight: bold;
+    }
+
+    .price{
+        margin-top: 5px;
+        font-size: 18px;
+    }
+    .contact{
+        font-size: 18px;
+    }
+    .open{
+        font-size: 18px;
+    }
+    .address{
+        font-size: 18px;
+    }
+    .fa-money:before{
+        font-family: 'FontAwesome';
+        content:"\f0d6";
+    }
+    .fa-phone-square:before{
+        font-family: 'FontAwesome';
+        content:"\f098";
+    }
+    .fa-clock-o:before{
+        font-family: 'FontAwesome';
+        content:"\f017";
+    }
+    .fa-map-marker:before{
+        font-family: 'FontAwesome';
+        content:"\f041";
+    }
+    .right{
+        float:right;
+    }
+    .promopic{
+        float:right;
+        width:330px;
+    }
+    .services{
+        margin-top: 20px;
+    }
+    .container{
+        float: left;
+    }
+    .col-lg-auto{
+        border:2px solid white;
+        box-shadow: 0 2px 2px lavender;
+        border-radius: 5px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        width: 18%;
+    }
+    .col-lg-auto:hover{
+        box-shadow: 0 0 10px lavender;
+        border:2px solid lavender;
+        transform: translate(0,-1%);
+    }
+    .sp{
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        object-position: center;
+        margin-left:-15px;
+    }
+    .service_name{
+        color:black;
+        font-size: 16px;
+    }
+    .service_price{
+        color:black;
+        font-size: 14px;
+        margin-top:10px;
+    }
+    .comment{
+        margin-top: 30px;
+        width:100%;
+        float:left;
+    }
+    .subtopic{
+        margin-top:20px;
+        display: table;
+    }
+    .subtopic > h4{
+        display: table-cell;
+    }
+    .mac{
+        color:rgb(191, 137, 242);
+        border: 1px solid rgb(191, 137, 242); 
+        padding:5px;
+        background-color: white;
+        border-radius: 3px;
+        width: 200px;
+        height: 35px;
+        margin-bottom: 12px;
+        cursor:pointer;
+        display: table-cell;
+        margin-left: 20px;
+    }
+    .mac:hover{
+        color: white;
+        background-color: rgb(191, 137, 242);
+    }
+    .cl{
+        color:rgb(191, 137, 242);
+        border: 0.6px solid rgb(191, 137, 242); 
+        padding:5px;
+        background-color: white;
+        border-radius: 3px;
+        width: 300px;
+        height: 35px;
+        margin-bottom: 12px;
+        cursor:pointer;
+        display: table-cell;
+    }
+    .cmf{
+        margin-top:20px;
+        margin-bottom:20px;
+        font-family: 'Courier New', Courier, monospace;
+        display: none;
+    }
+    .cmf input{
+        border: 1px solid lavender; 
+        border-radius: 3px;
+        padding:5px;
+        font-family: 'Courier New', Courier, monospace;
+        cursor: pointer;
+    }
+    .cmf label{
+        cursor: pointer;
+        vertical-align: middle;
+        margin-right: 10px;
+    }
+    textarea{
+        width: 800px;
+        height: 100px;
+        text-align: left;
+        border:solid 1px lavender;
+        border-radius: 5px;
+        padding: 10px;
+        color:rgb(144, 39, 242);
+    }
+    textarea::placeholder{
+        color: rgb(191, 137, 242);
+        font-style: italic;
+    }
+    .submit{
+        border: 1px solid lavender; 
+        border-radius: 3px;
+        padding:5px;
+        width: 100px;
+        background-color: lavender;
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: bold;
+        color:rgb(191, 137, 242);
+        margin-right: 10px;
+        cursor:pointer;
+    }
+    .comment-item{
+        -webkit-line-clamp: 2;
+        font-family: 'Courier New', Courier, monospace;
+        display: table;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .avatar{
+        width: 5%;
+        display:table-cell;
+    }
+    .ava{
+        border-radius: 50%;
+        width: 60%;
+        height: 60%;
+        object-fit: cover;
+        object-position: center;
+    }
+    .comright{
+        display: table-cell;
+        width: 95%;
+    }
+    .user{
+        font-weight: bold;
+        font-size: 14px;
+        vertical-align: top;
+    }
+    .content{
+        margin-top: -10px;
+    }
+    #tags {
+        float: left;
+        background-color: #fff9e8;
+        color: #fe9b3e;
+        width: 140px;
+        margin: 0 6px 0 0;
+        padding: 6px 0 6px 0;
+        text-align: center;
+        font-size: 12px;
+        font-weight: bold;
+        margin-top: -10px;
+    }
+    .datetime{
+        clear:both;
+        font-size:12px;
+        color: rgb(191, 137, 242);
+    }
+    .remind{
+        margin-top:20px;
+        font-size: large;
+        color:rgb(208, 167, 245);
+        font-weight: bold;
+        font-style: italic;
+    }
+    .star-rate {
+        font-family: 'FontAwesome';
+    }
+
+    .star-rate > fieldset {
+        padding: 0;
+        margin: 0;
+        border: none;
+        display: inline;
+    }
+
+    .star-rate > fieldset > label {
+        float: right;
+        width: 1em;
+        padding: 0 .05em;
+        overflow: hidden;
+        white-space: nowrap;
+        cursor: pointer;
+        font-size: 150%;
+        color: #fca757;
+    }
+    .star-rate > fieldset:not(:checked) > label:hover,
+    .star-rate > fieldset:not(:checked) > label:hover ~ label {
+        color: #fca757;
+        text-shadow: 0 0 3px #fca757;
+    }
+    .star-rate > fieldset:not(:checked) > label:hover:before,
+    .star-rate > fieldset:not(:checked) > label:hover ~ label:before {
+        content: '\f005  ';
+    }
+    .star-rate > fieldset > label:before {
+        content: '\f006  ';
+    }
+    .star-rate > fieldset > label.rated:before {
+        content: '\f005  ';
+    }
+</style>
+{% endblock %}
+
+{% block body_block %}
+<div class="main">
+    <div class="detail">
+        <div class="left">
+            <div class="name">
+                <h2>{{ salon.salon_name }}</h2>
+                {% if user.is_authenticated %}
+                    {% if follow %}
+                    <div class="f">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input class="f1" type="submit" value="Unfollow">
+                        </form>
+                        <label class="followed"></label>
+                    </div>
+                    {% else %}
+                    <div class="f">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input class="f2" type="submit" value="Follow">
+                        </form>
+                        <label class="unfollowed"></label>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div class="f">
+                        <a href="{% url 'salonrate:login' %}"><input class="f2" value="Follow"></a>
+                        <a href="{% url 'salonrate:login' %}"><label class="unfollowed"></label></a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="comline">
+                <div class="item-rate">
+                    <fieldset>
+                        {% if salon.rate > 4 %}
+                        <label class="star4 rated" title="Outstanding">5 stars</label>
+                        {% else %}
+                        <label class="star4" title="Outstanding">5 stars</label>
+                        {% endif %}
+
+                        {% if salon.rate > 3 %}
+                        <label class="star3 rated" title="Very Good">4 stars</label>
+                        {% else %}
+                        <label class="star3" title="Very Good">4 stars</label>
+                        {% endif %}
+
+                        {% if salon.rate > 2 %}
+                        <label class="star2 rated" title="Good">3 stars</label>
+                        {% else %}
+                        <label class="star2" title="Good">3 stars</label>
+                        {% endif %}
+
+                        {% if salon.rate > 1 %}
+                        <label class="star1 rated" title="Poor">2 stars</label>
+                        {% else %}
+                        <label class="star1" title="Poor">2 stars</label>
+                        {% endif %}
+
+                        {% if salon.rate > 0 %}
+                        <label class="star0 rated" title="Very Poor">1 star</label>
+                        {% else %}
+                        <label class="star0" title="Very Poor">1 star</label>
+                        {% endif %}
+                    </fieldset>
+                </div>            
+                <div class="comcount">
+                    {{ comment_count }} 
+                    {% if comment_count == 1 %}
+                    Comment
+                    {% else %}
+                    Comments
+                    {% endif %}
+                </div>
+            </div>
+            <div class="price"><label class="fa-money"></label> Average Cost: £ {{ salon.salon_avg_price }}</div>
+            <div class="contact"><label class="fa-phone-square"></label> Phone: {{ salon.phone }}</div>
+            <div class="open"><label class="fa-clock-o"></label> Opening Hours: {{ salon.open_time }}</div>
+            <div class="address"><label class="fa-map-marker"></label> {{ salon.salon_address }}</div>
+            <ul class="item-tags">
+                <ul class="tags">
+                    {% if salon.good_env %}
+                    <li id="tags">Nice Environment</li>
+                    {% endif %}
+                    {% if salon.good_service %}
+                    <li id="tags">Attentive Service</li>
+                    {% endif %}
+                    {% if salon.cost_effective %}
+                    <li id="tags">Cost Effective</li>
+                    {% endif %}
+                    {% if salon.good_skill %}
+                    <li id="tags">Excellent Skill</li>
+                    {% endif %}
+                    {% if salon.good_attitude %}
+                    <li id="tags">Warm Attidute</li>
+                    {% endif %}
+                </ul><br />
+            </ul>
+        </div>
+        <div class="right">
+            {% if salon.image %}
+            <img class="promopic" src="{{ salon.image.url }}" alt="salon_img" />
+            {% else %}
+            <img class="promopic" src="{% static 'images/salondefault.jpeg' %}" alt="salon_img" />
+            {% endif %}
+        </div>
+    </div>
+    <hr />
+    <div class="services">
+        <h4>· Services Offered ·</h4>
+        {% if services %}
+        <div class="container">
+            <div class="row row-cols-auto">
+                {% for service in services %}
+                <div class="col-lg-auto">
+                    <a href="{% url 'salonrate:service' service.slug %}">
+                        <div class="service-item">
+                            <div class="service_img">
+                                {% if service.service_type == 0 %}
+                                <img class="sp" src="{% static 'images/wash.png' %}" alt="wash_img" />
+                                {% elif service.service_type == 1 %}
+                                <img class="sp" src="{% static 'images/cut.jpeg' %}" alt="cut_img" />
+                                {% elif service.service_type == 2 %}
+                                <img class="sp" src="{% static 'images/dye.jpeg' %}" alt="dye_img" />
+                                {% elif service.service_type == 3 %}
+                                <img class="sp" src="{% static 'images/perm.jpg' %}" alt="perm_img" />
+                                {% elif service.service_type == 4 %}
+                                <img class="sp" src="{% static 'images/care.jpeg' %}" alt="care_img" />
+                                {% else %}
+                                <img class="sp" src="{% static 'images/item.png' %}" alt="care_img" />
+                                {% endif %}
+                            </div>
+                            <div class="service_info">
+                                <div class="service_name">{{ service.service_name }}</div>
+                                <div class="service_price">£{{ service.service_price }}</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="comment">
+        <div class="subtopic">
+            <h4>· Comments On Salon ·</h4>
+            {% if user.is_authenticated %}
+            <button class="mac" id="mac">Write a Comment</button>
+            {% else %}
+                <a href="{% url 'salonrate:login' %}"><button class="cl">Log in to write a comment</button></a>
+            {% endif %}
+        </div>
+        <form id="commentForm" class="cmf" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="star-rate">
+                <fieldset>
+                    <label class="star4" title="Outstanding">5</label>
+                    <label class="star3" title="Very Good">4</label>
+                    <label class="star2" title="Good">3</label>
+                    <label class="star1" title="Poor">2</label>
+                    <label class="star0" title="Very Poor">1</label>
+                </fieldset>
+            </div>
+            <p style="display: none" name="star" id="id_star">{{ form.star.label }}{{ form.star }}</p>
+            <input type="checkbox" name="tag_environ" id="id_tag_environ">
+            <label for="id_tag_environ" name="tag_environ">Nice Environment</label>
+            
+            <input type="checkbox" name="tag_service" id="id_tag_service">
+            <label for="id_tag_service" name="tag_service">Attentive Service</label>
+            
+            <input type="checkbox" name="tag_cost" id="id_tag_cost">
+            <label for="id_tag_cost" name="tag_cost">Cost Effective</label>
+            
+            <input type="checkbox" name="tag_skill" id="id_tag_skill">
+            <label for="id_tag_skill" name="tag_skill">Excellent Skill</label>
+            
+            <input type="checkbox" name="tag_attitude" id="id_tag_attitude">
+            <label for="id_tag_attitude" name="tag_attitude">Warm Attidute</label><br />
+        
+            <textarea type="text" name="comment" maxlength="500" required id="id_comment" placeholder="Enter your comment here. No more than 500 letters." ></textarea><br />
+            <input class="submit" type="submit" value="Submit" id="commentForm"/>
+            <input class="submit" type="button" value="Cancel" id="cancel" />
+        </form>
+        {% if comments %}
+        {% for comment in comments %}
+        <div class="comment-item">
+            {% if comment.username.userprofile.avatar %}
+            <div class="avatar"><img class='ava' src="{{ comment.username.userprofile.avatar.url }}" alt="Avatar" /></div>
+            {% else %}
+            <div class="avatar"><img class='ava' src="{% static 'images/me.png' %}" alt="Avatar" /></div>
+            {% endif %}
+            <div class="comright">
+                <div class="user">{{ comment.username.username }}</div><br />
+                <div class="item-rate">
+                    <fieldset>
+                        {% if comment.star > 4 %}
+                        <label class="star4 rated" title="Outstanding">5 stars</label>
+                        {% else %}
+                        <label class="star4" title="Outstanding">5 stars</label>
+                        {% endif %}
+
+                        {% if comment.star > 3 %}
+                        <label class="star3 rated" title="Very Good">4 stars</label>
+                        {% else %}
+                        <label class="star3" title="Very Good">4 stars</label>
+                        {% endif %}
+
+                        {% if comment.star > 2 %}
+                        <label class="star2 rated" title="Good">3 stars</label>
+                        {% else %}
+                        <label class="star2" title="Good">3 stars</label>
+                        {% endif %}
+
+                        {% if comment.star > 1 %}
+                        <label class="star1 rated" title="Poor">2 stars</label>
+                        {% else %}
+                        <label class="star1" title="Poor">2 stars</label>
+                        {% endif %}
+
+                        {% if comment.star > 0 %}
+                        <label class="star0 rated" title="Very Poor">1 star</label>
+                        {% else %}
+                        <label class="star0" title="Very Poor">1 star</label>
+                        {% endif %}
+                    </fieldset>
+                </div>
+                <div class="content">{{ comment.comment }}</div><br />
+                <ul class="tags">
+                    {% if comment.tag_environ %}
+                    <li id="tags">Nice Environment</li>
+                    {% endif %}
+                    {% if comment.tag_service %}
+                    <li id="tags">Attentive Service</li>
+                    {% endif %}
+                    {% if comment.tag_cost %}
+                    <li id="tags">Cost Effective</li>
+                    {% endif %}
+                    {% if comment.tag_skill %}
+                    <li id="tags">Excellent Skill</li>
+                    {% endif %}
+                    {% if comment.tag_attitude %}
+                    <li id="tags">Warm Attidute</li>
+                    {% endif %}
+                </ul><br />
+                <div class="datetime"> {{ comment.comment_time }}</div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="remind">Still waiting for the first comment~</div>
+        {% endif %}
+    </div>
+</div>
+<script src="{% static 'js/salon.js' %}" crossorigin="anonymous"></script>
+{% endblock %}

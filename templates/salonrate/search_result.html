@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Search Result</title>
+        <link rel="stylesheet" type="text/css" href="https://s1.pstatp.com/cdn/expire-1-M/font-awesome/4.6.0/css/font-awesome.min.css">
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+        <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <script>
+            let current_page = 1
+            let all_page_count = 0
+            let checked_value = {}
+            let scope
+            let keyword
+            let current_sort = 'rate'
+            let current_type
+            let service_tag = ["Wash", "Cut", "Dye", "Perm", "Care"]
+
+            scope = '{{scope}}'
+            keyword = '{{keyword}}'
+            all_page_count = '{{detail.paginator.num_pages}}'
+
+            // get current service type from homepage type click
+            if ('{{current_type}}'!=='None'){
+                current_type = '{{current_type}}'
+            }
+
+            // use ajax to get previous page
+            function getPrevPage() {
+                current_page--
+                $("span#current-page").text(current_page)
+
+                if (current_page >= 1) {
+                    $("a#next-page").show()
+                    $.ajax({
+                        type: 'post',
+                        url: '{% url "salonrate:search_result" %}',
+                        data: {
+                            'scope': scope,
+                            'keyword': keyword,
+                            'current_page': current_page,
+                            'sort_tag':checked_value,
+                            'current_sort':current_sort,
+                            'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        },
+                        success: function (res) {
+                            // console.log(res)
+                            $("div.item-container").html(res)
+                            if (current_page===1){
+                                $("a#prev-page").hide()
+                            }
+                        }
+                    })
+                }
+            }
+
+            // use ajax to get next page
+            function getNextPage() {
+                current_page++
+                $("span#current-page").text(current_page)
+
+                if (current_page <= all_page_count) {
+                    $("a#prev-page").show()
+                    $.ajax({
+                        type: 'post',
+                        url: '{% url "salonrate:search_result" %}',
+                        data: {
+                            'scope': scope,
+                            'keyword': keyword,
+                            'current_page': current_page,
+                            'sort_tag':checked_value,
+                            'current_sort':current_sort,
+                            'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        },
+                        success: function (res) {
+                            // console.log(res)
+                            $("div.item-container").html(res)
+                            if (current_page===parseInt(all_page_count)){
+                                $("a#next-page").hide()
+                            }
+                        }
+                    })
+                }
+            }
+
+            // check the checked value in checkbox and store in checked_value dict
+            function check_checked_value(){
+                checked_value = {}
+                $("div.tag-filter input:checkbox:checked").each(function () {
+                    checked_value[$(this).val().toLowerCase().replace(" ", "_")] = 1
+                })
+            }
+
+            // document ready functions
+            $(function () {
+
+                // dynamic add search keyword when switch the search scope
+                if (scope==='salon'){
+                    $("ul.search-switch li").eq(0).addClass("selected").siblings().removeClass("selected")
+                    $("input.search-txt").attr("placeholder", keyword)
+                }
+                else {
+                    $("ul.search-switch li").eq(-1).addClass("selected").siblings().removeClass("selected")
+                    $("input.search-txt").attr("placeholder", keyword)
+
+                }
+
+                // dynamic change the tag filter when switch the search scope
+                let current_scope_selected = $(".search-switch li.selected").text().toLowerCase();
+                if (current_scope_selected === "service") {
+                    for (let i = 0; i < 5; i++) {
+                        $("div.tag-filter li input").eq(i).attr("value", service_tag[i]).attr("id", service_tag[i].toLowerCase())
+                        $("div.tag-filter li label").eq(i).attr("for", service_tag[i].toLowerCase())
+                        $("div.tag-filter li label").eq(i).text(service_tag[i])
+                    }
+                    $("div.tag-filter li").eq(-1).hide()
+                }
+                if (current_scope_selected === "salon") {
+                    let salon_tag = ["Good Env", "Good Service", "Cost Effective", "Good Skill", "Good Attitude", "Not Busy"]
+                    for (let i = 0; i < 6; i++) {
+                        $("div.tag-filter li input").eq(i).attr("value", salon_tag[i]).attr("id", salon_tag[i].toLowerCase().replace(" ", "_"))
+                        $("div.tag-filter li label").eq(i).attr("for", salon_tag[i].toLowerCase().replace(" ", "_"))
+                        $("div.tag-filter li label").eq(i).text(text_remap(salon_tag[i]))
+                    }
+                    $("div.tag-filter li").eq(-1).show()
+                }
+
+                // dynamic check the checked value based on the checkbox
+                if (current_type) {
+                    $("div.tag-filter input").eq(current_type).attr("checked","checked")
+                    check_checked_value()
+                }
+
+                // bind next_page and previous_page function
+                $("a#next-page").on('click', getNextPage)
+                $("a#prev-page").on('click', getPrevPage)
+
+                // dynamic change the placeholder when change the search scope
+                $(".search-switch li").on("click", function () {
+                    $(this).addClass("selected").siblings().removeClass("selected").end()
+                    if ($(this).text() === "Salon") {
+                        $("div.search-box div.search-area input").attr("placeholder", "Salon Name")
+                    } else {
+                        $("div.search-box div.search-area input").attr("placeholder", "Service Name")
+                    }
+                })
+
+                // dynamic change the background when click sort
+                $(".sort li").on("click", function () {
+                    $(this).addClass("selected").siblings().removeClass("selected").end()
+                })
+
+                // dynamic refresh the page when change the tag
+                $(".tag-filter input").change(function () {
+                    check_checked_value()
+                    getSearchData()
+                })
+                // mouse hover to show my center operation
+                $("div.my-center").hover(function() {
+                    $("ul.dropdown-menu").show()
+                },function (){
+                    $("ul.dropdown-menu").hide()
+                })
+
+                // bind sort function on two sort button
+                $(".sort li").on("click", sort)
+
+
+            })
+
+            // use ajax to refresh the item by selected sort rule
+            function sort(){
+                current_sort = $(this).text().trim().replace("/\s/g", "").toLowerCase()
+                current_page=1
+                $.ajax({
+                        type: 'post',
+                        url: '{% url "salonrate:search_result" %}',
+                        data: {
+                            'scope': scope,
+                            'keyword': keyword,
+                            'current_page': current_page,
+                            'sort_tag':checked_value,
+                            'current_sort':current_sort,
+                            'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        },
+                        success: function (res) {
+                            // console.log(res)
+                            $("span#current-page").text(current_page)
+                            $("div.item-container").html(res)
+                        }
+                    })
+            }
+
+            // remap the words
+            function text_remap(original_name) {
+                switch (original_name) {
+                    case ("Good Env"):
+                        return "Nice Environment"
+                    case("Good Service"):
+                        return "Attentive Service"
+                    case("Good Skill"):
+                        return "Excellent Skill"
+                    case("Good Attitude"):
+                        return "Warm Attitude"
+                    case("Cost Effective"):
+                        return "Cost Effective"
+                }
+            }
+
+            // use ajax to get item data, return ajax_search.html(item content)
+            function getSearchData() {
+                let scope = $('ul.search-switch li.selected').text().toLowerCase()
+                let keyword = $('input.search-txt').val()
+                current_page=1
+                $.ajax({
+                    type: 'post',
+                    url: '{% url "salonrate:ajax_search" %}',
+                    data: {
+                        'scope': scope,
+                        'keyword': keyword,
+                        'sort_tag': checked_value,
+                        'current_page': current_page,
+                        'current_sort':current_sort,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function (res) {
+                        $("div.item-container").html(res)
+                        if (res.trim()===""){
+                            $("span#current-page").text(0)
+                            $("span#all-page").text(0)
+                            $("a#next-page").hide()
+                            $("a#prev-page").hide()
+                        }else {
+                            $("span#current-page").text(current_page)
+                            $("a#next-page").show()
+                            if (current_page>=parseInt(all_page_count)){
+                                $("a#next-page").hide()
+                            }
+                            if (current_page===1){
+                                $("a#prev-page").hide()
+                            }
+                        }
+
+                    }
+                })
+            }
+
+            // change the tag filter checkbox when change the search scope
+            $(function () {
+                $(".search-switch li").on("click", function () {
+                    $(this).addClass("selected").siblings().removeClass("selected").end()
+                    let scope = $(this).text().toLowerCase()
+                    if (scope === "service") {
+                        for (let i = 0; i < 5; i++) {
+                            $("div.tag-filter li input").eq(i).attr("value", service_tag[i]).attr("id", service_tag[i].toLowerCase())
+                            $("div.tag-filter li label").eq(i).attr("for", service_tag[i].toLowerCase())
+                            $("div.tag-filter li label").eq(i).text(service_tag[i])
+                        }
+                        $("div.tag-filter li").eq(-1).hide()
+                    }
+                    if (scope === "salon") {
+                        let salon_tag = ["Good Env", "Good Service", "Cost Effective", "Good Skill", "Good Attitude", "Not Busy"]
+                        for (let i = 0; i < 6; i++) {
+                            $("div.tag-filter li input").eq(i).attr("value", salon_tag[i]).attr("id", salon_tag[i].toLowerCase().replace(" ", "_"))
+                            $("div.tag-filter li label").eq(i).attr("for", salon_tag[i].toLowerCase().replace(" ", "_"))
+                            $("div.tag-filter li label").eq(i).text(text_remap(salon_tag[i]))
+                        }
+                        $("div.tag-filter li").eq(-1).show()
+                    }
+                    $("div.tag-filter input").removeAttr("checked")
+                    check_checked_value()
+                })
+            })
+
+            // bind ENTER key to search function
+            $(function search() {
+                $('input.search-txt').keydown(function (e) {
+                    if (e.keyCode === 13) {
+                        getSearchData()
+                    }
+                })
+
+                // bind search icon to search function
+                $(".search-btn").on("click", getSearchData)
+            })
+        </script>
+        <style>
+            body {
+                font-size: .875rem;
+            }
+            .result-header {
+                margin-top: 15px;
+                margin-left: 10%;
+                margin-right: 10%;
+                display: flex;
+                align-items: center;
+                font-family: 'Courier New', Courier, monospace;
+            }
+
+            ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                width: auto;
+            }
+
+            li .menu{
+                color: rgb(191, 137, 242);
+                height: 30px;
+                text-align: center;
+            }
+            li .menu:hover{
+                color: rgb(191, 137, 242);
+                background-color:rgb(247, 236, 255);
+            }
+            .sort-filter > ul {
+                margin-left: 10%;
+            }
+
+            .search-switch li {
+                float: left;
+                border: 1px solid rgb(208, 167, 245);
+                width: 80px;
+                height: 30px;
+                text-align: center;
+                margin: 0 -1px 0 -1px;
+                padding: 4px 10px 2px 10px;
+                font-weight: 500;
+                font-size: 15px;
+            }
+
+            .search-switch li:first-child {
+                border-radius: 2px 0 0 2px;
+            }
+
+            .search-switch li:last-child {
+                border-radius: 0 2px 2px 0;
+            }
+
+            .logo-img {
+                display: block;
+                height: 50px;
+                /* margin: 0 0 0 10%; */
+            }
+
+
+            .me-img {
+                border-radius: 50%;
+                width: 4vmin;
+                height: 4vmin;
+                object-fit: cover;
+                object-position: center;
+            }
+
+
+            .search-switch {
+                color: rgb(191, 137, 242);
+                background-color: #FFFFFF;
+                float: left;
+                margin: 0 20px 0 0;
+                cursor: pointer;
+            }
+
+
+            .selected {
+                color: #FFFFFF;
+                background-color: rgb(208, 167, 245);
+            }
+
+            .search-box {
+                    flex: 1;
+                    display: flex;
+                    justify-content: center;
+                }
+
+            .search-area {
+                float: left;
+                border: 1px solid rgb(208, 167, 245);
+                border-radius: 2px;
+                height: 30px;
+                width: 300px;
+            }
+
+            .search-txt {
+                height: 28px;
+                width: 248px;
+                border: none;
+                background: transparent;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                font-style: italic;
+                color: rgb(191, 137, 242);
+                outline: none;
+            }
+
+            .search-txt::placeholder {
+                color: rgb(191, 137, 242);
+            }
+
+            .search-btn {
+                color: rgb(191, 137, 242);
+                display: inline-block;
+                width: 10%;
+            }
+
+            .search-img {
+                width: 25px;
+                margin-top: -5px;
+            }
+
+            .sort-filter {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .sort li {
+                float: left;
+                border: 2px solid rgb(208, 167, 245);
+                margin: 0 -1px 0 -1px;
+                padding: 2px 10px 2px 10px;
+                color: rgb(191, 137, 242);
+                cursor: pointer;
+            }
+
+            .sort li.selected {
+                color: #FFFFFF;
+            }
+
+            .tag-filter li {
+                float: left;
+                font-weight: bold;
+                margin-right: 10px;
+            }
+
+            .tag-filter input {
+                height: 14px;
+                width: 14px;
+                display: inline-block;
+                /* float: left; */
+                border: 1px solid rgb(208, 167, 245);
+            }
+            .pages{
+                display: flex;
+                align-items: center;
+                margin-right: 10%
+            }
+            #prev-page, #next-page {
+                float: left;
+                border: 2px solid rgb(208, 167, 245);
+                border-radius: 1px;
+                margin: 0 -1px 0 -1px;
+                padding: 0 15px 0 15px;
+                color: rgb(191, 137, 242);
+                cursor: pointer;
+            }
+
+            .page-control, .page-show {
+                float: left;
+            }
+
+            .item-content {
+                border: 1px solid orange;
+                width: 80%;
+                display: flex;
+                margin: 1% 10% 1% 10%;
+                /* align-items: center; */
+                position: relative;
+            }
+            .item-img {
+                margin: 2% 1% 2% 1%;
+                width: 400px;
+                height: 220px;
+                object-fit: cover;
+                object-position: center;
+            }
+            .item-detail{
+                height:200px;
+                padding-top: 20px;
+                width: 60%; 
+            }
+            .item-name {
+                font-family: 'Courier New', Courier, monospace;
+                font-weight: bolder;
+                font-size: 20px;
+                
+            }
+            .item-name:hover{
+                color:rgb(167, 81, 247);
+            }
+            a {
+                color: inherit;
+            }
+            a:link {
+                text-decoration: none;
+            }
+            a:hover {
+                color:inherit;
+                text-decoration: none;
+            }
+
+            .item-rate {
+                font-family: 'FontAwesome';
+                margin: 10px 0 10px 0;
+            }
+
+            .item-rate > fieldset {
+                padding: 0;
+                margin: 0;
+                border: none;
+                display: inline-block;
+            }
+
+            .item-rate > fieldset > label {
+                float: right;
+                width: 1em;
+                padding: 0 .05em;
+                overflow: hidden;
+                white-space: nowrap;
+                cursor: pointer;
+                font-size: 150%;
+                color: #F0A30A;
+                margin: 3px;
+            }
+
+            .item-rate > fieldset > label:before {
+                content: '\f006  ';
+            }
+
+            .item-rate > fieldset > label.rated:before {
+                content: '\f005  ';
+            }
+
+            .fa-money:before{
+                font-family: 'FontAwesome';
+                content:"\f0d6";
+            }
+            .fa-scissors:before{
+                font-family: 'FontAwesome';
+                content:"\f0c4";
+                margin-right: 5px;
+            }
+            .item-price{
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 18px;
+                margin-top: 20px;
+                vertical-align: bottom;
+            }
+            .item-salon-name{
+                font-size: 16px;
+                font-family: 'Courier New', Courier, monospace;
+                color:rgb(167, 81, 247)
+            }
+            .item-address {
+                font-size: 16px;
+                font-family: 'Courier New', Courier, monospace;
+                vertical-align: bottom;
+            }
+            
+            .fa-map-marker:before{
+                font-family: 'FontAwesome';
+                content:"\f041";
+                margin-right: 10px;
+            }
+
+            .item-tags {
+                margin-top: 2%;
+            }
+
+            .item-tags > li {
+                float: left;
+                background-color: #FFF2CC;
+                color: #fca95b;
+                width: 120px;
+                margin: 0 1% 0 1%;
+                padding: 1% 0 1% 0;
+                text-align: center;
+            }
+
+            .busy {
+                border: 1px solid #B85450;
+                background-image: linear-gradient(#F8CECC, #EA6B66);
+                color: black;
+                font-weight: bolder;
+                font-style: italic;
+                padding: 4px 10px 4px 10px;
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+
+            .arrow {
+                border: solid rgb(191, 137, 242);
+                border-width: 0 3px 3px 0;
+                display: inline-block;
+                padding: 3px;
+                margin: 0 0 3px 2px;
+                transform: rotate(45deg);
+            }
+
+            li.selected > i.arrow {
+                border: solid white;
+                border-width: 0 3px 3px 0;
+                display: inline-block;
+                padding: 3px;
+                margin: 0 0 3px 2px;
+                transform: rotate(45deg);
+            }
+
+            li.selected > i.arrow-rotated {
+                border: solid white;
+                border-width: 0 3px 3px 0;
+                display: inline-block;
+                padding: 3px;
+                margin: 3px 0 0 2px;
+                transform: rotate(-135deg);
+            }
+
+            .about {
+                align-items: center;
+                float: left;
+                text-align: center;
+                margin-left: 40%;
+                font-family: 'Courier New', Courier, monospace;
+            }
+            .me-img {
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                object-fit: cover;
+                object-position: center;
+            }
+
+            img {
+                vertical-align: middle;
+                border-style: none;
+            }
+            *, ::after, ::before {
+                box-sizing: border-box;
+            }
+
+            button, input.search-txt, optgroup, select, textarea {
+                margin: 0;
+                font-family: inherit;
+                font-size: inherit;
+                line-height: inherit;
+            }
+        </style>
+    </head>
+    <body>
+        {% csrf_token %}
+        <div class="result-header">
+            <a href="{% url 'salonrate:homepage' %}"><img class="logo-img" src="{% static 'images/logo.png' %}"
+                                                  alt="Salonrate Logo"></a>
+            <div class="search-box">
+                <ul class="search-switch">
+                    <li class="selected">Salon</li>
+                    <li>Service</li>
+                </ul>
+                <div class="search-area">
+                    <label>
+                        <input class="search-txt" type="text" placeholder="Search for salon or service" name="keywords">
+                    </label>
+                    <a class="search-btn">
+                        <img class="search-img" src="{% static 'images/search.png' %}" alt="Q">
+                    </a>
+                </div>
+            </div>
+                <div class="my-center">
+                    <li class="dropdown" style="list-style-type: none">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: #FFFFFF">
+                            {% if user.is_authenticated %}
+                                {% if user.userprofile.avatar %}
+                                    {% if user.userprofile.avatar.url %}
+                                    <img class='me-img' src="{{ user.userprofile.avatar.url }}" alt="Avatar" />
+                                    <span class="caret"></span>
+                                    {% endif %}
+                                {% else %}
+                                <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
+                                <span class="caret"></span>
+                                {% endif %}
+                                <a>{{ user.username }}</a>
+                            {% else %}
+                                <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
+                                <a>My Account</a>
+                                <span class="caret"></span>
+                            {% endif %}
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% if user.is_authenticated %}
+                            <li class="menu"><a href="{% url 'salonrate:logout' %}">Logout</a></li>
+                            <li class="menu"><a href="{% url 'salonrate:profile' %}">Profile</a> </li>
+                            {% else %}
+                            <li class="menu"><a href="{% url 'salonrate:login' %}">Login</a></li>
+                            <li class="menu"><a href="{% url 'salonrate:register' %}">Register</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+    </div>
+        </div>
+        <hr>
+        <div class="sort-filter">
+            <ul class="sort">
+                <li class="selected">
+                    Rate
+                    <i class="arrow"></i>
+                </li>
+                <li>
+                    Price
+                    <i class="arrow"></i>
+                </li>
+            </ul>
+            <div class="tag-filter">
+                <ul>
+                    <li>
+                        <input type="checkbox" class="flagged" value="Nice Environment" id="good_env"/>
+                        <label for="good_env">
+                            Nice Environment
+                        </label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="flagged" value="Attentive Service" id="good_service">
+                        <label for="good_service">
+                            Attentive Service
+                        </label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="flagged" value="Cost Effective" id="cost_effective">
+                        <label for="cost_effective">
+                            Cost Effective
+                        </label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="flagged" value="Excellent Skill" id="good_skill">
+                        <label for="good_skill">
+                            Excellent Skill
+                        </label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="flagged" value="Warm Attitude" id="good_attitude">
+                        <label for="good_attitude">
+                            Warm Attitude
+                        </label>
+                    </li>
+                    <li>
+                        <input type="checkbox" class="flagged" value="Not Busy" id="not_busy">
+                        <label for="not_busy">
+                            Not Busy
+                        </label>
+                    </li>
+                </ul>
+            </div>
+            <div class="pages">
+                <div class="page-show" style="margin-right: 15px">
+                    <span id="current-page">{{ detail.number }}</span>
+                    <span>/</span>
+                    <span id="all-page">{{ detail.paginator.num_pages }}</span>
+                </div>
+                <div class="page-control">
+                    <a id="prev-page" style="display: none"><</a>
+                    <a id="next-page">></a>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="item-container">
+            {% if detail %}
+            {% for item in detail %}
+            {% if scope == 'salon' %}
+            <div class="item-content">
+                <img class="item-img" src="{{ item.image.url }}" alt="item image">
+                <div class="item-detail">
+                    <span class="item-name">
+                        <a href="{% url 'salonrate:salon' item.slug %}" target="_blank">{{item.salon_name}}</a>
+                    </span>
+                    <div class="item-rate">
+                        <fieldset>
+                            {% if item.rate > 4 %}
+                            <label class="star4 rated" title="Outstanding">5 stars</label>
+                            {% else %}
+                            <label class="star4" title="Outstanding">5 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 3 %}
+                            <label class="star3 rated" title="Very Good">4 stars</label>
+                            {% else %}
+                            <label class="star3" title="Very Good">4 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 2 %}
+                            <label class="star2 rated" title="Good">3 stars</label>
+                            {% else %}
+                            <label class="star2" title="Good">3 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 1 %}
+                            <label class="star1 rated" title="Poor">2 stars</label>
+                            {% else %}
+                            <label class="star1" title="Poor">2 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 0 %}
+                            <label class="star0 rated" title="Very Poor">1 star</label>
+                            {% else %}
+                            <label class="star0" title="Very Poor">1 star</label>
+                            {% endif %}
+
+                        </fieldset>
+                    </div>
+                    <ul class="item-tags">
+                        {% if item.good_env %}
+                        <li>Nice Environment</li>
+                        {% endif %}
+                        {% if item.good_service %}
+                        <li>Attentive Service</li>
+                        {% endif %}
+                        {% if item.cost_effective %}
+                        <li>Cost Effective</li>
+                        {% endif %}
+                        {% if item.good_skill %}
+                        <li>Excellent Skill</li>
+                        {% endif %}
+                        {% if item.good_attitude %}
+                        <li>Warm Attidute</li>
+                        {% endif %}
+                    </ul><br />
+                    <div class="item-price">
+                        <label class="fa-money"></label> Average Cost: £ {{ item.salon_avg_price }}
+                    </div>
+                    <br />
+                    <span class="item-address">
+                        <label class="fa-map-marker"></label>{{item.salon_address}}
+                    </span>
+                </div>
+                {% if item.salon_busy %}
+                <div class="busy">
+                    BUSY
+                </div>
+                {% endif %}
+            </div>
+            {% else %}
+            <div class="item-content">
+                {% if item.service_type == 0 %}
+                <img class="item-img" src="{% static 'images/wash.png' %}" alt="wash_img" />
+                {% elif item.service_type == 1 %}
+                <img class="item-img" src="{% static 'images/cut.jpeg' %}" alt="cut_img" />
+                {% elif item.service_type == 2 %}
+                <img class="item-img" src="{% static 'images/dye.jpeg' %}" alt="dye_img" />
+                {% elif item.service_type == 3 %}
+                <img class="item-img" src="{% static 'images/perm.jpg' %}" alt="perm_img" />
+                {% elif item.service_type == 4 %}
+                <img class="item-img" src="{% static 'images/care.jpeg' %}" alt="care_img" />
+                {% else %}
+                <img class="item-img" src="{% static 'images/item.png' %}" alt="care_img" />
+                {% endif %}
+                <div class="item-detail">
+                    <span class="item-name">
+                        <a href="{% url 'salonrate:service' item.slug %}" target="_blank">{{item.service_name}}</a>
+                    </span>
+                    <div class="item-rate">
+                        <fieldset>
+                            {% if item.rate > 4 %}
+                            <label class="star4 rated" title="Outstanding">5 stars</label>
+                            {% else %}
+                            <label class="star4" title="Outstanding">5 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 3 %}
+                            <label class="star3 rated" title="Very Good">4 stars</label>
+                            {% else %}
+                            <label class="star3" title="Very Good">4 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 2 %}
+                            <label class="star2 rated" title="Good">3 stars</label>
+                            {% else %}
+                            <label class="star2" title="Good">3 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 1 %}
+                            <label class="star1 rated" title="Poor">2 stars</label>
+                            {% else %}
+                            <label class="star1" title="Poor">2 stars</label>
+                            {% endif %}
+
+                            {% if item.rate > 0 %}
+                            <label class="star0 rated" title="Very Poor">1 star</label>
+                            {% else %}
+                            <label class="star0" title="Very Poor">1 star</label>
+                            {% endif %}
+                        </fieldset>
+                    </div>
+                    <div class="item-price">
+                        <label class="fa-money"></label> Average Cost: £ {{ item.service_price }}
+                    </div>
+                    <br />
+                    <span class="item-salon-name">
+                        <label class="fa-scissors"></label>
+                        <a href="{% url 'salonrate:salon' item.salon_id.slug %}">{{item.salon_id.salon_name}}</a>
+                    </span><br />
+                    <span class="item-address">
+                        <label class="fa-map-marker"></label>{{item.salon_id.salon_address}}
+                    </span>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+        </div>
+<hr/>
+<div class="about">
+    <dl>
+        <dt>· About Us: IT-17 ·</dt>
+        <br/>
+        <dd>2589587C · Cui, Chong</li>
+        <dd>2647735Y · YING, Heting</li>
+        <dd>2590260Y · Yang, Suiyi</li>
+        <dd>2612713X · Xiong, Yipeng</li>
+        <dd>2492428V · Varadhan, Reetu Thillai</li>
+    </dl>
+</div>
+    </body>
+</html>

@@ -1,0 +1,97 @@
+{% extends 'salonrate/base_lr.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Register
+{% endblock %}
+
+{% block style_block %}
+<style>
+    .container{
+        text-align: center;
+    }
+    h1{
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 36px;
+        font-style: italic;
+        font-weight: bold;
+        color:rgb(191, 137, 242);
+        margin-top:5%;
+        text-align: center;
+    }
+    .jump{
+        text-align: center;
+    }
+    #user_form{
+        margin-top:10px;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 16px;
+        font-weight: 500;   
+    }
+    label{
+        font-family: 'Courier New', Courier, monospace;
+        width: 150px;
+        display: inline-block;
+        text-align: right;
+    }
+    p{
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 12px;
+        margin-top: -5px;
+    }
+    input{
+        width: 250px;
+        margin: 8px;
+        border: 1px solid #ccc; 
+        padding: 3px 0px;
+        border-radius: 3px;
+        padding:5px;
+        background-color: lavender;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    .btn{
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 18px;
+        font-weight: 800;
+        margin-top: 20px;
+        border: 2px solid rgb(191, 137, 242); 
+        padding: 3px 0px;
+        border-radius: 3px;
+        padding-left:5px; 
+        width: 405px;
+        height: 40px;
+        background-color: white;
+        color:rgb(191, 137, 242);
+    }
+</style>
+{% endblock %}
+
+{% block body_block %}
+{% if registered %}
+<h1>Thank you for registering!</h1>
+<div class="jump"><a href="{% url 'salonrate:login' %}"><button class="btn" type="button">Click Here to Sign in!</button></a></div>
+{% else %}
+<div class="container">
+    <h1>Register</h1>
+    <form id="user_form" method="post" action="{% url 'salonrate:register' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in user_form %}
+            {{ field.errors }}
+            {{ field.label_tag }} {{ field }}<br />
+            {% if field.help_text %}
+            <p class="help">{{ field.help_text|safe }}</p>
+            {% endif %}
+        {% endfor %}
+        {% for field in profile_form %}
+            {{ field.errors }}
+            {{ field.label_tag }} {{ field }}<br />
+            {% if field.help_text %}
+            <p class="help">{{ field.help_text|safe }}</p>
+            {% endif %}
+        {% endfor %}
+        <button class="btn" type="submit" value="Submit">Register</button><br />
+        <a href="{% url 'salonrate:login' %}"><button class="btn" type="button">Already have an account? Sign in!</button></a>
+    </form>
+</div>
+{% endif %}
+{% endblock %}

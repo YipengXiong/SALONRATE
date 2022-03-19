@@ -1,0 +1,148 @@
+{% load staticfiles %}
+{% if detail %}
+<script>
+    all_page_count = '{{detail.paginator.num_pages}}'
+    scope = '{{scope}}'
+    keyword = '{{keyword}}'
+    $("span#all-page").text(all_page_count)
+</script>
+{% for item in detail %}
+{% if scope == 'salon' %}
+<div class="item-content">
+    <img class="item-img" src="{{ item.image.url }}" alt="item image">
+    <div class="item-detail">
+        <span class="item-name">
+            <a href="{% url 'salonrate:salon' item.slug %}" target="_blank">{{item.salon_name}}</a>
+        </span>
+        <div class="item-rate">
+            <fieldset>
+                {% if item.rate > 4 %}
+                <label class="star4 rated" title="Outstanding">5 stars</label>
+                {% else %}
+                <label class="star4" title="Outstanding">5 stars</label>
+                {% endif %}
+
+                {% if item.rate > 3 %}
+                <label class="star3 rated" title="Very Good">4 stars</label>
+                {% else %}
+                <label class="star3" title="Very Good">4 stars</label>
+                {% endif %}
+
+                {% if item.rate > 2 %}
+                <label class="star2 rated" title="Good">3 stars</label>
+                {% else %}
+                <label class="star2" title="Good">3 stars</label>
+                {% endif %}
+
+                {% if item.rate > 1 %}
+                <label class="star1 rated" title="Poor">2 stars</label>
+                {% else %}
+                <label class="star1" title="Poor">2 stars</label>
+                {% endif %}
+
+                {% if item.rate > 0 %}
+                <label class="star0 rated" title="Very Poor">1 star</label>
+                {% else %}
+                <label class="star0" title="Very Poor">1 star</label>
+                {% endif %}
+
+            </fieldset>
+        </div>
+        <ul class="item-tags">
+            {% if item.good_env %}
+            <li>Nice Environment</li>
+            {% endif %}
+            {% if item.good_service %}
+            <li>Attentive Service</li>
+            {% endif %}
+            {% if item.cost_effective %}
+            <li>Cost Effective</li>
+            {% endif %}
+            {% if item.good_skill %}
+            <li>Excellent Skill</li>
+            {% endif %}
+            {% if item.good_attitude %}
+            <li>Warm Attidute</li>
+            {% endif %}
+        </ul><br /><br />
+        <div class="item-price">
+            <label class="fa-money"></label> Average Cost: £ {{ item.salon_avg_price }}
+        </div>
+        <br />
+        <span class="item-address">
+            <label class="fa-map-marker"></label>{{item.salon_address}}
+        </span>
+    </div>
+    {% if item.salon_busy %}
+    <div class="busy">
+        BUSY
+    </div>
+    {% endif %}
+</div>
+{% else %}
+<div class="item-content">
+    {% if item.service_type == 0 %}
+    <img class="item-img" src="{% static 'images/wash.png' %}" alt="wash_img" />
+    {% elif item.service_type == 1 %}
+    <img class="item-img" src="{% static 'images/cut.jpeg' %}" alt="cut_img" />
+    {% elif item.service_type == 2 %}
+    <img class="item-img" src="{% static 'images/dye.jpeg' %}" alt="dye_img" />
+    {% elif item.service_type == 3 %}
+    <img class="item-img" src="{% static 'images/perm.jpg' %}" alt="perm_img" />
+    {% elif item.service_type == 4 %}
+    <img class="item-img" src="{% static 'images/care.jpeg' %}" alt="care_img" />
+    {% else %}
+    <img class="item-img" src="{% static 'images/item.png' %}" alt="care_img" />
+    {% endif %}
+    <div class="item-detail">
+        <span class="item-name">
+            <a href="{% url 'salonrate:service' item.slug %}" target="_blank">{{item.service_name}}</a>
+        </span>
+        <div class="item-rate">
+            <fieldset>
+                {% if item.rate > 4 %}
+                <label class="star4 rated" title="Outstanding">5 stars</label>
+                {% else %}
+                <label class="star4" title="Outstanding">5 stars</label>
+                {% endif %}
+
+                {% if item.rate > 3 %}
+                <label class="star3 rated" title="Very Good">4 stars</label>
+                {% else %}
+                <label class="star3" title="Very Good">4 stars</label>
+                {% endif %}
+
+                {% if item.rate > 2 %}
+                <label class="star2 rated" title="Good">3 stars</label>
+                {% else %}
+                <label class="star2" title="Good">3 stars</label>
+                {% endif %}
+
+                {% if item.rate > 1 %}
+                <label class="star1 rated" title="Poor">2 stars</label>
+                {% else %}
+                <label class="star1" title="Poor">2 stars</label>
+                {% endif %}
+
+                {% if item.rate > 0 %}
+                <label class="star0 rated" title="Very Poor">1 star</label>
+                {% else %}
+                <label class="star0" title="Very Poor">1 star</label>
+                {% endif %}
+            </fieldset>
+        </div>
+        <div class="item-price">
+            <label class="fa-money"></label> Average Cost: £ {{ item.service_price }}
+        </div>
+        <br /><br />
+        <span class="item-salon-name">
+            <label class="fa-scissors"></label>{{item.salon_id.salon_name}}
+        </span><br />
+        <span class="item-address">
+            <label class="fa-map-marker"></label>{{item.salon_id.salon_address}}
+        </span>
+    </div>
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}

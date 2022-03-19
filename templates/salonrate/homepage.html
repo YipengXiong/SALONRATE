@@ -1,0 +1,406 @@
+{% extends 'salonrate/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Homepage
+{% endblock %}
+
+{% block css_block %}
+<style>
+    .carousel-inner img {
+        width: 50%;
+        float:left;
+    }
+    .container{
+        margin-top: 20px;
+    }
+
+    .tag1 {
+        width: 150px;
+        height: 150px;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 50%;
+        border-color: rgb(208,206,226);
+        background-color: rgb(208,206,226);
+        line-height: 150px;
+        text-align: center;
+        font-size: 24px;
+        font-style: italic;
+        font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        color:rgb(241, 241, 255);
+        -moz-border-radius: 50%; -webkit-border-radius: 50%;
+        cursor: pointer;
+    }
+    .tag1:hover{
+        box-shadow: 0 0 10px lavender;
+        border:2px solid lavender;
+        transform: translate(0,-1%);
+    }
+
+    .tag2 {
+        width: 150px;
+        height: 150px;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 50%;
+        border-color: rgb(255,242,204);
+        background-color: rgb(255,242,204);
+        line-height: 150px;
+        text-align: center;
+        font-size: 24px;
+        font-style: italic;
+        font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        color:peru;
+        cursor: pointer;
+        -moz-border-radius: 50%; -webkit-border-radius: 50%;
+    }
+    .tag2:hover{
+        box-shadow: 0 0 10px rgb(255,242,204);
+        border:2px solid rgb(255,242,204);
+        transform: translate(0,-1%);
+    }
+
+    .tag3 {
+        width: 150px;
+        height: 150px;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 50%;
+        border-color: rgb(240,163,10);
+        background-color: rgb(240,163,10);
+        line-height: 150px;
+        text-align: center;
+        font-size: 24px;
+        font-style: italic;
+        font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        color: rgb(255,242,204);
+        cursor: pointer;
+        -moz-border-radius: 50%; -webkit-border-radius: 50%;
+    }
+    .tag3:hover{
+        box-shadow: 0 0 10px rgb(240,163,10);
+        border:2px solid rgb(240,163,10);
+        transform: translate(0,-1%);
+    }
+
+    .tag4 {
+        width: 150px;
+        height: 150px;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 50%;
+        border-color: rgb(255,230,204);
+        background-color: rgb(255,230,204);
+        line-height: 150px;
+        text-align: center;
+        font-size: 24px;
+        font-style: italic;
+        font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        color: rgb(240,163,10);
+        cursor: pointer;
+        -moz-border-radius: 50%; -webkit-border-radius: 50%;
+    }
+    .tag4:hover{
+        box-shadow: 0 0 10px rgb(255,230,204);
+        border:2px solid rgb(255,230,204);
+        transform: translate(0,-1%);
+    }
+
+    .tag5 {
+        width: 150px;
+        height: 150px;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 50%;
+        border-color: rgb(220, 204, 228);
+        background-color: rgb(220, 204, 228);
+        line-height: 150px;
+        text-align: center;
+        font-size: 24px;
+        font-style: italic;
+        font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        color:rgb(250, 245, 252);
+        cursor: pointer;
+        -moz-border-radius: 50%; -webkit-border-radius: 50%;
+    }
+    .tag5:hover{
+        box-shadow: 0 0 10px rgb(220, 204, 228);
+        border:2px solid rgb(220, 204, 228);
+        transform: translate(0,-1%);
+    }
+
+    .item-content {
+        border: 1px solid orange;
+        width: 80%;
+        display: flex;
+        margin: 1% 10% 1% 10%;
+        position: relative;
+    }
+    .item-img {
+        margin: 2% 2% 2% 1%;
+        width: 400px;
+        height: 220px;
+        object-fit: cover;
+        object-position: center;
+    }
+    .item-detail{
+        height:200px;
+        padding-top: 20px;
+        width: 60%; 
+    }
+    .item-name {
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: bolder;
+        font-size: 20px;
+        
+    }
+    .item-name:hover{
+        color:rgb(167, 81, 247);
+    }
+    a {
+        color: inherit;
+    }
+    a:link {
+        text-decoration: none;
+    }
+
+    .item-img {
+        margin: 2% 1% 2% 1%;
+    }
+
+    .item-name {
+        font-weight: bolder;
+
+    }
+    .fa-money:before{
+        font-family: 'FontAwesome';
+        content:"\f0d6";
+    }
+    .fa-scissors:before{
+        font-family: 'FontAwesome';
+        content:"\f0c4";
+        margin-right: 5px;
+    }
+    .item-price{
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 18px;
+        margin-top: 50px;
+    }
+    .item-salon-name{
+        font-size: 16px;
+        font-family: 'Courier New', Courier, monospace;
+        color:rgb(167, 81, 247)
+    }
+    .item-address {
+        font-size: 16px;
+        font-family: 'Courier New', Courier, monospace;
+        vertical-align: bottom;
+    }
+    
+    .fa-map-marker:before{
+        font-family: 'FontAwesome';
+        content:"\f041";
+        margin-right: 10px;
+    }
+
+    .item-tags {
+        margin-top: 2%;
+    }
+
+    .item-tags > li {
+        float: left;
+        background-color: #FFF2CC;
+        color: #fca95b;
+        width: 120px;
+        margin: 0 1% 0 1%;
+        padding: 1% 0 1% 0;
+        text-align: center;
+    }
+
+    .busy {
+        border: 1px solid #B85450;
+        background-image: linear-gradient(#F8CECC, #EA6B66);
+        color: black;
+        font-weight: bolder;
+        font-style: italic;
+        padding: 4px 10px 4px 10px;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+</style>
+{% endblock %}
+
+{% block body_block %}
+<div class="container">
+<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="2000">
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <a href="{% url 'salonrate:salon' salon1.slug %}" target="_blank"><img src="{{ salon1.image.url }}" alt="First slide"></a>
+            <a href="{% url 'salonrate:salon' salon2.slug %}" target="_blank"><img src="{{ salon2.image.url }}" alt="Second slide"></a>
+        </div>
+        <div class="carousel-item">
+            <a href="{% url 'salonrate:salon' salon2.slug %}" target="_blank"><img src="{{ salon2.image.url }}" alt="Second slide"></a>
+            <a href="{% url 'salonrate:salon' salon3.slug %}" target="_blank"><img src="{{ salon3.image.url }}" alt="Third slide"></a>
+        </div>
+        <div class="carousel-item">
+            <a href="{% url 'salonrate:salon' salon3.slug %}" target="_blank"><img src="{{ salon3.image.url }}" alt="Third slide"></a>
+            <a href="{% url 'salonrate:salon' salon1.slug %}" target="_blank"><img src="{{ salon1.image.url }}" alt="First slide"></a>
+        </div>
+        <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
+            <span _ngcontent-c3="" aria-hidden="true" class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+        <a class="carousel-control-next" href="#myCarousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div>
+</div>
+
+<script>
+    $(function (){
+        $("div.row-cols-auto>div>div").each(function() {
+        $(this).on("click",getType)
+    })
+    })
+
+    function getType(){
+        let current_type = $(this).attr("data-id")
+        let form = $('<form></form>');
+        form.attr('action', '{% url "salonrate:search_result" %}');
+        form.attr('method', 'post');
+        form.attr('target', '_self');
+
+        let keyword_input = $('<input type="text" name="keyword" />');
+        keyword_input.attr('value', '');
+
+        let scope_input = $('<input type="text" name="scope" />');
+        scope_input.attr('value', 'service');
+
+        let type_input = $('<input type="text" name="current_type" />');
+        type_input.attr('value', current_type);
+
+        let csrf_input = $('<input type="text" name="csrfmiddlewaretoken" />');
+        csrf_input.attr('value', '{{ csrf_token }}');
+
+        form.append(csrf_input)
+        form.append(scope_input)
+        form.append(keyword_input)
+        form.append(type_input);
+        form.appendTo("body")
+
+        form.submit();
+    }
+
+
+</script>
+
+<div class="container">
+    {% csrf_token %}
+    <div class="row row-cols-auto" style="justify-content: space-around">
+        <div class="tag1">
+            <div class="tags-text" data-id="0">Wash</div>
+        </div>
+
+        <div class="tag2">
+            <div class="tags-text" data-id="1">Cut</div>
+        </div>
+
+        <div class="tag3">
+            <div class="tags-text" data-id="2">Dye</div>
+        </div>
+
+        <div class="tag4">
+            <div class="tags-text" data-id="3">Perm</div>
+        </div>
+
+        <div class="tag5">
+            <div class="tags-text" data-id="4">Care</div>
+        </div>
+    </div>
+
+</div>
+
+<hr />
+<div class="item-container">
+    {% for salon in salons %}
+    <div class="item-content">
+        <img class="item-img" src="{{ salon.image.url }}" alt="item image">
+        <div class="item-detail">
+            <span class="item-name">
+                <a href="{% url 'salonrate:salon' salon.slug %}" target="_blank">{{salon.salon_name}}</a>
+            </span>
+            <div class="item-rate">
+                <fieldset>
+                    {% if salon.rate > 4 %}
+                    <label class="star4 rated" title="Outstanding">5 stars</label>
+                    {% else %}
+                    <label class="star4" title="Outstanding">5 stars</label>
+                    {% endif %}
+
+                    {% if salon.rate > 3 %}
+                    <label class="star3 rated" title="Very Good">4 stars</label>
+                    {% else %}
+                    <label class="star3" title="Very Good">4 stars</label>
+                    {% endif %}
+
+                    {% if salon.rate > 2 %}
+                    <label class="star2 rated" title="Good">3 stars</label>
+                    {% else %}
+                    <label class="star2" title="Good">3 stars</label>
+                    {% endif %}
+
+                    {% if salon.rate > 1 %}
+                    <label class="star1 rated" title="Poor">2 stars</label>
+                    {% else %}
+                    <label class="star1" title="Poor">2 stars</label>
+                    {% endif %}
+
+                    {% if salon.rate > 0 %}
+                    <label class="star0 rated" title="Very Poor">1 star</label>
+                    {% else %}
+                    <label class="star0" title="Very Poor">1 star</label>
+                    {% endif %}
+
+                </fieldset>
+            </div>
+            <ul class="item-tags">
+                {% if salon.good_env %}
+                <li>Nice Environment</li>
+                {% endif %}
+                {% if salon.good_service %}
+                <li>Attentive Service</li>
+                {% endif %}
+                {% if salon.cost_effective %}
+                <li>Cost Effective</li>
+                {% endif %}
+                {% if salon.good_skill %}
+                <li>Excellent Skill</li>
+                {% endif %}
+                {% if salon.good_attitude %}
+                <li>Warm Attidute</li>
+                {% endif %}
+            </ul>
+            <br />
+            <div class="item-price">
+                <label class="fa-money"></label> Average Cost: £ {{ salon.salon_avg_price }}
+            </div>
+            <span class="item-address">
+                <label class="fa-map-marker"></label>{{salon.salon_address}}
+            </span>
+        </div>
+        {% if salon.salon_busy %}
+        <div class="busy">
+            BUSY
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

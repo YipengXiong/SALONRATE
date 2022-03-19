@@ -1,0 +1,301 @@
+{% extends 'salonrate/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Profile
+{% endblock %}
+{% block css_block %}
+<style>
+    a{
+        color: #000;
+    }
+    .main {
+        margin-left: 5%;
+        margin-right: 5%;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    h1 {
+        text-align: center;
+    }
+    .profile{
+        -webkit-line-clamp: 2;
+        font-family: 'Courier New', Courier, monospace;
+        display: table;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .profile-picture{
+        margin-left: 20px;
+        display:table-cell;
+    }
+    #avatar{
+        width: 200px;
+        border-radius: 50%;
+    }
+    .info{
+        display: table-cell;
+        width: 85%;
+        font-size: 18px;
+        vertical-align: top;
+    }
+    .text-info{
+        margin-left: 20px;
+        margin-top: 40px;
+    }
+    .upload-btn{
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 16px;
+        font-weight: 800;
+        margin-top: 20px;
+        border: 2px solid rgb(191, 137, 242); 
+        padding: 3px 0px;
+        border-radius: 3px;
+        padding-left:5px; 
+        width: 300px;
+        height: 40px;
+        background-color: white;
+        color:rgb(191, 137, 242);
+    }
+    .submit-btn{
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 16px;
+        font-weight: 800;
+        margin-top: 20px;
+        border: 2px solid rgb(191, 137, 242); 
+        padding: 3px 0px;
+        border-radius: 3px;
+        padding-left:5px; 
+        width: 200px;
+        height: 40px;
+        background-color: white;
+        color:rgb(191, 137, 242);
+    }
+    #name{
+        color:rgb(180, 100, 250);
+        font-size: 14px;
+    }
+    #title{
+        font-size: 16px;
+        color:black;
+    }
+    #userinfo{
+        color:rgb(198, 136, 252);
+        font-size: 18px;
+    }
+    
+    .comment-item{
+        margin-bottom: 20px;
+        border: 2px solid #eee;
+        border-radius: 8px;
+    }
+    .comment-container{
+        margin-left: 10px;
+    }
+    .title{
+        font-size: 18px;
+        font-weight:bold;
+    }
+    .content{
+        margin-top: -10px;
+    }
+    #tags {
+        float: left;
+        background-color: #fff9e8;
+        color: #fe9b3e;
+        width: 140px;
+        margin: 0 6px 0 0;
+        padding: 6px 0 6px 0;
+        text-align: center;
+        font-size: 12px;
+        /* font-style: italic; */
+        font-weight: bold;
+        margin-top: -10px;
+    }
+    .datetime{
+        clear:both;
+        font-size:12px;
+        /* color:rgb(208, 167, 245); */
+        color: rgb(191, 137, 242);
+    }
+    .remind{
+        margin-top:20px;
+        font-size: large;
+        color:rgb(208, 167, 245);
+        font-weight: bold;
+        font-style: italic;
+    }
+    .follows{
+        float: left;
+    }
+    .salon-item{
+        border:2px solid white;
+        box-shadow: 0 2px 2px lavender;
+        border-radius: 5px;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        width: 375px;
+        float: left;
+        /* text-align: center; */
+    }
+    .salon-item:hover{
+        box-shadow: 0 0 10px lavender;
+        border:2px solid lavender;
+        transform: translate(0,-1%);
+    }
+    #salon_img{
+        width: 370px;
+        height: 250px;
+        object-fit: cover;
+        object-position: center;
+    }
+    .salon-name{
+        font-size: 18px;
+        text-align: center;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+   }
+    .clear-float{
+        clear: both;
+    }
+    /* dl{
+        margin-top:0;
+        margin-bottom:1rem
+    }
+    dt{
+        font-weight:700
+    }
+    dd{
+        margin-bottom:.5rem;
+        margin-left:0
+    } */
+</style>
+{% endblock %}
+
+{% block body_block %}
+<div class="main">
+    <h1>My Profile</h1>
+    <hr />
+    <h2>Personal Information</h2>
+    <div class="profile">
+        <img id="avatar" src="{{ profile.avatar.url }}">
+        <div class="info">
+            <div class="text-info">
+                <span id="title">Username: </span><span id="userinfo">{{user.username}}</span> <br -/>
+                <span id="title">Email: </span><span id="userinfo">{{user.email}}</span> <br />
+                <span id="title">Upload Your Profile Picture:</span>
+                <form enctype="multipart/form-data" action="#" method="post" class="profile-picture">
+                    {% csrf_token %}
+                    <input type="file" name="profile_picture" accept="image/*" class="upload-btn">
+                    <input type="submit" value="Upload" class="submit-btn">
+                </form>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <h2>My Comments</h2>
+    {% if comments %}
+    <div class="comments">
+        {% for comment in comments %}
+        <div class="comment-item">
+            {% if comment.service %}
+            <a href="{% url 'salonrate:service' comment.service.slug %}">
+            {% else %}
+            <a href="{% url 'salonrate:salon' comment.salon.slug %}">
+            {% endif %}
+                <div class="comment-container">
+                    {% if comment.service %}
+                    <div class="service">
+                        <div class="title">· Service:</div>
+                        <span id="name">{{ comment.service.service_name }}</span>
+                    </div><br />
+                    
+                    {% else %}
+                    <div class="salon">
+                        <div class="title">· Salon:</div>
+                        <span id="name">{{ comment.salon.salon_name }}</span>
+                    </div><br />
+                    {% endif %}
+                    <div class="item-rate">
+                        <fieldset>
+                            {% if comment.comment.star > 4 %}
+                            <label class="star4 rated" title="Outstanding">5 stars</label>
+                            {% else %}
+                            <label class="star4" title="Outstanding">5 stars</label>
+                            {% endif %}
+        
+                            {% if comment.comment.star > 3 %}
+                            <label class="star3 rated" title="Very Good">4 stars</label>
+                            {% else %}
+                            <label class="star3" title="Very Good">4 stars</label>
+                            {% endif %}
+        
+                            {% if comment.comment.star > 2 %}
+                            <label class="star2 rated" title="Good">3 stars</label>
+                            {% else %}
+                            <label class="star2" title="Good">3 stars</label>
+                            {% endif %}
+        
+                            {% if comment.comment.star > 1 %}
+                            <label class="star1 rated" title="Poor">2 stars</label>
+                            {% else %}
+                            <label class="star1" title="Poor">2 stars</label>
+                            {% endif %}
+        
+                            {% if comment.comment.star > 0 %}
+                            <label class="star0 rated" title="Very Poor">1 star</label>
+                            {% else %}
+                            <label class="star0" title="Very Poor">1 star</label>
+                            {% endif %}
+                        </fieldset>
+                    </div>
+                    <div class="content">{{ comment.comment.comment }}</div><br />
+                    <ul class="tags">
+                        {% if comment.comment.tag_environ %}
+                        <li id="tags">Nice Environment</li>
+                        {% endif %}
+                        {% if comment.comment.tag_service %}
+                        <li id="tags">Attentive Service</li>
+                        {% endif %}
+                        {% if comment.comment.tag_cost %}
+                        <li id="tags">Cost Effective</li>
+                        {% endif %}
+                        {% if comment.comment.tag_skill %}
+                        <li id="tags">Excellent Skill</li>
+                        {% endif %}
+                        {% if comment.comment.tag_attitude %}
+                        <li id="tags">Warm Attidute</li>
+                        {% endif %}
+                    </ul>
+                    <div class="datetime"> {{ comment.comment.comment_time }}</div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="remind">No Comments Yet~</div>
+    {% endif %}
+    <hr />
+
+    <h2>My Follows</h2>
+    {% if follows %}
+    <dl class="follows">
+    {% for follow in follows %}
+        <div class="salon-item">
+            <a href="{% url 'salonrate:salon' follow.salon_id.slug %}">
+            
+                <img id="salon_img" src="{{ follow.salon_id.image.url }}">
+                <dd class="salon-name">{{ follow.salon_id.salon_name }}</dd>
+            </a>
+        </div>
+    {% endfor %}
+    </dl>
+    {% else %}
+    <div class="remind">No Follows Yet~</div>
+    {% endif %}
+    <div class="clear-float"></div>
+    
+</div>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html>
+    <head>
+    <meta charset="utf-8">
+
+    <title>
+        Salonrate - 
+        {% block title_block %}
+            Welcome!
+        {% endblock %}
+    </title>
+    <style>
+        .logo{
+            width: 100%;
+            margin-top: 20px;
+            text-align: center;
+            vertical-align: center;
+        }
+        img{
+            height: 80px;
+        }
+        .about{
+            /* float:flex; */
+            text-align: center;
+            /* margin-left: 40%; */
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+        }
+        hr{
+            margin-top:6rem;
+            margin-bottom:1rem;
+            border:0;
+            border-top:1px solid rgba(0,0,0,.1);
+            width: 500px;
+        }
+        dl{
+            margin-top:0;
+            margin-bottom:1rem
+        }
+        dt{
+            font-weight:700
+        }
+        dd{
+            margin-bottom:.5rem;
+            margin-left:0
+        }
+    </style>
+    {% block style_block %}
+    {% endblock %}
+    </head>
+    <body>
+        <div class="logo">
+            <a href="{% url 'salonrate:homepage' %}"><img src="{% static 'images/logo.png' %}" alt="Salonrate" /></a>
+        </div>
+        <div class="main">
+        {% block body_block %}
+        {% endblock %}
+        </div>
+        <div class="about">
+            <hr />
+            <dl>
+                <dt>· About Us: IT-17 ·</dt><br />
+                <dd>2589587C  ·  Cui, Chong</li>
+                <dd>2647735Y  ·  Ying, Heting</li>
+                <dd>2590260Y  ·  Yang, Suiyi</li>
+                <dd>2612713X  ·  Xiong, Yipeng</li>
+                <dd>2492428V  ·  Varadhan, Reetu Thillai</li>
+            </dl>
+        </div>
+    </body>
+</html>
