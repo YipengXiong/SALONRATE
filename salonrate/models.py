@@ -5,7 +5,6 @@ from django.forms import CharField, FloatField, IntegerField
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.core.validators import MaxValueValidator, MinValueValidator
-from zmq import DEALER
 # Create your models here.
 
 
