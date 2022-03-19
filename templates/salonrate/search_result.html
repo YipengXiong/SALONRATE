@@ -112,7 +112,6 @@
 
                 // dynamic change the tag filter when switch the search scope
                 let current_scope_selected = $(".search-switch li.selected").text().toLowerCase();
-                console.log(current_scope_selected)
                 if (current_scope_selected === "service") {
                     for (let i = 0; i < 5; i++) {
                         $("div.tag-filter li input").eq(i).attr("value", service_tag[i]).attr("id", service_tag[i].toLowerCase())
