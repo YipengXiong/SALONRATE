@@ -61,17 +61,14 @@
                                 {% if user.userprofile.avatar %}
                                     {% if user.userprofile.avatar.url %}
                                     <img class='me-img' src="{{ user.userprofile.avatar.url }}" alt="Avatar" />
-                                    <span class="caret"></span>
                                     {% endif %}
                                 {% else %}
                                 <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
-                                <span class="caret"></span>
                                 {% endif %}
                                 <a>{{ user.username }}</a>
                             {% else %}
                                 <img class="me-img" src="{% static 'images/me.png' %}" alt="My logo">
                                 <a>My Account</a>
-                                <span class="caret"></span>
                             {% endif %}
                         </a>
                         <ul class="dropdown-menu">

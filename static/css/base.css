@@ -19,6 +19,9 @@ li {
 .dropdown-toggle{
     color: #FFFFFF;
 }
+.dropdown-toggle::after{
+    content:none;
+}
 li .menu{
     color: rgb(191, 137, 242);
     height: 30px;

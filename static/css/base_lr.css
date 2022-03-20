@@ -8,9 +8,7 @@ img{
     height: 80px;
 }
 .about{
-    /* float:flex; */
     text-align: center;
-    /* margin-left: 40%; */
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
 }
@@ -42,6 +40,7 @@ h1{
     font-weight: bold;
     color:rgb(191, 137, 242);
     margin-top:5%;
+    text-align: center;
 }
 #login_form{
     margin-top:10px;
