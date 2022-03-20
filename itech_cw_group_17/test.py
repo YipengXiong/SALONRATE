@@ -110,11 +110,18 @@ class salonratemodeltest(TestCase):
         print(response.context['comments'])
         print(response.context['follows'])
 
+    def test_empty_userprofile_class(self):
+        c = Client()
+        c.login(username='test1', password='test1')
+        response = c.get(reverse('salonrate:profile'))
+        self.assertContains(response, 'No Comments Yet~')
+        self.assertContains(response, 'No Follows Yet~')
+
     def test_salon_detail_unauthorized(self):
         response = self.client.get(reverse('salonrate:salon', kwargs={'salon_name_slug': 'dunaskin-mill-salon'}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['salon'].salon_id, 1)
-        self.assertEqual(response.context['salon'].salon_name, 'Dunaksin Mill Salon')
+        self.assertEqual(response.context['salon'].salon_name, 'Dunaskin Mill Salon')
         self.assertEqual(response.context['salon'].salon_address, '5 Dunaskin Court, Glasgow, G11 6EQ')
         self.assertEqual(response.context['salon'].phone, '0756555443')
         self.assertEqual(response.context['salon'].salon_avg_price, 32.3)
@@ -127,7 +134,7 @@ class salonratemodeltest(TestCase):
         response = self.client.get(reverse('salonrate:salon', kwargs={'salon_name_slug': 'dunaskin-mill-salon'}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['salon'].salon_id, 1)
-        self.assertEqual(response.context['salon'].salon_name, 'Dunaksin Mill Salon')
+        self.assertEqual(response.context['salon'].salon_name, 'Dunaskin Mill Salon')
         self.assertEqual(response.context['salon'].salon_address, '5 Dunaskin Court, Glasgow, G11 6EQ')
         self.assertEqual(response.context['salon'].phone, '0756555443')
         self.assertEqual(response.context['salon'].salon_avg_price, 32.3)
