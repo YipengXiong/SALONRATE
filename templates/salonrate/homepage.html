@@ -40,41 +40,10 @@
     </div>
 </div>
 <script>
-    $(function (){
-        $("div.row-cols-auto>div>div").each(function() {
-        $(this).on("click",getType)
-    })
-    })
-
-    function getType(){
-        let current_type = $(this).attr("data-id")
-        let form = $('<form></form>');
-        form.attr('action', '{% url "salonrate:search_result" %}');
-        form.attr('method', 'post');
-        form.attr('target', '_self');
-
-        let keyword_input = $('<input type="text" name="keyword" />');
-        keyword_input.attr('value', '');
-
-        let scope_input = $('<input type="text" name="scope" />');
-        scope_input.attr('value', 'service');
-
-        let type_input = $('<input type="text" name="current_type" />');
-        type_input.attr('value', current_type);
-
-        let csrf_input = $('<input type="text" name="csrfmiddlewaretoken" />');
-        csrf_input.attr('value', '{{ csrf_token }}');
-
-        form.append(csrf_input)
-        form.append(scope_input)
-        form.append(keyword_input)
-        form.append(type_input);
-        form.appendTo("body")
-
-        form.submit();
-    }
-
-
+    // Dynamic parameters' assignment by django render context_dict
+    // As the external js load time is slower than the html load, so it should be inline js
+    let homepage_search_url = '{% url "salonrate:search_result" %}'
+    let homepage_csrf_token = '{{ csrf_token }}'
 </script>
 
 <div class="container">
