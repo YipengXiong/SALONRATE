@@ -1,6 +1,8 @@
 {% load staticfiles %}
 {% if detail %}
 <script>
+    // Dynamic parameters' assignment by django render context_dict
+    // As the external js load time is slower than the html load, so it should be inline js
     all_page_count = '{{detail.paginator.num_pages}}'
     scope = '{{scope}}'
     keyword = '{{keyword}}'
