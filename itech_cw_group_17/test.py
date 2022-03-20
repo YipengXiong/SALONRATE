@@ -91,13 +91,6 @@ class salonratemodeltest(TestCase):
         service1_2.save()    # service_name_slug="wax-11"
         service1_3 = Service.objects.create(service_name="Eyebrow Care", salon_id=salon1, service_type=4, service_price=20)
         service1_3.save()    # service_name_slug="eyebrow-care-12"
-        comment_salon_1 = Comment.objects.create(username=user1, salon_or_service_id=salon1.salon_id, type=0,
-                                          comment="Went here last Sunday with friends. Perfect experience.", star=3,
-                                          tag_environ=True, tag_service=True, tag_skill=True, tag_attitude=True)
-        comment_salon_1.save()
-        comment_service_1 = Comment.objects.create(username=user1, salon_or_service_id=service1_1.service_id, type=1,
-                                          comment="My hair looks good!", star=4)
-        comment_service_1.save()
         follow1 = Follows.objects.create(username=user,salon_id=salon1)
         follow1.save()  # Attention: user follows 2 salons while user1 follow no salon
         return super().setUp()
