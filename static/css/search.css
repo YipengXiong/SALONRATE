@@ -1,0 +1,378 @@
+body {
+    font-size: .875rem;
+}
+
+.result-header {
+    margin-top: 15px;
+    margin-left: 10%;
+    margin-right: 10%;
+    display: flex;
+    align-items: center;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: auto;
+}
+
+li .menu {
+    color: rgb(191, 137, 242);
+    height: 30px;
+    text-align: center;
+}
+
+li .menu:hover {
+    color: rgb(191, 137, 242);
+    background-color: rgb(247, 236, 255);
+}
+
+.sort-filter > ul {
+    margin-left: 10%;
+}
+
+.search-switch li {
+    float: left;
+    border: 1px solid rgb(208, 167, 245);
+    width: 80px;
+    height: 30px;
+    text-align: center;
+    margin: 0 -1px 0 -1px;
+    padding: 4px 10px 2px 10px;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.search-switch li:first-child {
+    border-radius: 2px 0 0 2px;
+}
+
+.search-switch li:last-child {
+    border-radius: 0 2px 2px 0;
+}
+
+.logo-img {
+    display: block;
+    height: 50px;
+    /* margin: 0 0 0 10%; */
+}
+
+
+.me-img {
+    border-radius: 50%;
+    width: 4vmin;
+    height: 4vmin;
+    object-fit: cover;
+    object-position: center;
+}
+
+
+.search-switch {
+    color: rgb(191, 137, 242);
+    background-color: #FFFFFF;
+    float: left;
+    margin: 0 20px 0 0;
+    cursor: pointer;
+}
+
+
+.selected {
+    color: #FFFFFF;
+    background-color: rgb(208, 167, 245);
+}
+
+.search-box {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.search-area {
+    float: left;
+    border: 1px solid rgb(208, 167, 245);
+    border-radius: 2px;
+    height: 30px;
+    width: 300px;
+}
+
+.search-txt {
+    height: 28px;
+    width: 248px;
+    border: none;
+    background: transparent;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-style: italic;
+    color: rgb(191, 137, 242);
+    outline: none;
+}
+
+.search-txt::placeholder {
+    color: rgb(191, 137, 242);
+}
+
+.search-btn {
+    color: rgb(191, 137, 242);
+    display: inline-block;
+    width: 10%;
+}
+
+.search-img {
+    width: 25px;
+    margin-top: -5px;
+}
+
+.sort-filter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sort li {
+    float: left;
+    border: 2px solid rgb(208, 167, 245);
+    margin: 0 -1px 0 -1px;
+    padding: 2px 10px 2px 10px;
+    color: rgb(191, 137, 242);
+    cursor: pointer;
+}
+
+.sort li.selected {
+    color: #FFFFFF;
+}
+
+.tag-filter li {
+    float: left;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.tag-filter input {
+    height: 14px;
+    width: 14px;
+    display: inline-block;
+    /* float: left; */
+    border: 1px solid rgb(208, 167, 245);
+}
+
+.pages {
+    display: flex;
+    align-items: center;
+    margin-right: 10%
+}
+
+#prev-page, #next-page {
+    float: left;
+    border: 2px solid rgb(208, 167, 245);
+    border-radius: 1px;
+    margin: 0 -1px 0 -1px;
+    padding: 0 15px 0 15px;
+    color: rgb(191, 137, 242);
+    cursor: pointer;
+}
+
+.page-control, .page-show {
+    float: left;
+}
+
+.item-content {
+    border: 1px solid orange;
+    width: 80%;
+    display: flex;
+    margin: 1% 10% 1% 10%;
+    /* align-items: center; */
+    position: relative;
+}
+
+.item-img {
+    margin: 2% 1% 2% 1%;
+    width: 400px;
+    height: 220px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.item-detail {
+    height: 200px;
+    padding-top: 20px;
+    width: 60%;
+}
+
+.item-name {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bolder;
+    font-size: 20px;
+
+}
+
+.item-name:hover {
+    color: rgb(167, 81, 247);
+}
+
+a {
+    color: inherit;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:hover {
+    color: inherit;
+    text-decoration: none;
+}
+
+.item-rate {
+    font-family: 'FontAwesome';
+    margin: 5px 0 5px 0;
+}
+
+.item-rate > fieldset {
+    padding: 0;
+    margin: 0;
+    border: none;
+    display: inline-block;
+}
+
+.item-rate > fieldset > label {
+    float: right;
+    width: 1em;
+    padding: 0 .05em;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 150%;
+    color: #F0A30A;
+    margin: 3px;
+}
+
+.item-rate > fieldset > label:before {
+    content: '\f006  ';
+}
+
+.item-rate > fieldset > label.rated:before {
+    content: '\f005  ';
+}
+
+.fa-money:before {
+    font-family: 'FontAwesome';
+    content: "\f0d6";
+}
+
+.fa-scissors:before {
+    font-family: 'FontAwesome';
+    content: "\f0c4";
+    margin-right: 5px;
+}
+
+.item-price {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 18px;
+    margin-top: 35px;
+    vertical-align: bottom;
+}
+
+.item-salon-name {
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace;
+    color: rgb(167, 81, 247)
+}
+
+.item-address {
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace;
+    vertical-align: bottom;
+}
+
+.fa-map-marker:before {
+    font-family: 'FontAwesome';
+    content: "\f041";
+    margin-right: 10px;
+}
+
+.item-tags {
+    margin-top: 0;
+}
+
+.item-tags > li {
+    float: left;
+    background-color: #FFF2CC;
+    color: #fca95b;
+    width: 120px;
+    margin: 0 1% 0 1%;
+    padding: 1% 0 1% 0;
+    text-align: center;
+}
+
+.busy {
+    border: 1px solid #B85450;
+    background-image: linear-gradient(#F8CECC, #EA6B66);
+    color: black;
+    font-weight: bolder;
+    font-style: italic;
+    padding: 4px 10px 4px 10px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.arrow {
+    border: solid rgb(191, 137, 242);
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    margin: 0 0 3px 2px;
+    transform: rotate(45deg);
+}
+
+li.selected > i.arrow {
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    margin: 0 0 3px 2px;
+    transform: rotate(45deg);
+}
+
+li.selected > i.arrow-rotated {
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    margin: 3px 0 0 2px;
+    transform: rotate(-135deg);
+}
+
+.about {
+    align-items: center;
+    float: left;
+    text-align: center;
+    margin-left: 40%;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.me-img {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    object-position: center;
+}
+
+img {
+    vertical-align: middle;
+    border-style: none;
+}
+
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+
+button, input.search-txt, optgroup, select, textarea {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
