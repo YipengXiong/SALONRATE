@@ -92,4 +92,9 @@ input{
     height: 40px;
     background-color: white;
     color:rgb(191, 137, 242);
+    cursor: pointer;
+}
+.btn:hover{
+    color: white;
+    background-color: rgb(191, 137, 242);
 }
