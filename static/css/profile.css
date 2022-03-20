@@ -75,8 +75,8 @@ h1 {
     font-size: 18px;
 }
 .comments{
-    height: 600px;
-    overflow:scroll;
+    max-height: 600px;
+    overflow:auto;
 }
 .comment-item{
     margin-bottom: 20px;
@@ -119,8 +119,8 @@ h1 {
 }
 .follows{
     float: left;
-    height: 600px;
-    overflow: scroll;
+    max-height: 600px;
+    overflow: auto;
 }
 .salon-item{
     border:2px solid white;
