@@ -19,17 +19,9 @@ $(document).ready(function () {
         $("#id_star").val(rate);
     })
 });
-
-// $.ajax({
-//     type:'POST',
-//     url:'',
-//     data:{
-//         'scrfmiddlewaretoken':'',
-//     }
-// })
+// Click the star to make a comment
 $("div.star-rate label").on("click", function () {
     let current_star = $(this).text()
-    // console.log(current_star)
     $("div.star-rate label").removeClass("rated")
     for (let i = 0; i < current_star; i++) {
         $("div.star-rate label.star"+i).addClass("rated")
