@@ -1,1 +1,322 @@
-[{"https://www.treatwell.co.uk/place/purple-rinse/#serviceIds=TR4021801&tt=6": [{"name": "Purple Rinse"}, {"rate": "5.0"}, {"address": "Central Retail District, Manchester"}]}, {"https://www.treatwell.co.uk/place/inhype-beauty/#serviceIds=&tt=6": [{"name": "Inhype Beauty"}, {"rate": "5.0"}, {"address": "Marylebone, London"}]}, {"https://www.treatwell.co.uk/place/beauty-redefined/#serviceIds=&tt=6": [{"name": "Beauty Redefined"}, {"rate": "5.0"}, {"address": "Knutsford, Cheshire"}]}, {"https://www.treatwell.co.uk/place/gusto-hairdressing-soho/#serviceIds=TR545586,TR2493964,TR4034006&tt=6": [{"name": "Gusto Hairdressing - Soho"}, {"rate": "4.4"}, {"address": "Soho, London"}]}, {"https://www.treatwell.co.uk/place/star-style-salon/#serviceIds=TR3783209,TR2995079,TR2995038&tt=6": [{"name": "Star Style Salon"}, {"rate": "4.8"}, {"address": "Willesden, London"}]}, {"https://www.treatwell.co.uk/place/live-true-london-brixton/#serviceIds=TR3147572,TR3147595,TR3147592&tt=6": [{"name": "Live True London - Brixton"}, {"rate": "4.6"}, {"address": "Brixton, London"}]}, {"https://www.treatwell.co.uk/place/heavens-hair-beauty/#serviceIds=TR3767347,TR3767344&tt=6": [{"name": "Heavens Hair & Beauty"}, {"rate": "4.9"}, {"address": "Whitechapel, London"}]}, {"https://www.treatwell.co.uk/place/mimosa-s-hair-and-beauty/#serviceIds=TR3378579,TR3378585,TR3422267&tt=6": [{"name": "Mimosa's Hair and Beauty"}, {"rate": "4.8"}, {"address": "Golders Green, London"}]}, {"https://www.treatwell.co.uk/place/the-red-angel-hair-company-manchester/#serviceIds=TR2092295,TR3002488,TR3002485&tt=6": [{"name": "The Red Angel Hair Company Manchester"}, {"rate": "4.6"}, {"address": "Central Retail District, Manchester"}]}, {"https://www.treatwell.co.uk/place/shades-primrose-hill/#serviceIds=TR2845580,TR3881553,TR2649316&tt=6": [{"name": "Shades - Primrose Hill"}, {"rate": "4.7"}, {"address": "Primrose Hill, London"}]}, {"https://www.treatwell.co.uk/place/glow-blade-academy/#serviceIds=&tt=6": [{"name": "Glow & Blade Academy"}, {"rate": "5.0"}, {"address": "Liverpool"}]}, {"https://www.treatwell.co.uk/place/sultan-hair-beauty-laser-clinic/#serviceIds=TP2310962,TR609193,TR3045884&tt=6": [{"name": "Sultan Hair & Beauty Laser Clinic"}, {"rate": "4.6"}, {"address": "Earls Court, London"}]}, {"https://www.treatwell.co.uk/place/abbeville-hair-beauty/#serviceIds=TR1291046,TR2365278&tt=6": [{"name": "Abbeville Hair & Beauty"}, {"rate": "4.8"}, {"address": "Clapham South, London"}]}, {"https://www.treatwell.co.uk/place/camden-barbers/#serviceIds=TP2167517,TR3011872,TR2167490&tt=6": [{"name": "Camden Barbers"}, {"rate": "4.7"}, {"address": "Camden Town, London"}]}, {"https://www.treatwell.co.uk/place/flair-hair-salon/#serviceIds=TP2713856,TP2713866,TP2387364&tt=6": [{"name": "Flair Hair Salon"}, {"rate": "4.8"}, {"address": "Queens Park, London"}]}, {"https://www.treatwell.co.uk/place/victoria-salon-edgware-road/#serviceIds=TP3564821,TR3529801,TR3549844&tt=6": [{"name": "Victoria Salon - Edgware Road"}, {"rate": "4.9"}, {"address": "Marylebone, London"}]}, {"https://www.treatwell.co.uk/place/savas-hair-beauty/#serviceIds=TR2343180,TR875845&tt=6": [{"name": "Savas Hair & Beauty"}, {"rate": "4.8"}, {"address": "Fulham, London"}]}, {"https://www.treatwell.co.uk/place/lili-london/#serviceIds=TR3162708,TR3162714,TR3162727&tt=6": [{"name": "Lili London"}, {"rate": "4.8"}, {"address": "Cricklewood, London"}]}, {"https://www.treatwell.co.uk/place/lemoge-clinic-94-kilburn-high-road/#serviceIds=TP1993619,TR978319&tt=6": [{"name": "Lemoge Clinic - 94 Kilburn High Road"}, {"rate": "4.3"}, {"address": "Kilburn, London"}]}, {"https://www.treatwell.co.uk/place/rich-hair-beauty-salon/#serviceIds=TR4017256,TR4019793&tt=6": [{"name": "Rich Hair & Beauty Salon"}, {"rate": "4.6"}, {"address": "Barkingside, London"}]}]
+[
+  {
+    "https://www.treatwell.co.uk/place/purple-rinse/#serviceIds=TR4021801&tt=6": [
+      {
+        "name": "Purple Rinse"
+      },
+      {
+        "rate": "5.0"
+      },
+      {
+        "address": "Central Retail District, Manchester"
+      },
+      {
+        "image": "salon_image/0.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/inhype-beauty/#serviceIds=&tt=6": [
+      {
+        "name": "Inhype Beauty"
+      },
+      {
+        "rate": "5.0"
+      },
+      {
+        "address": "Marylebone, London"
+      },
+      {
+        "image": "salon_image/1.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/beauty-redefined/#serviceIds=&tt=6": [
+      {
+        "name": "Beauty Redefined"
+      },
+      {
+        "rate": "5.0"
+      },
+      {
+        "address": "Knutsford, Cheshire"
+      },
+      {
+        "image": "salon_image/2.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/gusto-hairdressing-soho/#serviceIds=TR545586,TR2493964,TR4034006&tt=6": [
+      {
+        "name": "Gusto Hairdressing - Soho"
+      },
+      {
+        "rate": "4.4"
+      },
+      {
+        "address": "Soho, London"
+      },
+      {
+        "image": "salon_image/3.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/star-style-salon/#serviceIds=TR3783209,TR2995079,TR2995038&tt=6": [
+      {
+        "name": "Star Style Salon"
+      },
+      {
+        "rate": "4.8"
+      },
+      {
+        "address": "Willesden, London"
+      },
+      {
+        "image": "salon_image/4.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/live-true-london-brixton/#serviceIds=TR3147572,TR3147595,TR3147592&tt=6": [
+      {
+        "name": "Live True London - Brixton"
+      },
+      {
+        "rate": "4.6"
+      },
+      {
+        "address": "Brixton, London"
+      },
+      {
+        "image": "salon_image/5.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/heavens-hair-beauty/#serviceIds=TR3767347,TR3767344&tt=6": [
+      {
+        "name": "Heavens Hair & Beauty"
+      },
+      {
+        "rate": "4.9"
+      },
+      {
+        "address": "Whitechapel, London"
+      },
+      {
+        "image": "salon_image/6.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/mimosa-s-hair-and-beauty/#serviceIds=TR3378579,TR3378585,TR3422267&tt=6": [
+      {
+        "name": "Mimosa's Hair and Beauty"
+      },
+      {
+        "rate": "4.8"
+      },
+      {
+        "address": "Golders Green, London"
+      },
+      {
+        "image": "salon_image/7.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/the-red-angel-hair-company-manchester/#serviceIds=TR2092295,TR3002488,TR3002485&tt=6": [
+      {
+        "name": "The Red Angel Hair Company Manchester"
+      },
+      {
+        "rate": "4.6"
+      },
+      {
+        "address": "Central Retail District, Manchester"
+      },
+      {
+        "image": "salon_image/8.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/shades-primrose-hill/#serviceIds=TR2845580,TR3881553,TR2649316&tt=6": [
+      {
+        "name": "Shades - Primrose Hill"
+      },
+      {
+        "rate": "4.7"
+      },
+      {
+        "address": "Primrose Hill, London"
+      },
+      {
+        "image": "salon_image/9.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/glow-blade-academy/#serviceIds=&tt=6": [
+      {
+        "name": "Glow & Blade Academy"
+      },
+      {
+        "rate": "5.0"
+      },
+      {
+        "address": "Liverpool"
+      },
+      {
+        "image": "salon_image/10.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/sultan-hair-beauty-laser-clinic/#serviceIds=TP2310962,TR609193,TR3045884&tt=6": [
+      {
+        "name": "Sultan Hair & Beauty Laser Clinic"
+      },
+      {
+        "rate": "4.6"
+      },
+      {
+        "address": "Earls Court, London"
+      },
+      {
+        "image": "salon_image/11.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/abbeville-hair-beauty/#serviceIds=TR1291046,TR2365278&tt=6": [
+      {
+        "name": "Abbeville Hair & Beauty"
+      },
+      {
+        "rate": "4.8"
+      },
+      {
+        "address": "Clapham South, London"
+      },
+      {
+        "image": "salon_image/12.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/camden-barbers/#serviceIds=TP2167517,TR3011872,TR2167490&tt=6": [
+      {
+        "name": "Camden Barbers"
+      },
+      {
+        "rate": "4.7"
+      },
+      {
+        "address": "Camden Town, London"
+      },
+      {
+        "image": "salon_image/13.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/flair-hair-salon/#serviceIds=TP2713856,TP2713866,TP2387364&tt=6": [
+      {
+        "name": "Flair Hair Salon"
+      },
+      {
+        "rate": "4.8"
+      },
+      {
+        "address": "Queens Park, London"
+      },
+      {
+        "image": "salon_image/14.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/victoria-salon-edgware-road/#serviceIds=TP3564821,TR3529801,TR3549844&tt=6": [
+      {
+        "name": "Victoria Salon - Edgware Road"
+      },
+      {
+        "rate": "4.9"
+      },
+      {
+        "address": "Marylebone, London"
+      },
+      {
+        "image": "salon_image/15.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/savas-hair-beauty/#serviceIds=TR2343180,TR875845&tt=6": [
+      {
+        "name": "Savas Hair & Beauty"
+      },
+      {
+        "rate": "4.8"
+      },
+      {
+        "address": "Fulham, London"
+      },
+      {
+        "image": "salon_image/16.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/lili-london/#serviceIds=TR3162708,TR3162714,TR3162727&tt=6": [
+      {
+        "name": "Lili London"
+      },
+      {
+        "rate": "4.8"
+      },
+      {
+        "address": "Cricklewood, London"
+      },
+      {
+        "image": "salon_image/17.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/lemoge-clinic-94-kilburn-high-road/#serviceIds=TP1993619,TR978319&tt=6": [
+      {
+        "name": "Lemoge Clinic - 94 Kilburn High Road"
+      },
+      {
+        "rate": "4.3"
+      },
+      {
+        "address": "Kilburn, London"
+      },
+      {
+        "image": "salon_image/18.webp"
+      }
+    ]
+  },
+  {
+    "https://www.treatwell.co.uk/place/rich-hair-beauty-salon/#serviceIds=TR4017256,TR4019793&tt=6": [
+      {
+        "name": "Rich Hair & Beauty Salon"
+      },
+      {
+        "rate": "4.6"
+      },
+      {
+        "address": "Barkingside, London"
+      },
+      {
+        "image": "salon_image/19.webp"
+      }
+    ]
+  }
+]
