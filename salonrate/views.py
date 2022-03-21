@@ -80,6 +80,7 @@ def user_logout(request):
 
 @login_required
 def user_profile(request):
+    # If receiving a 'POST' request, upload avatar 
     if request.method == 'POST' and request.FILES:
         file = request.FILES['profile_picture']
         if file:
@@ -87,25 +88,21 @@ def user_profile(request):
             profile.avatar=file
             profile.save()
     user = request.user
-    # print(user)
     profile = UserProfile.objects.filter(user=user)[0]
-    # print(profile)
-    comments = Comment.objects.filter(username=user)
     follows = Follows.objects.filter(username=user)
-    # print("follows: ", len(follows))
     context_dic = {
         'username': request.user.username,
         'profile': profile,
         'follows': follows
     }
+
     comments_objs = Comment.objects.filter(username=user)
     comments = []
-
+    # Combine comments with salon and service info
     for comment in comments_objs:
         type = comment.type
         id = comment.salon_or_service_id
         comment_dic = {}
-        # print(comment.comment_id)
         if (type == 0):
             salon = Salon.objects.filter(salon_id=id)[0]
         else:
@@ -118,14 +115,24 @@ def user_profile(request):
     context_dic['comments'] = comments
     return render(request, 'salonrate/userprofile.html', context_dic)
 
-
 def homepage(request):
+    """
+    Homepage function which renders the homepage.html page
+    :param request: request from page
+    :return:  {request, homepage.html, {'salons': salons, 'salon1': salons[0], 'salon2': salons[1], 'salon3': salons[2]} }
+    """
+    # Randomly select three salons whose rate is larger equal than 3
     sql = "SELECT * FROM salonrate_salon WHERE rate >=3 ORDER BY random() LIMIT 3"
     salons = Salon.objects.raw(sql)
     context_dict = {"salons": salons, 'salon1': salons[0], 'salon2': salons[1], 'salon3': salons[2]}
     return render(request, 'salonrate/homepage.html', context_dict)
 
 def refresh_salon(salon, comments):
+    """
+    Refresh_salon function which calculates the rate of salon and switch the status of tags based on comments
+    :param salon and comments object
+    :return:  refreshed salon object
+    """
     if comments:
         salon.rate = round(sum([c.star for c in comments]) / len(comments))
         salon.save()
@@ -147,6 +154,11 @@ def refresh_salon(salon, comments):
     return salon
 
 def refresh_service(service, comments):
+    """
+    Refresh_service function which calculates the rate of service based on comments
+    :param service and comments object
+    :return:  refreshed service object
+    """
     if comments:
         service.rate = round(sum([c.star for c in comments]) / len(comments))
         service.save()
@@ -156,27 +168,29 @@ def refresh_service(service, comments):
     return service
 
 def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
+    """
+    Salon_detail function which renders the salon.html page, handles get and post requests and identifies them for further process
+    :param request: request from page
+    :return:  {request, salon.html, {'salon': salon, 'services': services, 'comments':comments, 'comment_count':comment_count, 'follow': follow} }
+    """
     salon = get_object_or_404(Salon, slug=salon_name_slug)
     comments = Comment.objects.filter(salon_or_service_id=salon.salon_id, type=0).order_by("-comment_id")
     services = Service.objects.filter(salon_id=salon.salon_id).order_by("-service_id")
     salon = refresh_salon(salon, comments)
     context_dict = {"salon": salon, "services": None, "comments": comments, "follow": False}
-
+    # if comment exists, return comment_count
     if comments:
-        context_dict["comments"] = comments
         context_dict["comment_count"] = len(comments)
-        salon.rate = round(sum([c.star for c in comments]) / len(comments))
-        salon.save()
-        context_dict["salon"] = salon
-        context_dict["rate"] = salon.rate
     else:
         print("No Comments")
-
+        
+    # If there are services under the salon, return services
     if services:
         context_dict["services"] = services
     else:
         print("No services available yet")
 
+    # If user is authenticated, return the follow state
     if request.user.is_authenticated:
         follows = Follows.objects.filter(username=request.user)
         for follow in follows:
@@ -184,8 +198,8 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
                 context_dict["follow"] = True
 
     commentform = CommentForm()
-
     if request.method == 'POST':
+        # If there is comment in the request data, submit the commentForm
         if 'comment' in request.POST:
             commentform = CommentForm(request.POST)
             if commentform.is_valid():
@@ -194,19 +208,11 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
                 comment.salon_or_service_id = salon.salon_id
                 comment.type = 0
                 comment.save()
-                if comment.tag_environ == True:
-                    salon.good_env = True
-                if comment.tag_service == True:
-                    salon.good_service = True
-                if comment.tag_cost == True:
-                    salon.cost_effective = True
-                if comment.tag_skill == True:
-                    salon.good_skill = True
-                if comment.tag_attitude == True:
-                    salon.good_attitude = True
-                salon.save()
+                salon = refresh_salon(salon, comments)
+                context_dict["salon"] = salon
             return redirect(reverse("salonrate:salon", kwargs={"salon_name_slug": salon_name_slug}))
-
+        
+        # If there is no comment, submit the followForm
         else:
             print('followForm detected')
             if context_dict["follow"] == True:
@@ -224,21 +230,18 @@ def salon_detail(request, salon_name_slug="rich-hair-beauty-salon"):
 
 
 def service_detail(request, service_name_slug="eyebrows-eyelashes-191"):
+    """
+    Service_detail function which renders the service.html page, handles get and post requests and identifies them for further process
+    :param request: request from page
+    :return:  {request, service.html, {'service': service, 'comments':comments, 'comment_count':comment_count}
+    """
     service = get_object_or_404(Service, slug=service_name_slug)
     comments = Comment.objects.filter(salon_or_service_id=service.service_id, type=1).order_by("-comment_id")
     service = refresh_service(service, comments)
     context_dict = {"service": service, "comments": comments}
     
     if comments:
-        context_dict["comments"] = comments
         context_dict["comment_count"] = len(comments)
-        # Calculate the average rate of the current service
-        service.rate = round(sum([c.star for c in comments]) / len(comments))
-        service.save()
-        context_dict["service"] = service
-        # context_dict["service_rate"] = service.service_rate
-    else:
-        print("No Comments")
 
     form = CommentForm()
     if request.method == 'POST':
@@ -403,11 +406,3 @@ def ajax_search(request):
     page = paginator.page(current_page)
     return render(request, 'salonrate/ajax_search.html',
                   {'scope': scope, 'keyword': keyword, 'current_type': current_type, 'detail': page})
-
-# def jsonEncoder(data):
-#     json_data = []
-#     for p in data:
-#         print(p.__dict__)
-#         p.__dict__.pop("_state") # Remove '_state'
-#         json_data.append(p.__dict__)
-#     return json_data
